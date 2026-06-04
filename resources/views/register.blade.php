@@ -12,8 +12,13 @@
         <div class="flex flex-col justify-center flex-1 px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-28 bg-white relative z-10">
             <div class="mx-auto w-full max-w-[480px] lg:w-[480px]">
                 <!-- Brand Logo -->
-                <div class="bg-white border border-gray-150 p-2.5 rounded-xl shadow-xs w-fit">
-                    <img class="h-9 w-auto object-contain select-none" src="{{ asset('images/logo.png') }}" alt="SportOps Logo">
+                <div class="col-span-2 md:col-span-1 inline-block">
+                    <a href="{{ route('home') }}" class="flex items-center gap-2.5 select-none">
+                        <div class="bg-white border border-gray-150 p-2.5 rounded-xl shadow-xs w-fit">
+                            <img class="h-9 w-auto object-contain select-none" src="{{ asset('images/logo.png') }}" alt="SportOps Logo">
+                        </div>
+                        <span class="text-lg font-extrabold tracking-tight text-gray-900">SportOps</span>
+                    </a>
                 </div>
 
                 <!-- Page Header -->
