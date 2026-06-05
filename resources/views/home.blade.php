@@ -30,12 +30,23 @@
 
             <!-- Right actions -->
             <div class="flex items-center gap-2 sm:gap-3">
-                <a href="{{ route('login') }}" class="hidden sm:inline-block px-4 py-2 text-sm font-semibold text-gray-700 hover:text-[#0047D4] transition-colors duration-150">
-                    Log In
-                </a>
-                <a href="{{ route('register') }}" class="hidden sm:inline-flex items-center rounded-xl bg-[#0047D4] px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/10 hover:bg-[#003cb5] hover:shadow-blue-500/20 active:scale-[0.99] transition-all duration-200">
-                    Sign Up Free
-                </a>
+                @guest
+                    <a href="{{ route('login') }}" class="hidden sm:inline-block px-4 py-2 text-sm font-semibold text-gray-700 hover:text-[#0047D4] transition-colors duration-150">
+                        Log In
+                    </a>
+                    <a href="{{ route('register') }}" class="hidden sm:inline-flex items-center rounded-xl bg-[#0047D4] px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/10 hover:bg-[#003cb5] hover:shadow-blue-500/20 active:scale-[0.99] transition-all duration-200">
+                        Sign Up Free
+                    </a>
+                @endguest
+                @auth
+                    <span class="hidden sm:inline-block text-sm font-medium text-gray-700 mr-2">Hello, {{ Auth::user()->name }}</span>
+                    <form method="POST" action="{{ route('logout') }}" class="hidden sm:inline-block">
+                        @csrf
+                        <button type="submit" class="px-4 py-2 text-sm font-semibold text-red-600 hover:text-red-800 transition-colors duration-150">
+                            Log Out
+                        </button>
+                    </form>
+                @endauth
                 <!-- Mobile menu toggle -->
                 <button type="button" onclick="toggleMobileMenu()" class="lg:hidden inline-flex items-center justify-center rounded-lg p-2 text-gray-600 hover:bg-gray-100 transition-colors duration-150" aria-label="Toggle menu">
                     <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -56,8 +67,16 @@
                 <a href="#reviews" class="rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50">Reviews</a>
                 <a href="#contact" class="rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50">Contact</a>
                 <div class="mt-3 flex flex-col gap-2 border-t border-gray-100 pt-3">
-                    <a href="{{ route('login') }}" class="rounded-xl border border-gray-200 px-4 py-2.5 text-center text-sm font-semibold text-gray-700 hover:bg-gray-50">Log In</a>
-                    <a href="{{ route('register') }}" class="rounded-xl bg-[#0047D4] px-4 py-2.5 text-center text-sm font-semibold text-white hover:bg-[#003cb5]">Sign Up Free</a>
+                    @guest
+                        <a href="{{ route('login') }}" class="rounded-xl border border-gray-200 px-4 py-2.5 text-center text-sm font-semibold text-gray-700 hover:bg-gray-50">Log In</a>
+                        <a href="{{ route('register') }}" class="rounded-xl bg-[#0047D4] px-4 py-2.5 text-center text-sm font-semibold text-white hover:bg-[#003cb5]">Sign Up Free</a>
+                    @endguest
+                    @auth
+                        <form method="POST" action="{{ route('logout') }}" class="w-full">
+                            @csrf
+                            <button type="submit" class="w-full rounded-xl border border-red-200 text-red-600 px-4 py-2.5 text-center text-sm font-semibold hover:bg-red-50">Log Out</button>
+                        </form>
+                    @endauth
                 </div>
             </div>
         </div>
