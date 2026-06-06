@@ -101,84 +101,8 @@
         </div>
     </section>
 
-    <!-- ============================ SCHEDULE TABLE ============================ -->
-    <section id="schedule" class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-                <h2 class="text-2xl font-extrabold tracking-tight text-gray-900">Today's Schedule</h2>
-                <p class="mt-1 text-sm text-gray-500">{{ date('l, F j, Y') }} · tap any open slot to book it.</p>
-            </div>
-            <!-- Legend -->
-            <div class="flex items-center gap-4">
-                <span class="flex items-center gap-2 text-xs font-medium text-gray-600">
-                    <span class="h-3 w-3 rounded bg-blue-50 ring-1 ring-blue-200"></span> Available
-                </span>
-                <span class="flex items-center gap-2 text-xs font-medium text-gray-600">
-                    <span class="h-3 w-3 rounded bg-gray-100 ring-1 ring-gray-200"></span> Booked
-                </span>
-            </div>
-        </div>
-
-        @php
-            $fields = ['Futsal Synthetic Grass', 'Futsal Premium Vinyl', 'Badminton', 'Basketball'];
-            $times  = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00', '01:00', '02:00'];
-            // Pre-booked slots: time => [courts already taken]
-            $booked = [
-                '08:00' => ['Futsal Synthetic Grass'],
-                '09:00' => ['Futsal Synthetic Grass', 'Badminton'],
-                '10:00' => ['Futsal Premium Vinyl'],
-                '12:00' => ['Basketball'],
-                '14:00' => ['Futsal Synthetic Grass', 'Futsal Premium Vinyl'],
-                '16:00' => ['Badminton'],
-                '18:00' => ['Futsal Synthetic Grass', 'Futsal Premium Vinyl', 'Basketball'],
-                '19:00' => ['Futsal Premium Vinyl', 'Badminton'],
-                '20:00' => ['Futsal Synthetic Grass', 'Basketball', 'Badminton'],
-                '21:00' => ['Futsal Synthetic Grass', 'Futsal Premium Vinyl'],
-                '22:00' => ['Basketball'],
-                '00:00' => ['Futsal Synthetic Grass'],
-            ];
-        @endphp
-
-        <!-- Mobile hint -->
-        <p class="mt-4 text-xs text-gray-400 sm:hidden">Swipe horizontally to see all courts &rarr;</p>
-
-        <!-- Scrollable wrapper: capped height (vertical scroll) + horizontal scroll on mobile -->
-        <div class="mt-3 max-h-[28rem] overflow-auto rounded-2xl border border-gray-100 bg-white shadow-xs">
-            <table class="w-full min-w-[780px] border-separate border-spacing-0 text-sm">
-                <thead>
-                    <tr>
-                        <th class="sticky left-0 top-0 z-30 border-b border-r border-gray-100 bg-gray-50 px-4 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-gray-500">Time</th>
-                        @foreach ($fields as $field)
-                            <th class="sticky top-0 z-20 border-b border-gray-100 bg-gray-50 px-3 py-3.5 text-center text-xs font-bold uppercase tracking-wider text-gray-700">{{ $field }}</th>
-                        @endforeach
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($times as $time)
-                        <tr>
-                            <td class="sticky left-0 z-10 border-b border-r border-gray-100 bg-white px-4 py-2.5 text-left font-semibold text-gray-700 whitespace-nowrap">{{ $time }}</td>
-                            @foreach ($fields as $field)
-                                @php $isBooked = in_array($field, $booked[$time] ?? []); @endphp
-                                <td class="border-b border-gray-50 px-2 py-2 text-center">
-                                    @if ($isBooked)
-                                        <span class="inline-flex w-full max-w-[8rem] items-center justify-center rounded-lg bg-gray-100 px-3 py-2 text-xs font-semibold text-gray-400 cursor-not-allowed select-none">
-                                            Booked
-                                        </span>
-                                    @else
-                                        <a href="{{ route('register') }}" title="Book {{ $field }} at {{ $time }}"
-                                           class="inline-flex w-full max-w-[8rem] items-center justify-center rounded-lg bg-blue-50 px-3 py-2 text-xs font-semibold text-[#0047D4] ring-1 ring-inset ring-blue-100 transition-all duration-150 hover:bg-[#0047D4] hover:text-white hover:ring-[#0047D4] active:scale-[0.97]">
-                                            Available
-                                        </a>
-                                    @endif
-                                </td>
-                            @endforeach
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-        <p class="mt-3 text-xs text-gray-400">Slots after midnight (00:00–02:00) belong to the next day. Scroll inside the table to see all hours.</p>
-    </section>
+    <!-- ============================ SCHEDULE (date-aware; guests = today only) ============================ -->
+    <x-schedule-board :authed="auth()->check()" title="Court Schedule" />
 
     <!-- ============================ PRICING ============================ -->
     <section id="pricing" class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
