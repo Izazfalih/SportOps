@@ -31,7 +31,7 @@
 
                 <!-- Form Section -->
                 <div class="mt-8">
-                    <form action="#" method="POST" class="space-y-5">
+                    <form action="{{ route('login.post') }}" method="POST" class="space-y-5">
                         @csrf
                         
                         <!-- Email Address Input -->
@@ -47,9 +47,12 @@
                                         <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
                                     </svg>
                                 </div>
-                                <input id="email" name="email" type="email" autocomplete="email" required placeholder="admin@sportops.com" 
+                                <input id="email" name="email" type="email" autocomplete="email" required placeholder="admin@sportops.com" value="{{ old('email') }}"
                                     class="block w-full bg-transparent border-0 py-3.5 pl-12 pr-4 text-sm text-gray-900 placeholder-gray-400 focus:ring-0 focus:outline-none">
                             </div>
+                            @error('email')
+                                <p class="mt-2 text-xs text-red-600">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <!-- Password Input -->

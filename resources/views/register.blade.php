@@ -42,7 +42,7 @@
 
                 <!-- Form Section -->
                 <div class="mt-8">
-                    <form action="#" method="POST" class="space-y-4">
+                    <form action="{{ route('register.post') }}" method="POST" class="space-y-4">
                         @csrf
                         
                         <!-- Full Name Input -->
@@ -58,9 +58,12 @@
                                         <circle cx="12" cy="7" r="4"></circle>
                                     </svg>
                                 </div>
-                                <input id="name" name="name" type="text" autocomplete="name" required placeholder="Jane Doe" 
+                                <input id="name" name="name" type="text" autocomplete="name" required placeholder="Jane Doe" value="{{ old('name') }}"
                                     class="block w-full bg-transparent border-0 py-3.5 pl-12 pr-4 text-sm text-gray-900 placeholder-gray-400 focus:ring-0 focus:outline-none">
                             </div>
+                            @error('name')
+                                <p class="mt-2 text-xs text-red-600">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <!-- Email & Phone Fields (Responsive Grid) -->
@@ -78,9 +81,12 @@
                                             <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
                                         </svg>
                                     </div>
-                                    <input id="email" name="email" type="email" autocomplete="email" required placeholder="jane@example.com" 
+                                    <input id="email" name="email" type="email" autocomplete="email" required placeholder="jane@example.com" value="{{ old('email') }}"
                                         class="block w-full bg-transparent border-0 py-3.5 pl-12 pr-4 text-sm text-gray-900 placeholder-gray-400 focus:ring-0 focus:outline-none">
                                 </div>
+                                @error('email')
+                                    <p class="mt-2 text-xs text-red-600">{{ $message }}</p>
+                                @enderror
                             </div>
 
                             <!-- Phone Number -->
@@ -95,9 +101,12 @@
                                             <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                                         </svg>
                                     </div>
-                                    <input id="phone" name="phone" type="tel" placeholder="+1 (555) 000-0000" 
+                                    <input id="phone" name="phone" type="tel" placeholder="+1 (555) 000-0000" value="{{ old('phone') }}"
                                         class="block w-full bg-transparent border-0 py-3.5 pl-12 pr-4 text-sm text-gray-900 placeholder-gray-400 focus:ring-0 focus:outline-none">
                                 </div>
+                                @error('phone')
+                                    <p class="mt-2 text-xs text-red-600">{{ $message }}</p>
+                                @enderror
                             </div>
                         </div>
 
@@ -119,6 +128,9 @@
                                     <input id="password" name="password" type="password" required placeholder="••••••••" 
                                         class="block w-full bg-transparent border-0 py-3.5 pl-12 pr-4 text-sm text-gray-900 placeholder-gray-400 focus:ring-0 focus:outline-none">
                                 </div>
+                                @error('password')
+                                    <p class="mt-2 text-xs text-red-600">{{ $message }}</p>
+                                @enderror
                             </div>
 
                             <!-- Confirm Password -->
