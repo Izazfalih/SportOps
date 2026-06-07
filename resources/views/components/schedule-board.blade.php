@@ -16,7 +16,7 @@
 <section id="schedule" class="{{ $wrapClass }}"
          data-schedule-board
          data-authed="{{ $authed ? '1' : '0' }}"
-         data-book-url="{{ route('register') }}"
+         data-book-url="{{ $authed ? route('booking') : route('login') }}"
          data-courts='@json($courts)'
          data-times='@json($times)'>
 
@@ -149,7 +149,13 @@
                         if (isBooked(ds, ci, ti)) {
                             html += '<span class="' + bookedCls + '">Booked</span>';
                         } else {
-                            html += '<a href="' + bookUrl + '" title="Book ' + courts[ci] + ' at ' + times[ti] + '" class="' + availCls + '">Available</a>';
+                            var href = bookUrl;
+                            if (authed) {
+                                href += '?court=' + encodeURIComponent(courts[ci])
+                                      + '&date=' + encodeURIComponent(ds)
+                                      + '&time=' + encodeURIComponent(times[ti]);
+                            }
+                            html += '<a href="' + href + '" title="Book ' + courts[ci] + ' at ' + times[ti] + '" class="' + availCls + '">Available</a>';
                         }
                         html += '</td>';
                     }

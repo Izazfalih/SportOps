@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('dashboard');
 });
 
 Route::middleware('guest')->group(function () {
@@ -32,6 +32,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    Route::get('/booking', function () {
+        return view('booking');
+    })->name('booking');
+
+    Route::get('/bookings', function () {
+        return view('booking-history');
+    })->name('bookings');
 
     Route::post('/logout', [AuthController::class, 'logout'])
         ->name('logout');

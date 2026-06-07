@@ -11,59 +11,17 @@
     @php
         // ----------------------------- Placeholder data -----------------------------
         $user = [
-            'name'       => 'Rizky Maulana',
-            'first'      => 'Rizky',
-            'email'      => 'rizky.maulana@example.com',
-            'initials'   => 'RM',
-            'membership' => 'Gold Member',
-            'bookings'   => 24,
-        ];
-
-        // Icons reused across cards
-        $icons = [
-            'Futsal'         => '<circle cx="12" cy="12" r="9"></circle><path d="m12 3 2.5 4.5L12 12 9.5 7.5 12 3Z"></path><path d="m21 12-5 .8-2.5-4.3M3 12l5 .8 2.5-4.3M16.5 19.5 14 15l4.5-1.5M7.5 19.5 10 15 5.5 13.5"></path>',
-            'Premium Futsal' => '<circle cx="12" cy="12" r="9"></circle><path d="m12 3 2.5 4.5L12 12 9.5 7.5 12 3Z"></path><path d="m21 12-5 .8-2.5-4.3M3 12l5 .8 2.5-4.3M16.5 19.5 14 15l4.5-1.5M7.5 19.5 10 15 5.5 13.5"></path>',
-            'Badminton'      => '<path d="M14 3 4 13l3 3 4 4 10-10"></path><circle cx="6.5" cy="17.5" r="2.5"></circle><path d="m14 3 7 7"></path>',
-            'Basketball'     => '<circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3v18M5.6 5.6c3.5 3.5 9.3 3.5 12.8 0M5.6 18.4c3.5-3.5 9.3-3.5 12.8 0"></path>',
-        ];
-
-        // SportOps Arena — one court per sport, matching the Home page (names, prices).
-        $courts = [
-            ['name' => 'Futsal — Synthetic Grass', 'sport' => 'Futsal',         'rating' => '4.9', 'price' => '120,000', 'status' => 'Available',   'badge' => 'open',    'gradient' => 'from-blue-500 via-blue-600 to-indigo-700'],
-            ['name' => 'Premium Futsal — Vinyl',   'sport' => 'Premium Futsal', 'rating' => '4.8', 'price' => '180,000', 'status' => 'Popular',     'badge' => 'popular', 'gradient' => 'from-violet-500 via-purple-600 to-fuchsia-700'],
-            ['name' => 'Badminton',                'sport' => 'Badminton',      'rating' => '4.8', 'price' => '50,000',  'status' => 'Available',   'badge' => 'open',    'gradient' => 'from-emerald-500 via-teal-600 to-cyan-700'],
-            ['name' => 'Basketball',               'sport' => 'Basketball',     'rating' => '4.7', 'price' => '150,000', 'status' => '2 slots left', 'badge' => 'few',    'gradient' => 'from-orange-400 via-orange-500 to-rose-600'],
-        ];
-
-        $badgeStyles = [
-            'open'    => 'bg-emerald-50 text-emerald-700 ring-emerald-200',
-            'few'     => 'bg-amber-50 text-amber-700 ring-amber-200',
-            'popular' => 'bg-[#D7F23D] text-[#1c2a00] ring-[#c4dd2f]',
-        ];
-
-        $history = [
-            ['id' => 'SPO-10482', 'court' => 'Futsal — Synthetic Grass', 'date' => 'Jun 02, 2026', 'pay' => 'Paid',     'status' => 'Completed'],
-            ['id' => 'SPO-10455', 'court' => 'Basketball',               'date' => 'May 28, 2026', 'pay' => 'Paid',     'status' => 'Completed'],
-            ['id' => 'SPO-10431', 'court' => 'Badminton',                'date' => 'May 21, 2026', 'pay' => 'Deposit',  'status' => 'Upcoming'],
-            ['id' => 'SPO-10398', 'court' => 'Premium Futsal — Vinyl',   'date' => 'May 14, 2026', 'pay' => 'Refunded', 'status' => 'Cancelled'],
-            ['id' => 'SPO-10377', 'court' => 'Futsal — Synthetic Grass', 'date' => 'May 09, 2026', 'pay' => 'Paid',     'status' => 'Completed'],
-        ];
-
-        $payStyles = [
-            'Paid'     => 'bg-emerald-50 text-emerald-700',
-            'Deposit'  => 'bg-blue-50 text-[#0047D4]',
-            'Refunded' => 'bg-gray-100 text-gray-500',
-        ];
-        $statusStyles = [
-            'Completed' => 'bg-emerald-50 text-emerald-700',
-            'Upcoming'  => 'bg-amber-50 text-amber-700',
-            'Cancelled' => 'bg-rose-50 text-rose-600',
+            'name'     => 'Rizky Maulana',
+            'first'    => 'Rizky',
+            'email'    => 'rizky.maulana@example.com',
+            'initials' => 'RM',
+            'bookings' => 24,
         ];
 
         $quickActions = [
-            ['label' => 'Book Court',      'href' => route('register'), 'icon' => '<path d="M5 12h14M12 5v14"></path>'],
+            ['label' => 'Book Court',      'href' => route('booking'),  'icon' => '<path d="M5 12h14M12 5v14"></path>'],
             ['label' => 'View Schedule',   'href' => '#schedule',       'icon' => '<rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path>'],
-            ['label' => 'Booking History', 'href' => '#history',        'icon' => '<path d="M3 3v5h5"></path><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"></path><path d="M12 7v5l4 2"></path>'],
+            ['label' => 'My Bookings',     'href' => route('bookings'), 'icon' => '<path d="M3 3v5h5"></path><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"></path><path d="M12 7v5l4 2"></path>'],
             ['label' => 'Edit Profile',    'href' => '#profile',        'icon' => '<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle>'],
         ];
     @endphp
@@ -82,8 +40,8 @@
             <!-- Center nav links -->
             <div class="hidden items-center gap-1 lg:flex">
                 <a href="#" class="rounded-lg bg-blue-50 px-3.5 py-2 text-sm font-semibold text-[#0047D4]">Dashboard</a>
-                <a href="#courts" class="rounded-lg px-3.5 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-[#0047D4] transition-colors duration-150">Explore Courts</a>
-                <a href="#history" class="rounded-lg px-3.5 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-[#0047D4] transition-colors duration-150">My Bookings</a>
+                <a href="{{ route('booking') }}" class="rounded-lg px-3.5 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-[#0047D4] transition-colors duration-150">Book a Court</a>
+                <a href="{{ route('bookings') }}" class="rounded-lg px-3.5 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-[#0047D4] transition-colors duration-150">My Bookings</a>
                 <a href="#schedule" class="rounded-lg px-3.5 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-[#0047D4] transition-colors duration-150">Schedule</a>
             </div>
 
@@ -113,7 +71,7 @@
                         </div>
                         <div class="py-1">
                             <a href="#profile" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-[#0047D4]">My Profile</a>
-                            <a href="#history" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-[#0047D4]">My Bookings</a>
+                            <a href="{{ route('bookings') }}" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-[#0047D4]">My Bookings</a>
                             <a href="#" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-[#0047D4]">Settings</a>
                         </div>
                         <div class="border-t border-gray-50 py-1">
@@ -133,8 +91,8 @@
         <div id="mobile-menu" class="hidden border-t border-gray-100 bg-white px-4 py-3 lg:hidden">
             <div class="flex flex-col gap-1">
                 <a href="#" class="rounded-lg bg-blue-50 px-3 py-2.5 text-sm font-semibold text-[#0047D4]">Dashboard</a>
-                <a href="#courts" class="rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50">Explore Courts</a>
-                <a href="#history" class="rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50">My Bookings</a>
+                <a href="{{ route('booking') }}" class="rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50">Book a Court</a>
+                <a href="{{ route('bookings') }}" class="rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50">My Bookings</a>
                 <a href="#schedule" class="rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50">Schedule</a>
             </div>
         </div>
@@ -159,135 +117,20 @@
                 </h1>
                 <p class="mt-2 text-base text-blue-100/90">Book your next game in seconds.</p>
 
-                <!-- Search + CTA -->
-                <form action="#" method="GET" class="mt-6 flex flex-col gap-3 sm:flex-row">
-                    <div class="relative flex-1">
-                        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400">
-                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
-                        </div>
-                        <input type="text" placeholder="Search venue, sport, or location"
-                            class="w-full rounded-2xl border border-white/30 bg-white/95 py-3.5 pl-12 pr-4 text-sm text-gray-900 placeholder-gray-400 shadow-lg backdrop-blur focus:border-white focus:ring-4 focus:ring-white/30 focus:outline-none transition-all duration-200">
-                    </div>
-                    <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#D7F23D] px-7 py-3.5 text-sm font-bold text-[#1c2a00] shadow-lg shadow-black/10 hover:bg-[#c8e62f] active:scale-[0.99] transition-all duration-200">
+                <!-- Primary CTA -->
+                <div class="mt-6">
+                    <a href="{{ route('booking') }}" class="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#D7F23D] px-7 py-3.5 text-sm font-bold text-[#1c2a00] shadow-lg shadow-black/10 hover:bg-[#c8e62f] active:scale-[0.99] transition-all duration-200">
                         Book Now
                         <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
-                    </button>
-                </form>
-            </div>
-        </section>
-
-        <!-- ---------------------- COURT CATEGORIES (one per sport) ---------------------- -->
-        <section class="mt-8">
-            <div class="flex items-end justify-between">
-                <div>
-                    <h2 class="text-lg font-extrabold tracking-tight text-gray-900">Our Courts</h2>
-                    <p class="mt-0.5 text-sm text-gray-500">One venue · one court per sport.</p>
-                </div>
-                <a href="#courts" class="text-sm font-semibold text-[#0047D4] hover:text-[#003cb5] transition-colors duration-150">See all courts</a>
-            </div>
-            <div class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-                @foreach ($courts as $cat)
-                    <a href="#courts" class="group flex items-center gap-3 rounded-2xl border border-gray-100 bg-white p-4 shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md">
-                        <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-[#0047D4] transition-colors duration-200 group-hover:bg-[#0047D4] group-hover:text-white">
-                            <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">{!! $icons[$cat['sport']] !!}</svg>
-                        </span>
-                        <div class="min-w-0">
-                            <p class="truncate text-sm font-bold text-gray-900">{{ $cat['sport'] }}</p>
-                            <p class="text-xs text-gray-500">1 court available</p>
-                        </div>
                     </a>
-                @endforeach
+                </div>
             </div>
         </section>
 
         <!-- ---------------------- MAIN GRID: content + sidebar ---------------------- -->
-        <div class="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-3">
+        <div class="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
 
-            <!-- ============ LEFT / MAIN COLUMN ============ -->
-            <div class="space-y-8 lg:col-span-2">
-
-                <!-- Available Courts -->
-                <section id="courts">
-                    <div class="flex items-end justify-between">
-                        <div>
-                            <h2 class="text-lg font-extrabold tracking-tight text-gray-900">Available Courts</h2>
-                            <p class="mt-0.5 text-sm text-gray-500">SportOps Arena · book any court by the hour.</p>
-                        </div>
-                        <a href="#schedule" class="hidden text-sm font-semibold text-[#0047D4] hover:text-[#003cb5] transition-colors duration-150 sm:inline">View schedule</a>
-                    </div>
-
-                    <div class="mt-4 grid grid-cols-1 gap-5 sm:grid-cols-2">
-                        @foreach ($courts as $court)
-                            <article class="group overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-xs transition-all duration-200 hover:-translate-y-1 hover:shadow-lg">
-                                <!-- Image placeholder -->
-                                <div class="relative h-36 bg-gradient-to-br {{ $court['gradient'] }}">
-                                    <div class="absolute inset-0 bg-black/10"></div>
-                                    <span class="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-bold text-gray-700 shadow-sm backdrop-blur">
-                                        {{ $court['sport'] }}
-                                    </span>
-                                    <span class="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-white/90 px-2 py-1 shadow-sm backdrop-blur">
-                                        <svg class="h-3.5 w-3.5 text-[#D7B400]" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.3 5.9 20.4l1.4-6.8L2.2 9l6.9-.7L12 2Z"></path></svg>
-                                        <span class="text-xs font-bold text-gray-800">{{ $court['rating'] }}</span>
-                                    </span>
-                                </div>
-                                <!-- Body -->
-                                <div class="p-4">
-                                    <div class="flex items-center justify-between gap-2">
-                                        <h3 class="truncate text-base font-bold text-gray-900">{{ $court['name'] }}</h3>
-                                        <span class="shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold ring-1 ring-inset {{ $badgeStyles[$court['badge']] }}">{{ $court['status'] }}</span>
-                                    </div>
-                                    <div class="mt-4 flex items-center justify-between">
-                                        <p class="text-sm">
-                                            <span class="text-lg font-extrabold text-[#0047D4]">Rp{{ $court['price'] }}</span>
-                                            <span class="font-medium text-gray-400">/hr</span>
-                                        </p>
-                                        <a href="{{ route('register') }}" class="inline-flex items-center justify-center rounded-xl bg-[#0047D4] px-4 py-2 text-xs font-semibold text-white shadow-lg shadow-blue-500/10 hover:bg-[#003cb5] hover:shadow-blue-500/20 active:scale-[0.98] transition-all duration-200">
-                                            Book Now
-                                        </a>
-                                    </div>
-                                </div>
-                            </article>
-                        @endforeach
-                    </div>
-                </section>
-
-                <!-- Booking History -->
-                <section id="history">
-                    <div class="flex items-end justify-between">
-                        <h2 class="text-lg font-extrabold tracking-tight text-gray-900">Booking History</h2>
-                        <a href="#" class="text-sm font-semibold text-[#0047D4] hover:text-[#003cb5] transition-colors duration-150">Export</a>
-                    </div>
-                    <div class="mt-4 overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-xs">
-                        <div class="overflow-x-auto">
-                            <table class="w-full min-w-[640px] border-collapse text-sm">
-                                <thead>
-                                    <tr class="border-b border-gray-100 bg-gray-50/70 text-left text-xs font-bold uppercase tracking-wider text-gray-500">
-                                        <th class="px-5 py-3.5">Booking ID</th>
-                                        <th class="px-5 py-3.5">Court</th>
-                                        <th class="px-5 py-3.5">Date</th>
-                                        <th class="px-5 py-3.5">Payment</th>
-                                        <th class="px-5 py-3.5">Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($history as $row)
-                                        <tr class="border-b border-gray-50 last:border-0 hover:bg-gray-50/60 transition-colors duration-150">
-                                            <td class="px-5 py-4 font-mono text-xs font-semibold text-gray-500">{{ $row['id'] }}</td>
-                                            <td class="px-5 py-4 font-semibold text-gray-900">{{ $row['court'] }}</td>
-                                            <td class="px-5 py-4 text-gray-500">{{ $row['date'] }}</td>
-                                            <td class="px-5 py-4"><span class="rounded-full px-2.5 py-1 text-xs font-semibold {{ $payStyles[$row['pay']] }}">{{ $row['pay'] }}</span></td>
-                                            <td class="px-5 py-4"><span class="rounded-full px-2.5 py-1 text-xs font-semibold {{ $statusStyles[$row['status']] }}">{{ $row['status'] }}</span></td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </section>
-            </div>
-
-            <!-- ============ RIGHT / SIDEBAR COLUMN ============ -->
-            <aside class="space-y-6">
+            <!-- ============ SIDEBAR CARDS ============ -->
 
                 <!-- Profile Summary -->
                 <section id="profile" class="rounded-3xl border border-gray-100 bg-white p-6 shadow-xs">
@@ -298,21 +141,14 @@
                             <p class="truncate text-xs text-gray-500">{{ $user['email'] }}</p>
                         </div>
                     </div>
-                    <div class="mt-5 grid grid-cols-2 gap-3">
+                    <div class="mt-5">
                         <div class="rounded-2xl bg-gray-50 p-3 text-center">
                             <p class="text-xl font-extrabold text-gray-900">{{ $user['bookings'] }}</p>
                             <p class="text-xs text-gray-500">Total bookings</p>
                         </div>
-                        <div class="rounded-2xl bg-gradient-to-br from-amber-50 to-yellow-50 p-3 text-center ring-1 ring-amber-100">
-                            <p class="flex items-center justify-center gap-1 text-sm font-extrabold text-amber-700">
-                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.3 5.9 20.4l1.4-6.8L2.2 9l6.9-.7L12 2Z"></path></svg>
-                                Gold
-                            </p>
-                            <p class="text-xs text-amber-600/80">Membership</p>
-                        </div>
                     </div>
-                    <a href="#" class="mt-4 inline-flex w-full items-center justify-center rounded-xl border border-gray-200 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:border-[#0047D4] hover:text-[#0047D4] transition-colors duration-150">
-                        Edit Profile
+                    <a href="{{ route('bookings') }}" class="mt-4 inline-flex w-full items-center justify-center rounded-xl border border-gray-200 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:border-[#0047D4] hover:text-[#0047D4] transition-colors duration-150">
+                        View my bookings
                     </a>
                 </section>
 
@@ -339,7 +175,7 @@
                                 Deposit paid · Rp25,000
                             </div>
                         </div>
-                        <a href="#" class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#0047D4] px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/10 hover:bg-[#003cb5] active:scale-[0.99] transition-all duration-200">
+                        <a href="{{ route('bookings') }}" class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#0047D4] px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/10 hover:bg-[#003cb5] active:scale-[0.99] transition-all duration-200">
                             View Details
                             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
                         </a>
@@ -360,7 +196,6 @@
                         @endforeach
                     </div>
                 </section>
-            </aside>
         </div>
 
         <!-- ---------------------- SCHEDULE (date-aware; logged-in users browse any date) ---------------------- -->
