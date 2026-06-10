@@ -28,7 +28,7 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('dashboard');
+        return redirect()->route($this->dashboardRoute($user));
     }
 
     public function login(Request $request)
@@ -43,7 +43,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
 
-            return redirect()->intended(route('dashboard'));
+            return redirect()->intended(route($this->dashboardRoute(Auth::user())));
         }
 
         return back()->withErrors([
@@ -59,5 +59,14 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/');
+    }
+
+    private function dashboardRoute($user): string
+    {
+        return match ($user->role) {
+            'admin' => 'admin.dashboard',
+            'penjaga' => 'staff.dashboard',
+            default => 'dashboard',
+        };
     }
 }

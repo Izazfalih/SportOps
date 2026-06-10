@@ -44,4 +44,22 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])
         ->name('logout');
 
+    // ────────────── Admin Routes ──────────────
+    Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
+        Route::get('/dashboard', fn () => view('admin.dashboard'))->name('dashboard');
+        Route::get('/courts', fn () => view('admin.courts'))->name('courts');
+        Route::get('/bookings', fn () => view('admin.bookings'))->name('bookings');
+        Route::get('/users', fn () => view('admin.users'))->name('users');
+        Route::get('/reports', fn () => view('admin.reports'))->name('reports');
+        Route::get('/settings', fn () => view('admin.settings'))->name('settings');
+    });
+
+    // ────────────── Staff Routes ──────────────
+    Route::middleware('staff')->prefix('staff')->name('staff.')->group(function () {
+        Route::get('/dashboard', fn () => view('staff.dashboard'))->name('dashboard');
+        Route::get('/schedule', fn () => view('staff.schedule'))->name('schedule');
+        Route::get('/checkin', fn () => view('staff.checkin'))->name('checkin');
+        Route::get('/offline-booking', fn () => view('staff.offline-booking'))->name('offline-booking');
+        Route::get('/settlement', fn () => view('staff.settlement'))->name('settlement');
+    });
 });
