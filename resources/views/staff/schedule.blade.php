@@ -1,12 +1,12 @@
-<!DOCTYPE html>
-<html lang="en" class="h-full bg-[#F7F8FA] scroll-smooth">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Today's Schedule | SportOps Staff</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <style>
-        .maintenance-stripes {
+@extends('layouts.staff')
+
+@section('title', 'Today's Schedule')
+@section('page-title', 'Today's Schedule')
+@section('page-subtitle', 'All bookings for today')
+
+@push('styles')
+<style>
+.maintenance-stripes {
             background: repeating-linear-gradient(
                 -45deg,
                 #f3f4f6,
@@ -15,18 +15,13 @@
                 #e5e7eb 8px
             );
         }
-    </style>
-</head>
-<body class="h-full font-sans antialiased text-gray-900 bg-[#F7F8FA]">
+</style>
+@endpush
+
+@section('content')
 
     @php
-        $staff = [
-            'name'     => 'Andi Prasetyo',
-            'initials' => 'AP',
-            'role'     => 'Front Desk Staff',
-        ];
-
-        $currentDate = 'Tuesday, 10 June 2026';
+$currentDate = 'Tuesday, 10 June 2026';
         $currentDateShort = '10 Jun 2026';
 
         $courts = ['Futsal', 'Badminton', 'Tennis', 'Basketball', 'Volleyball'];
@@ -77,159 +72,10 @@
         ];
 
         $activeFilter = 'all';
-
-        $navItems = [
-            ['label' => 'Dashboard',        'route' => 'staff.dashboard',        'icon' => 'dashboard'],
-            ['label' => "Today's Schedule",  'route' => 'staff.schedule',         'icon' => 'schedule'],
-            ['label' => 'Check-In',          'route' => 'staff.checkin',          'icon' => 'checkin'],
-            ['label' => 'Offline Booking',   'route' => 'staff.offline-booking',  'icon' => 'offline-booking'],
-            ['label' => 'Settlement',        'route' => 'staff.settlement',       'icon' => 'settlement'],
-        ];
     @endphp
 
-    <div class="flex h-full">
 
-        {{-- ======================== SIDEBAR (Desktop) ======================== --}}
-        <aside class="hidden lg:flex lg:w-[260px] lg:flex-col lg:fixed lg:inset-y-0 bg-white border-r border-gray-100 z-40">
-            {{-- Brand --}}
-            <div class="flex items-center gap-2.5 px-5 py-5 border-b border-gray-100">
-                <div class="bg-white border border-gray-150 p-1.5 rounded-xl shadow-xs">
-                    <img class="h-7 w-auto object-contain" src="{{ asset('images/logo.png') }}" alt="SportOps Logo">
-                </div>
-                <div>
-                    <span class="text-lg font-extrabold tracking-tight text-gray-900">SportOps</span>
-                    <span class="ml-1.5 rounded-md bg-blue-50 px-1.5 py-0.5 text-[10px] font-bold text-[#0047D4] uppercase tracking-wider">Staff</span>
-                </div>
-            </div>
-
-            {{-- Navigation --}}
-            <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-                @foreach ($navItems as $item)
-                    @php
-                        $isActive = $item['route'] === 'staff.schedule';
-                    @endphp
-                    <a href="{{ route($item['route']) }}"
-                       class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150
-                              {{ $isActive
-                                  ? 'bg-[#0047D4] text-white shadow-lg shadow-blue-500/20'
-                                  : 'text-gray-600 hover:bg-gray-50 hover:text-[#0047D4]' }}">
-                        {{-- Icons --}}
-                        @if ($item['icon'] === 'dashboard')
-                            <svg class="h-5 w-5 {{ $isActive ? 'text-white' : 'text-gray-400' }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1.5"></rect><rect width="7" height="5" x="14" y="3" rx="1.5"></rect><rect width="7" height="9" x="14" y="12" rx="1.5"></rect><rect width="7" height="5" x="3" y="16" rx="1.5"></rect></svg>
-                        @elseif ($item['icon'] === 'schedule')
-                            <svg class="h-5 w-5 {{ $isActive ? 'text-white' : 'text-gray-400' }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"></path></svg>
-                        @elseif ($item['icon'] === 'checkin')
-                            <svg class="h-5 w-5 {{ $isActive ? 'text-white' : 'text-gray-400' }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                        @elseif ($item['icon'] === 'offline-booking')
-                            <svg class="h-5 w-5 {{ $isActive ? 'text-white' : 'text-gray-400' }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M10 12h4M10 16h4"></path></svg>
-                        @elseif ($item['icon'] === 'settlement')
-                            <svg class="h-5 w-5 {{ $isActive ? 'text-white' : 'text-gray-400' }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"></rect><path d="M2 10h20"></path></svg>
-                        @endif
-                        <span>{{ $item['label'] }}</span>
-                    </a>
-                @endforeach
-            </nav>
-
-            {{-- Staff profile + Logout --}}
-            <div class="border-t border-gray-100 px-3 py-4 space-y-2">
-                <div class="flex items-center gap-3 px-3 py-2">
-                    <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#0047D4] to-indigo-600 text-xs font-bold text-white">{{ $staff['initials'] }}</span>
-                    <div class="min-w-0">
-                        <p class="truncate text-sm font-semibold text-gray-900">{{ $staff['name'] }}</p>
-                        <p class="truncate text-xs text-gray-500">{{ $staff['role'] }}</p>
-                    </div>
-                </div>
-                <form method="POST" action="/logout">
-                    @csrf
-                    <button type="submit" class="flex w-full items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-rose-50 hover:text-rose-600 transition-colors duration-150">
-                        <svg class="h-5 w-5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-                        <span>Logout</span>
-                    </button>
-                </form>
-            </div>
-        </aside>
-
-        {{-- ======================== MOBILE HEADER ======================== --}}
-        <div class="lg:hidden fixed top-0 inset-x-0 z-40 border-b border-gray-100 bg-white/80 backdrop-blur-md">
-            <div class="flex items-center justify-between px-4 py-3">
-                <div class="flex items-center gap-2.5">
-                    <div class="bg-white border border-gray-150 p-1.5 rounded-xl shadow-xs">
-                        <img class="h-6 w-auto object-contain" src="{{ asset('images/logo.png') }}" alt="SportOps Logo">
-                    </div>
-                    <span class="text-base font-extrabold tracking-tight text-gray-900">SportOps</span>
-                    <span class="rounded-md bg-blue-50 px-1.5 py-0.5 text-[10px] font-bold text-[#0047D4] uppercase tracking-wider">Staff</span>
-                </div>
-                <button type="button" onclick="toggleMobileSidebar()" class="inline-flex items-center justify-center rounded-xl border border-gray-150 bg-white p-2.5 text-gray-500 shadow-xs" aria-label="Toggle menu">
-                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="20" y2="7"></line><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="17" x2="20" y2="17"></line></svg>
-                </button>
-            </div>
-        </div>
-
-        {{-- Mobile sidebar overlay --}}
-        <div id="mobile-sidebar-overlay" class="hidden fixed inset-0 z-50 lg:hidden">
-            <div class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm" onclick="toggleMobileSidebar()"></div>
-            <aside class="fixed inset-y-0 left-0 w-[280px] bg-white shadow-2xl flex flex-col">
-                {{-- Brand --}}
-                <div class="flex items-center justify-between px-5 py-5 border-b border-gray-100">
-                    <div class="flex items-center gap-2.5">
-                        <div class="bg-white border border-gray-150 p-1.5 rounded-xl shadow-xs">
-                            <img class="h-7 w-auto object-contain" src="{{ asset('images/logo.png') }}" alt="SportOps Logo">
-                        </div>
-                        <span class="text-lg font-extrabold tracking-tight text-gray-900">SportOps</span>
-                    </div>
-                    <button type="button" onclick="toggleMobileSidebar()" class="rounded-lg p-1.5 text-gray-400 hover:text-gray-600">
-                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                    </button>
-                </div>
-
-                {{-- Nav --}}
-                <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-                    @foreach ($navItems as $item)
-                        @php $isActive = $item['route'] === 'staff.schedule'; @endphp
-                        <a href="{{ route($item['route']) }}"
-                           class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150
-                                  {{ $isActive
-                                      ? 'bg-[#0047D4] text-white shadow-lg shadow-blue-500/20'
-                                      : 'text-gray-600 hover:bg-gray-50 hover:text-[#0047D4]' }}">
-                            @if ($item['icon'] === 'dashboard')
-                                <svg class="h-5 w-5 {{ $isActive ? 'text-white' : 'text-gray-400' }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1.5"></rect><rect width="7" height="5" x="14" y="3" rx="1.5"></rect><rect width="7" height="9" x="14" y="12" rx="1.5"></rect><rect width="7" height="5" x="3" y="16" rx="1.5"></rect></svg>
-                            @elseif ($item['icon'] === 'schedule')
-                                <svg class="h-5 w-5 {{ $isActive ? 'text-white' : 'text-gray-400' }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"></path></svg>
-                            @elseif ($item['icon'] === 'checkin')
-                                <svg class="h-5 w-5 {{ $isActive ? 'text-white' : 'text-gray-400' }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                            @elseif ($item['icon'] === 'offline-booking')
-                                <svg class="h-5 w-5 {{ $isActive ? 'text-white' : 'text-gray-400' }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M10 12h4M10 16h4"></path></svg>
-                            @elseif ($item['icon'] === 'settlement')
-                                <svg class="h-5 w-5 {{ $isActive ? 'text-white' : 'text-gray-400' }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"></rect><path d="M2 10h20"></path></svg>
-                            @endif
-                            <span>{{ $item['label'] }}</span>
-                        </a>
-                    @endforeach
-                </nav>
-
-                {{-- Staff profile + Logout --}}
-                <div class="border-t border-gray-100 px-3 py-4 space-y-2">
-                    <div class="flex items-center gap-3 px-3 py-2">
-                        <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#0047D4] to-indigo-600 text-xs font-bold text-white">{{ $staff['initials'] }}</span>
-                        <div class="min-w-0">
-                            <p class="truncate text-sm font-semibold text-gray-900">{{ $staff['name'] }}</p>
-                            <p class="truncate text-xs text-gray-500">{{ $staff['role'] }}</p>
-                        </div>
-                    </div>
-                    <form method="POST" action="/logout">
-                        @csrf
-                        <button type="submit" class="flex w-full items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-rose-50 hover:text-rose-600 transition-colors duration-150">
-                            <svg class="h-5 w-5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-                            <span>Logout</span>
-                        </button>
-                    </form>
-                </div>
-            </aside>
-        </div>
-
-        {{-- ======================== MAIN CONTENT ======================== --}}
-        <main class="flex-1 lg:ml-[260px] min-h-screen pt-16 lg:pt-0">
-            <div class="px-4 py-6 sm:px-6 sm:py-8 lg:px-8 max-w-[1400px] mx-auto">
+<div class="px-4 py-6 sm:px-6 sm:py-8 lg:px-8 max-w-[1400px] mx-auto">
 
                 {{-- -------- Page Header -------- --}}
                 <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -472,14 +318,11 @@
                 </div>
 
             </div>
-        </main>
-    </div>
 
-    {{-- ======================== JavaScript ======================== --}}
-    <script>
-        function toggleMobileSidebar() {
-            document.getElementById('mobile-sidebar-overlay').classList.toggle('hidden');
-        }
-    </script>
-</body>
-</html>
+@endsection
+
+@push('scripts')
+<script>
+    // Sidebar toggle is handled by the shared layout
+</script>
+@endpush

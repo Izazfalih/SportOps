@@ -1,31 +1,21 @@
-<!DOCTYPE html>
-<html lang="en" class="h-full bg-[#F7F8FA] scroll-smooth">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Financial Reports | SportOps Admin</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <style>
-        .bar-tooltip { opacity: 0; transition: opacity 150ms; }
+@extends('layouts.admin')
+
+@section('title', 'Financial Reports')
+@section('page-title', 'Financial Reports')
+@section('page-subtitle', 'Revenue analytics and transaction history')
+
+@push('styles')
+<style>
+.bar-tooltip { opacity: 0; transition: opacity 150ms; }
         .bar-wrapper:hover .bar-tooltip { opacity: 1; }
         .bar-fill { transition: height 500ms cubic-bezier(.4,0,.2,1); }
-    </style>
-</head>
-<body class="h-full font-sans antialiased text-gray-900 bg-[#F7F8FA]">
+</style>
+@endpush
+
+@section('content')
 
     @php
-        $activePage = 'reports';
-
-        $navItems = [
-            ['label' => 'Dashboard',         'route' => 'admin.dashboard', 'icon' => 'dashboard'],
-            ['label' => 'Courts Management', 'route' => 'admin.courts',    'icon' => 'courts'],
-            ['label' => 'Bookings',          'route' => 'admin.bookings',  'icon' => 'bookings'],
-            ['label' => 'Users',             'route' => 'admin.users',     'icon' => 'users'],
-            ['label' => 'Financial Reports', 'route' => 'admin.reports',   'icon' => 'reports'],
-            ['label' => 'Settings',          'route' => 'admin.settings',  'icon' => 'settings'],
-        ];
-
-        $summaryCards = [
+$summaryCards = [
             ['label' => 'Total Revenue',      'value' => 'Rp 45,800,000', 'badge' => '+12.5%', 'badgeColor' => 'green', 'icon' => 'revenue'],
             ['label' => 'Total DP Payments',   'value' => 'Rp 18,200,000', 'badge' => null,     'badgeColor' => null,    'icon' => 'dp'],
             ['label' => 'Total Full Payments', 'value' => 'Rp 27,600,000', 'badge' => null,     'badgeColor' => null,    'icon' => 'full'],
@@ -70,90 +60,8 @@
         ];
     @endphp
 
-    <div class="flex h-full min-h-screen">
 
-        {{-- ======================== SIDEBAR (Desktop) ======================== --}}
-        <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 flex w-64 flex-col border-r border-gray-100 bg-white transition-transform duration-300 lg:translate-x-0 -translate-x-full">
-            {{-- Brand --}}
-            <div class="flex h-16 items-center gap-2.5 border-b border-gray-100 px-5">
-                <div class="bg-white border border-gray-150 p-1.5 rounded-xl shadow-xs">
-                    <img class="h-7 w-auto object-contain" src="{{ asset('images/logo.png') }}" alt="SportOps Logo">
-                </div>
-                <span class="text-lg font-extrabold tracking-tight text-gray-900">SportOps</span>
-                <button onclick="toggleSidebar()" class="ml-auto lg:hidden rounded-lg p-1 text-gray-400 hover:text-gray-600">
-                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
-                </button>
-            </div>
-
-            {{-- Navigation --}}
-            <nav class="flex-1 overflow-y-auto px-3 py-4">
-                <p class="mb-2 px-3 text-[11px] font-bold uppercase tracking-widest text-gray-400">Menu</p>
-                <ul class="space-y-1">
-                    @foreach ($navItems as $item)
-                        @php
-                            $isActive = $item['icon'] === $activePage;
-                        @endphp
-                        <li>
-                            <a href="{{ route($item['route']) }}"
-                               class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors duration-150
-                                      {{ $isActive
-                                          ? 'bg-blue-50 text-[#0047D4] font-semibold'
-                                          : 'text-gray-600 hover:bg-gray-50 hover:text-[#0047D4]' }}">
-                                {{-- Icons --}}
-                                @if ($item['icon'] === 'dashboard')
-                                    <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
-                                @elseif ($item['icon'] === 'courts')
-                                    <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 12h18M12 3v18"/></svg>
-                                @elseif ($item['icon'] === 'bookings')
-                                    <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-                                @elseif ($item['icon'] === 'users')
-                                    <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                                @elseif ($item['icon'] === 'reports')
-                                    <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>
-                                @elseif ($item['icon'] === 'settings')
-                                    <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
-                                @endif
-                                {{ $item['label'] }}
-                            </a>
-                        </li>
-                    @endforeach
-                </ul>
-            </nav>
-
-            {{-- Logout --}}
-            <div class="border-t border-gray-100 px-3 py-4">
-                <form method="POST" action="/logout">
-                    @csrf
-                    <button type="submit" class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-gray-600 hover:bg-rose-50 hover:text-rose-600 transition-colors duration-150">
-                        <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-                        Logout
-                    </button>
-                </form>
-            </div>
-        </aside>
-
-        {{-- Sidebar backdrop (mobile) --}}
-        <div id="sidebar-backdrop" onclick="toggleSidebar()" class="fixed inset-0 z-30 bg-gray-900/50 backdrop-blur-sm hidden lg:hidden"></div>
-
-        {{-- ======================== MAIN CONTENT ======================== --}}
-        <div class="flex-1 lg:ml-64">
-            {{-- Top bar --}}
-            <header class="sticky top-0 z-20 flex h-16 items-center gap-4 border-b border-gray-100 bg-white/80 backdrop-blur-md px-4 sm:px-6 lg:px-8">
-                <button onclick="toggleSidebar()" class="lg:hidden rounded-xl border border-gray-150 bg-white p-2 text-gray-500 shadow-xs hover:text-[#0047D4] transition-colors">
-                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
-                </button>
-                <div class="flex-1">
-                    <h1 class="text-lg font-extrabold tracking-tight text-gray-900">Financial Reports</h1>
-                </div>
-                <div class="flex items-center gap-2">
-                    <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[#0047D4] to-indigo-600 text-xs font-bold text-white">AD</span>
-                    <span class="hidden text-sm font-semibold text-gray-700 sm:inline">Admin</span>
-                </div>
-            </header>
-
-            <main class="px-4 py-6 sm:px-6 sm:py-8 lg:px-8 max-w-7xl">
-
-                {{-- ==================== PAGE HEADER ==================== --}}
+{{-- ==================== PAGE HEADER ==================== --}}
                 <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <h2 class="text-2xl font-extrabold tracking-tight text-gray-900">Financial Reports</h2>
@@ -368,29 +276,4 @@
                     </div>
                 </div>
 
-            </main>
-
-            {{-- Footer --}}
-            <footer class="mt-8 border-t border-gray-100 bg-white">
-                <div class="flex flex-col items-center justify-between gap-3 px-4 py-6 sm:flex-row sm:px-6 lg:px-8 max-w-7xl">
-                    <p class="text-sm text-gray-400">&copy; {{ date('Y') }} SportOps. All rights reserved.</p>
-                    <div class="flex items-center gap-5 text-sm text-gray-400">
-                        <a href="#" class="hover:text-[#0047D4] transition-colors duration-150">Help</a>
-                        <a href="#" class="hover:text-[#0047D4] transition-colors duration-150">Privacy</a>
-                        <a href="#" class="hover:text-[#0047D4] transition-colors duration-150">Terms</a>
-                    </div>
-                </div>
-            </footer>
-        </div>
-    </div>
-
-    <script>
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const backdrop = document.getElementById('sidebar-backdrop');
-            sidebar.classList.toggle('-translate-x-full');
-            backdrop.classList.toggle('hidden');
-        }
-    </script>
-</body>
-</html>
+@endsection

@@ -1,21 +1,13 @@
-<!DOCTYPE html>
-<html lang="en" class="h-full bg-[#F7F8FA] scroll-smooth">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Settings | Admin — SportOps</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body class="h-full font-sans antialiased text-gray-900 bg-[#F7F8FA]">
+@extends('layouts.admin')
+
+@section('title', 'Settings')
+@section('page-title', 'Settings')
+@section('page-subtitle', 'Manage venue configuration and preferences')
+
+@section('content')
 
     @php
-        $admin = [
-            'name'     => 'Admin SportOps',
-            'email'    => 'admin@sportops.id',
-            'initials' => 'AS',
-        ];
-
-        $venue = [
+$venue = [
             'name'    => 'SportOps Arena',
             'address' => 'Jl. Olahraga No. 12, Jakarta Selatan 12345',
             'phone'   => '+62 21 1234 5678',
@@ -35,108 +27,10 @@
             'payments'      => true,
             'cancellations' => false,
         ];
-
-        $navItems = [
-            ['label' => 'Dashboard',         'route' => 'admin.dashboard', 'icon' => '<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z"/><polyline points="9 22 9 12 15 12 15 22"/>'],
-            ['label' => 'Courts Management', 'route' => 'admin.courts',    'icon' => '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>'],
-            ['label' => 'Bookings',          'route' => 'admin.bookings',  'icon' => '<rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>'],
-            ['label' => 'Users',             'route' => 'admin.users',     'icon' => '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>'],
-            ['label' => 'Financial Reports', 'route' => 'admin.reports',   'icon' => '<path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/>'],
-            ['label' => 'Settings',          'route' => 'admin.settings',  'icon' => '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>'],
-        ];
     @endphp
 
-    <div class="flex h-full">
 
-        {{-- ======================== SIDEBAR (DESKTOP) ======================== --}}
-        <aside class="hidden lg:flex lg:flex-col lg:w-[260px] lg:shrink-0 bg-white border-r border-gray-100">
-            {{-- Brand --}}
-            <div class="flex items-center gap-2.5 px-5 py-5 border-b border-gray-100">
-                <div class="bg-white border border-gray-150 p-1.5 rounded-xl shadow-xs">
-                    <img class="h-7 w-auto object-contain" src="{{ asset('images/logo.png') }}" alt="SportOps Logo">
-                </div>
-                <span class="text-lg font-extrabold tracking-tight text-gray-900">SportOps</span>
-            </div>
-
-            {{-- Nav --}}
-            <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-1">
-                @foreach ($navItems as $item)
-                    @php $isActive = $item['route'] === 'admin.settings'; @endphp
-                    <a href="{{ route($item['route']) }}"
-                       class="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors duration-150
-                              {{ $isActive
-                                  ? 'bg-blue-50 text-[#0047D4] font-semibold'
-                                  : 'text-gray-600 hover:bg-gray-50 hover:text-[#0047D4]' }}">
-                        <svg class="h-5 w-5 shrink-0 {{ $isActive ? 'text-[#0047D4]' : 'text-gray-400 group-hover:text-[#0047D4]' }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{!! $item['icon'] !!}</svg>
-                        {{ $item['label'] }}
-                    </a>
-                @endforeach
-            </nav>
-
-            {{-- Admin profile + Logout --}}
-            <div class="border-t border-gray-100 px-3 py-4">
-                <div class="flex items-center gap-3 px-3 mb-3">
-                    <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-[#0047D4] to-indigo-600 text-xs font-bold text-white">{{ $admin['initials'] }}</span>
-                    <div class="min-w-0">
-                        <p class="truncate text-sm font-semibold text-gray-900">{{ $admin['name'] }}</p>
-                        <p class="truncate text-xs text-gray-500">{{ $admin['email'] }}</p>
-                    </div>
-                </div>
-                <form method="POST" action="/logout">
-                    @csrf
-                    <button type="submit" class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-rose-600 hover:bg-rose-50 transition-colors duration-150">
-                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-                        Logout
-                    </button>
-                </form>
-            </div>
-        </aside>
-
-        {{-- ======================== MOBILE HEADER ======================== --}}
-        <div class="flex flex-1 flex-col min-h-0">
-            <header class="lg:hidden sticky top-0 z-50 border-b border-gray-100 bg-white/80 backdrop-blur-md">
-                <div class="flex items-center justify-between px-4 py-3">
-                    <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2.5 select-none">
-                        <div class="bg-white border border-gray-150 p-1.5 rounded-xl shadow-xs">
-                            <img class="h-7 w-auto object-contain" src="{{ asset('images/logo.png') }}" alt="SportOps Logo">
-                        </div>
-                        <span class="text-lg font-extrabold tracking-tight text-gray-900">SportOps</span>
-                    </a>
-                    <button type="button" onclick="toggleMobileSidebar()" class="inline-flex items-center justify-center rounded-xl border border-gray-150 bg-white p-2.5 text-gray-500 shadow-xs" aria-label="Toggle menu">
-                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
-                    </button>
-                </div>
-
-                {{-- Mobile nav drawer --}}
-                <div id="mobile-sidebar" class="hidden border-t border-gray-100 bg-white px-4 py-3">
-                    <nav class="space-y-1">
-                        @foreach ($navItems as $item)
-                            @php $isActive = $item['route'] === 'admin.settings'; @endphp
-                            <a href="{{ route($item['route']) }}"
-                               class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors duration-150
-                                      {{ $isActive
-                                          ? 'bg-blue-50 text-[#0047D4] font-semibold'
-                                          : 'text-gray-600 hover:bg-gray-50 hover:text-[#0047D4]' }}">
-                                <svg class="h-5 w-5 shrink-0 {{ $isActive ? 'text-[#0047D4]' : 'text-gray-400' }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{!! $item['icon'] !!}</svg>
-                                {{ $item['label'] }}
-                            </a>
-                        @endforeach
-                    </nav>
-                    <div class="mt-3 border-t border-gray-100 pt-3">
-                        <form method="POST" action="/logout">
-                            @csrf
-                            <button type="submit" class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-rose-600 hover:bg-rose-50 transition-colors duration-150">
-                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-                                Logout
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </header>
-
-            {{-- ======================== MAIN CONTENT ======================== --}}
-            <main class="flex-1 overflow-y-auto">
-                <div class="mx-auto max-w-4xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+<div class="mx-auto max-w-4xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
 
                     {{-- Page header --}}
                     <h1 class="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">Settings</h1>
@@ -442,12 +336,12 @@
                     </div>
 
                 </div>
-            </main>
-        </div>
-    </div>
 
-    <script>
-        function toggleMobileSidebar() {
+@endsection
+
+@push('scripts')
+<script>
+function /* removed - handled by layout */() {
             document.getElementById('mobile-sidebar').classList.toggle('hidden');
         }
 
@@ -466,6 +360,5 @@
                 document.getElementById('tab-' + tab.dataset.tab).classList.remove('hidden');
             });
         });
-    </script>
-</body>
-</html>
+</script>
+@endpush

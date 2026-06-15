@@ -1,30 +1,12 @@
-<!DOCTYPE html>
-<html lang="en" class="h-full bg-[#F7F8FA] scroll-smooth">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard | SportOps</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body class="h-full font-sans antialiased text-gray-900 bg-[#F7F8FA]">
+@extends('layouts.admin')
+
+@section('title', 'Admin Dashboard')
+@section('page-title', 'Dashboard')
+
+@section('content')
 
     @php
-        $admin = [
-            'name'     => 'Admin Utama',
-            'initials' => 'AU',
-            'email'    => 'admin@sportops.id',
-        ];
-
-        $navItems = [
-            ['label' => 'Dashboard',         'href' => route('admin.dashboard'), 'active' => true,  'icon' => '<rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/>'],
-            ['label' => 'Courts Management', 'href' => route('admin.courts'), 'active' => false, 'icon' => '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 12h18"/><path d="M12 3v18"/>'],
-            ['label' => 'Bookings',          'href' => route('admin.bookings'), 'active' => false, 'icon' => '<rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"/>'],
-            ['label' => 'Users',             'href' => route('admin.users'), 'active' => false, 'icon' => '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>'],
-            ['label' => 'Financial Reports', 'href' => route('admin.reports'), 'active' => false, 'icon' => '<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>'],
-            ['label' => 'Settings',          'href' => route('admin.settings'), 'active' => false, 'icon' => '<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>'],
-        ];
-
-        $kpis = [
+$kpis = [
             [
                 'label'   => "Today's Bookings",
                 'value'   => '12',
@@ -186,102 +168,8 @@
         ];
     @endphp
 
-    {{-- ==================== MOBILE SIDEBAR OVERLAY ==================== --}}
-    <div id="sidebar-overlay" class="fixed inset-0 z-40 bg-gray-900/50 backdrop-blur-sm transition-opacity duration-300 lg:hidden hidden" onclick="closeSidebar()"></div>
 
-    {{-- ==================== SIDEBAR ==================== --}}
-    <aside id="sidebar" class="fixed left-0 top-0 z-50 flex h-full w-[280px] -translate-x-full flex-col border-r border-gray-100 bg-white transition-transform duration-300 ease-in-out lg:translate-x-0">
-        {{-- Brand --}}
-        <div class="flex items-center gap-3 border-b border-gray-100 px-6 py-5">
-            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#0047D4] to-indigo-600 shadow-lg shadow-blue-500/20">
-                <svg class="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-            </div>
-            <div>
-                <span class="text-lg font-extrabold tracking-tight text-gray-900">SportOps</span>
-                <p class="text-[11px] font-medium text-gray-400">Admin Panel</p>
-            </div>
-        </div>
-
-        {{-- Navigation --}}
-        <nav class="flex-1 overflow-y-auto px-4 py-4">
-            <p class="mb-2 px-3 text-[11px] font-bold uppercase tracking-widest text-gray-400">Menu</p>
-            <div class="space-y-1">
-                @foreach ($navItems as $item)
-                    <a href="{{ $item['href'] }}"
-                       class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors duration-150
-                              {{ $item['active']
-                                  ? 'bg-blue-50 font-semibold text-[#0047D4]'
-                                  : 'font-medium text-gray-600 hover:bg-gray-50 hover:text-[#0047D4]' }}">
-                        <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg {{ $item['active'] ? 'bg-[#0047D4] text-white shadow-lg shadow-blue-500/20' : 'bg-gray-50 text-gray-500' }}">
-                            <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{!! $item['icon'] !!}</svg>
-                        </span>
-                        {{ $item['label'] }}
-                    </a>
-                @endforeach
-            </div>
-        </nav>
-
-        {{-- Sidebar footer: Admin info + Logout --}}
-        <div class="border-t border-gray-100 px-4 py-4">
-            <div class="mb-3 flex items-center gap-3 rounded-xl bg-gray-50 px-3 py-2.5">
-                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#0047D4] to-indigo-600 text-xs font-bold text-white">{{ $admin['initials'] }}</span>
-                <div class="min-w-0">
-                    <p class="truncate text-sm font-semibold text-gray-900">{{ $admin['name'] }}</p>
-                    <p class="truncate text-xs text-gray-500">{{ $admin['email'] }}</p>
-                </div>
-            </div>
-            <form method="POST" action="/logout">
-                @csrf
-                <button type="submit" class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-gray-600 transition-colors duration-150 hover:bg-rose-50 hover:text-rose-600">
-                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gray-50 text-gray-500">
-                        <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-                    </span>
-                    Logout
-                </button>
-            </form>
-        </div>
-    </aside>
-
-    {{-- ==================== MAIN CONTENT ==================== --}}
-    <div class="min-h-full transition-all duration-300 lg:ml-[280px]">
-
-        {{-- Top header bar --}}
-        <header class="sticky top-0 z-30 border-b border-gray-100 bg-white/80 backdrop-blur-md">
-            <div class="flex items-center justify-between px-4 py-3.5 sm:px-6 lg:px-8">
-                <div class="flex items-center gap-3">
-                    {{-- Mobile hamburger --}}
-                    <button type="button" onclick="openSidebar()" class="inline-flex items-center justify-center rounded-xl border border-gray-150 bg-white p-2.5 text-gray-500 shadow-xs lg:hidden" aria-label="Open sidebar">
-                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
-                    </button>
-                    <div>
-                        <h1 class="text-xl font-extrabold tracking-tight text-gray-900 sm:text-2xl">Dashboard</h1>
-                        <p class="text-sm text-gray-500">Welcome back, {{ $admin['name'] }}</p>
-                    </div>
-                </div>
-
-                <div class="flex items-center gap-3">
-                    {{-- Notifications --}}
-                    <button type="button" class="relative inline-flex items-center justify-center rounded-xl border border-gray-150 bg-white p-2.5 text-gray-500 shadow-xs hover:text-[#0047D4] hover:border-blue-200 transition-colors duration-150" aria-label="Notifications">
-                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M10.268 21a2 2 0 0 0 3.464 0"/>
-                            <path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/>
-                        </svg>
-                        <span class="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#0047D4] text-[9px] font-bold text-white ring-2 ring-white">5</span>
-                    </button>
-
-                    {{-- Admin avatar --}}
-                    <div class="flex items-center gap-2.5 rounded-xl border border-gray-150 bg-white p-1 pr-3 shadow-xs">
-                        <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[#0047D4] to-indigo-600 text-xs font-bold text-white">{{ $admin['initials'] }}</span>
-                        <span class="hidden text-sm font-semibold text-gray-700 sm:inline">{{ $admin['name'] }}</span>
-                    </div>
-                </div>
-            </div>
-        </header>
-
-        {{-- Page content --}}
-        <main class="px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
-
-            {{-- ============ KPI METRIC CARDS ============ --}}
+{{-- ============ KPI METRIC CARDS ============ --}}
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
                 @foreach ($kpis as $kpi)
                     <div class="rounded-2xl border border-gray-100 bg-white p-5 shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
@@ -424,32 +312,4 @@
                 </div>
             </div>
 
-        </main>
-
-        {{-- Footer --}}
-        <footer class="mt-4 border-t border-gray-100 bg-white">
-            <div class="flex flex-col items-center justify-between gap-3 px-4 py-6 sm:flex-row sm:px-6 lg:px-8">
-                <p class="text-sm text-gray-400">&copy; {{ date('Y') }} SportOps. All rights reserved.</p>
-                <div class="flex items-center gap-5 text-sm text-gray-400">
-                    <a href="#" class="hover:text-[#0047D4] transition-colors duration-150">Help Center</a>
-                    <a href="#" class="hover:text-[#0047D4] transition-colors duration-150">Privacy</a>
-                    <a href="#" class="hover:text-[#0047D4] transition-colors duration-150">Terms</a>
-                </div>
-            </div>
-        </footer>
-    </div>
-
-    {{-- ==================== SIDEBAR TOGGLE SCRIPTS ==================== --}}
-    <script>
-        function openSidebar() {
-            document.getElementById('sidebar').classList.remove('-translate-x-full');
-            document.getElementById('sidebar-overlay').classList.remove('hidden');
-        }
-
-        function closeSidebar() {
-            document.getElementById('sidebar').classList.add('-translate-x-full');
-            document.getElementById('sidebar-overlay').classList.add('hidden');
-        }
-    </script>
-</body>
-</html>
+@endsection

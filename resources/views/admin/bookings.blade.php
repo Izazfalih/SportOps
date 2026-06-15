@@ -1,28 +1,13 @@
-<!DOCTYPE html>
-<html lang="en" class="h-full bg-[#F7F8FA] scroll-smooth">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bookings Management | SportOps Admin</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body class="h-full font-sans antialiased text-gray-900 bg-[#F7F8FA]">
+@extends('layouts.admin')
+
+@section('title', 'Bookings Management')
+@section('page-title', 'Bookings')
+@section('page-subtitle', 'View and manage all booking records')
+
+@section('content')
 
     @php
-        $admin = ['name' => 'Admin SportOps', 'initials' => 'AS', 'email' => 'admin@sportops.id'];
-
-        $sidebarNav = [
-            ['label' => 'Dashboard',         'route' => 'admin.dashboard', 'icon' => '<rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/>'],
-            ['label' => 'Courts Management', 'route' => 'admin.courts',    'icon' => '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 12h18"/><path d="M12 3v18"/>'],
-            ['label' => 'Bookings',          'route' => 'admin.bookings',  'icon' => '<rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/>'],
-            ['label' => 'Users',             'route' => 'admin.users',     'icon' => '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>'],
-            ['label' => 'Financial Reports', 'route' => 'admin.reports',   'icon' => '<path d="M3 3v18h18"/><path d="M7 16l4-8 4 4 4-6"/>'],
-            ['label' => 'Settings',          'route' => 'admin.settings',  'icon' => '<circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>'],
-        ];
-
-        $activeRoute = 'admin.bookings';
-
-        $statuses = ['All', 'Pending Payment', 'DP Paid', 'Fully Paid', 'Checked In', 'Completed', 'Cancelled'];
+$statuses = ['All', 'Pending Payment', 'DP Paid', 'Fully Paid', 'Checked In', 'Completed', 'Cancelled'];
         $sports = ['All', 'Futsal', 'Badminton', 'Tennis', 'Basketball', 'Volleyball'];
 
         $summaryCards = [
@@ -69,83 +54,8 @@
         ];
     @endphp
 
-    <div class="flex h-full min-h-screen">
 
-        {{-- ======================== SIDEBAR (Desktop) ======================== --}}
-        <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 flex w-64 -translate-x-full flex-col border-r border-gray-100 bg-white transition-transform duration-300 lg:translate-x-0">
-            {{-- Brand --}}
-            <div class="flex h-16 shrink-0 items-center gap-2.5 border-b border-gray-100 px-5">
-                <div class="rounded-xl border border-gray-150 bg-white p-1.5 shadow-xs">
-                    <img class="h-7 w-auto object-contain" src="{{ asset('images/logo.png') }}" alt="SportOps Logo">
-                </div>
-                <span class="text-lg font-extrabold tracking-tight text-gray-900">SportOps</span>
-                <span class="ml-auto rounded-lg bg-[#0047D4]/10 px-2 py-0.5 text-[10px] font-bold text-[#0047D4]">ADMIN</span>
-            </div>
-
-            {{-- Navigation --}}
-            <nav class="flex-1 overflow-y-auto px-3 py-4">
-                <ul class="space-y-1">
-                    @foreach ($sidebarNav as $item)
-                        @php $isActive = $item['route'] === $activeRoute; @endphp
-                        <li>
-                            <a href="{{ route($item['route']) }}"
-                               class="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors duration-150
-                                      {{ $isActive ? 'bg-[#0047D4] text-white shadow-lg shadow-blue-500/10' : 'text-gray-600 hover:bg-gray-50 hover:text-[#0047D4]' }}">
-                                <svg class="h-5 w-5 shrink-0 {{ $isActive ? 'text-white' : 'text-gray-400 group-hover:text-[#0047D4]' }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{!! $item['icon'] !!}</svg>
-                                {{ $item['label'] }}
-                            </a>
-                        </li>
-                    @endforeach
-                </ul>
-            </nav>
-
-            {{-- Bottom: admin info + logout --}}
-            <div class="shrink-0 border-t border-gray-100 p-3">
-                <div class="flex items-center gap-3 rounded-xl px-3 py-2">
-                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#0047D4] to-indigo-600 text-xs font-bold text-white">{{ $admin['initials'] }}</span>
-                    <div class="min-w-0">
-                        <p class="truncate text-sm font-semibold text-gray-900">{{ $admin['name'] }}</p>
-                        <p class="truncate text-xs text-gray-400">{{ $admin['email'] }}</p>
-                    </div>
-                </div>
-                <form method="POST" action="/logout" class="mt-1">
-                    @csrf
-                    <button type="submit" class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-gray-500 hover:bg-rose-50 hover:text-rose-600 transition-colors duration-150">
-                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-                        Log Out
-                    </button>
-                </form>
-            </div>
-        </aside>
-
-        {{-- Sidebar overlay (mobile) --}}
-        <div id="sidebar-overlay" class="fixed inset-0 z-30 hidden bg-gray-900/50 backdrop-blur-sm lg:hidden" onclick="closeSidebar()"></div>
-
-        {{-- ======================== MAIN CONTENT ======================== --}}
-        <div class="flex flex-1 flex-col lg:pl-64">
-
-            {{-- Top bar --}}
-            <header class="sticky top-0 z-20 flex h-16 shrink-0 items-center gap-4 border-b border-gray-100 bg-white/80 px-4 backdrop-blur-md sm:px-6">
-                <button type="button" onclick="openSidebar()" class="inline-flex items-center justify-center rounded-xl border border-gray-150 bg-white p-2 text-gray-500 shadow-xs lg:hidden" aria-label="Open sidebar">
-                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
-                </button>
-
-                <nav class="hidden items-center gap-1.5 text-xs font-medium text-gray-400 sm:flex">
-                    <a href="{{ route('admin.dashboard') }}" class="hover:text-[#0047D4] transition-colors">Admin</a>
-                    <span>/</span>
-                    <span class="text-gray-600">Bookings</span>
-                </nav>
-
-                <div class="ml-auto flex items-center gap-3">
-                    <span class="hidden text-sm font-semibold text-gray-700 sm:inline">{{ $admin['name'] }}</span>
-                    <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#0047D4] to-indigo-600 text-xs font-bold text-white">{{ $admin['initials'] }}</span>
-                </div>
-            </header>
-
-            {{-- Page content --}}
-            <main class="flex-1 overflow-y-auto px-4 py-6 sm:px-6 sm:py-8">
-
-                {{-- -------- Page Header -------- --}}
+{{-- -------- Page Header -------- --}}
                 <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <h1 class="text-2xl font-extrabold tracking-tight text-gray-900">Bookings Management</h1>
@@ -306,9 +216,6 @@
                     </div>
                 </div>
 
-            </main>
-        </div>
-    </div>
 
     {{-- ======================== BOOKING DETAIL MODAL ======================== --}}
     <div id="booking-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-gray-900/50 backdrop-blur-sm p-4" role="dialog" aria-modal="true">
@@ -344,80 +251,11 @@
                     </div>
                 </div>
 
-                {{-- Booking info --}}
-                <div class="rounded-2xl bg-gray-50 p-4 space-y-3">
-                    <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400">Booking Information</h3>
-                    <div class="grid grid-cols-2 gap-3 text-sm">
-                        <div>
-                            <p class="text-xs text-gray-400">Sport</p>
-                            <p id="modal-sport" class="font-semibold text-gray-900"></p>
-                        </div>
-                        <div>
-                            <p class="text-xs text-gray-400">Court</p>
-                            <p id="modal-court" class="font-semibold text-gray-900"></p>
-                        </div>
-                        <div>
-                            <p class="text-xs text-gray-400">Date</p>
-                            <p id="modal-date" class="font-semibold text-gray-900"></p>
-                        </div>
-                        <div>
-                            <p class="text-xs text-gray-400">Time</p>
-                            <p id="modal-time" class="font-semibold text-gray-900"></p>
-                        </div>
-                    </div>
-                </div>
+@endsection
 
-                {{-- Payment breakdown --}}
-                <div class="rounded-2xl bg-gray-50 p-4 space-y-3">
-                    <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400">Payment Breakdown</h3>
-                    <div class="space-y-2 text-sm">
-                        <div class="flex justify-between">
-                            <span class="text-gray-500">Total Price</span>
-                            <span id="modal-price" class="font-bold text-gray-900"></span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-gray-500">DP Amount Paid</span>
-                            <span id="modal-dp" class="font-semibold text-gray-700"></span>
-                        </div>
-                        <div class="flex justify-between border-t border-gray-200 pt-2">
-                            <span class="font-semibold text-gray-700">Remaining Balance</span>
-                            <span id="modal-remaining" class="font-bold text-gray-900"></span>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-2 pt-1">
-                        <span class="text-xs text-gray-400">Payment Status:</span>
-                        <span id="modal-payment-badge" class="inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold"></span>
-                    </div>
-                </div>
-
-                {{-- Status Timeline --}}
-                <div>
-                    <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400">Status Timeline</h3>
-                    <div id="modal-timeline" class="mt-3 space-y-0"></div>
-                </div>
-            </div>
-
-            {{-- Modal footer --}}
-            <div class="sticky bottom-0 flex justify-end gap-2 border-t border-gray-100 bg-white px-6 py-4 rounded-b-3xl">
-                <button type="button" onclick="closeModal()" class="rounded-xl border border-gray-200 bg-white px-5 py-2.5 text-sm font-semibold text-gray-600 shadow-xs hover:bg-gray-50 transition-colors">
-                    Close
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Sidebar mobile toggle
-        function openSidebar() {
-            document.getElementById('sidebar').classList.remove('-translate-x-full');
-            document.getElementById('sidebar-overlay').classList.remove('hidden');
-        }
-        function closeSidebar() {
-            document.getElementById('sidebar').classList.add('-translate-x-full');
-            document.getElementById('sidebar-overlay').classList.add('hidden');
-        }
-
-        // Booking data for modal
+@push('scripts')
+<script>
+// Booking data for modal
         const bookings = @json($bookings);
 
         const paymentBadgeClasses = {
@@ -535,6 +373,5 @@
         document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') closeModal();
         });
-    </script>
-</body>
-</html>
+</script>
+@endpush

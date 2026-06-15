@@ -1,15 +1,13 @@
-<!DOCTYPE html>
-<html lang="en" class="h-full bg-[#F7F8FA] scroll-smooth">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Courts Management | SportOps Admin</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body class="h-full font-sans antialiased text-gray-900 bg-[#F7F8FA]">
+@extends('layouts.admin')
+
+@section('title', 'Courts Management')
+@section('page-title', 'Courts Management')
+@section('page-subtitle', 'Manage all sport courts, pricing, and availability')
+
+@section('content')
 
     @php
-        $courts = [
+$courts = [
             [
                 'name'        => 'Lapangan Futsal',
                 'sport'       => 'Futsal',
@@ -59,121 +57,10 @@
             'Basketball' => ['bg' => 'bg-orange-50',    'text' => 'text-orange-700',   'icon_bg' => 'bg-orange-100'],
             'Volleyball' => ['bg' => 'bg-violet-50',    'text' => 'text-violet-700',   'icon_bg' => 'bg-violet-100'],
         ];
-
-        $navItems = [
-            ['label' => 'Dashboard',         'route' => 'admin.dashboard', 'icon' => 'dashboard'],
-            ['label' => 'Courts Management', 'route' => 'admin.courts',    'icon' => 'courts'],
-            ['label' => 'Bookings',          'route' => 'admin.bookings',  'icon' => 'bookings'],
-            ['label' => 'Users',             'route' => 'admin.users',     'icon' => 'users'],
-            ['label' => 'Financial Reports', 'route' => 'admin.reports',   'icon' => 'reports'],
-            ['label' => 'Settings',          'route' => 'admin.settings',  'icon' => 'settings'],
-        ];
-
-        $activeRoute = 'admin.courts';
     @endphp
 
-    <div class="flex h-full">
 
-        {{-- ======================== SIDEBAR (Desktop) ======================== --}}
-        <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 flex w-64 flex-col border-r border-gray-100 bg-white transition-transform duration-300 lg:translate-x-0 -translate-x-full">
-
-            {{-- Brand --}}
-            <div class="flex h-16 items-center gap-2.5 border-b border-gray-100 px-5">
-                <div class="bg-white border border-gray-150 p-1.5 rounded-xl shadow-xs">
-                    <img class="h-7 w-auto object-contain" src="{{ asset('images/logo.png') }}" alt="SportOps Logo">
-                </div>
-                <span class="text-lg font-extrabold tracking-tight text-gray-900">SportOps</span>
-                <button type="button" onclick="toggleSidebar()" class="ml-auto rounded-lg p-1 text-gray-400 hover:text-gray-600 lg:hidden" aria-label="Close sidebar">
-                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
-                </button>
-            </div>
-
-            {{-- Navigation --}}
-            <nav class="flex-1 overflow-y-auto px-3 py-4">
-                <p class="mb-2 px-3 text-[10px] font-bold uppercase tracking-widest text-gray-400">Menu</p>
-                <ul class="space-y-1">
-                    @foreach ($navItems as $item)
-                        @php
-                            $isActive = $item['route'] === $activeRoute;
-                        @endphp
-                        <li>
-                            <a href="{{ route($item['route']) }}"
-                               class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors duration-150
-                                      {{ $isActive
-                                          ? 'bg-blue-50 text-[#0047D4] font-semibold'
-                                          : 'text-gray-600 hover:bg-gray-50 hover:text-[#0047D4]' }}">
-
-                                {{-- Icons --}}
-                                @if ($item['icon'] === 'dashboard')
-                                    <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"></rect><rect width="7" height="5" x="14" y="3" rx="1"></rect><rect width="7" height="9" x="14" y="12" rx="1"></rect><rect width="7" height="5" x="3" y="16" rx="1"></rect></svg>
-                                @elseif ($item['icon'] === 'courts')
-                                    <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M3 12h18"></path><path d="M12 3v18"></path></svg>
-                                @elseif ($item['icon'] === 'bookings')
-                                    <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg>
-                                @elseif ($item['icon'] === 'users')
-                                    <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                                @elseif ($item['icon'] === 'reports')
-                                    <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline><path d="M8 13h2"></path><path d="M8 17h2"></path><path d="M14 13h2"></path><path d="M14 17h2"></path></svg>
-                                @elseif ($item['icon'] === 'settings')
-                                    <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                                @endif
-
-                                {{ $item['label'] }}
-                            </a>
-                        </li>
-                    @endforeach
-                </ul>
-            </nav>
-
-            {{-- Logout --}}
-            <div class="border-t border-gray-100 px-3 py-4">
-                <form method="POST" action="/logout">
-                    @csrf
-                    <button type="submit" class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-gray-600 transition-colors duration-150 hover:bg-rose-50 hover:text-rose-600">
-                        <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-                        Logout
-                    </button>
-                </form>
-            </div>
-        </aside>
-
-        {{-- Sidebar overlay (mobile) --}}
-        <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 z-30 bg-gray-900/50 backdrop-blur-sm transition-opacity duration-300 hidden lg:hidden"></div>
-
-        {{-- ======================== MAIN AREA ======================== --}}
-        <div class="flex flex-1 flex-col lg:ml-64">
-
-            {{-- Top bar --}}
-            <header class="sticky top-0 z-20 flex h-16 items-center gap-4 border-b border-gray-100 bg-white/80 px-4 backdrop-blur-md sm:px-6 lg:px-8">
-                <button type="button" onclick="toggleSidebar()" class="rounded-xl border border-gray-150 bg-white p-2 text-gray-500 shadow-xs hover:text-[#0047D4] lg:hidden" aria-label="Open sidebar">
-                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="20" y2="7"></line><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="17" x2="20" y2="17"></line></svg>
-                </button>
-
-                <div class="flex items-center gap-2">
-                    <nav class="hidden text-sm text-gray-400 sm:flex items-center gap-1.5">
-                        <a href="{{ route('admin.dashboard') }}" class="hover:text-[#0047D4] transition-colors duration-150">Admin</a>
-                        <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
-                        <span class="font-medium text-gray-700">Courts Management</span>
-                    </nav>
-                </div>
-
-                <div class="ml-auto flex items-center gap-3">
-                    <button type="button" class="relative inline-flex items-center justify-center rounded-xl border border-gray-150 bg-white p-2.5 text-gray-500 shadow-xs hover:text-[#0047D4] hover:border-blue-200 transition-colors duration-150" aria-label="Notifications">
-                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.268 21a2 2 0 0 0 3.464 0"></path><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"></path></svg>
-                        <span class="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#0047D4] text-[9px] font-bold text-white ring-2 ring-white">2</span>
-                    </button>
-
-                    <div class="flex items-center gap-2 rounded-xl border border-gray-150 bg-white p-1 pr-3 shadow-xs">
-                        <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[#0047D4] to-indigo-600 text-xs font-bold text-white">AD</span>
-                        <span class="hidden text-sm font-semibold text-gray-700 sm:inline">Admin</span>
-                    </div>
-                </div>
-            </header>
-
-            {{-- Page Content --}}
-            <main class="flex-1 overflow-y-auto px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
-
-                {{-- Page Header --}}
+{{-- Page Header --}}
                 <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <h1 class="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">Courts Management</h1>
@@ -279,11 +166,9 @@
                         </div>
                     @endforeach
                 </div>
-            </main>
-        </div>
-    </div>
 
-    {{-- ======================== ADD COURT MODAL ======================== --}}
+
+{{-- ======================== ADD COURT MODAL ======================== --}}
     <div id="add-court-modal" class="fixed inset-0 z-50 hidden">
         {{-- Backdrop --}}
         <div onclick="closeModal()" class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity duration-300"></div>
@@ -361,57 +246,43 @@
             </div>
         </div>
     </div>
+@endsection
 
-    <script>
-        // Sidebar toggle
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebar-overlay');
-            const isOpen = !sidebar.classList.contains('-translate-x-full');
+@push('scripts')
+<script>
+    // Modal open/close
+    function openModal() {
+        document.getElementById('add-court-modal').classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+    }
 
-            if (isOpen) {
-                sidebar.classList.add('-translate-x-full');
-                overlay.classList.add('hidden');
-            } else {
-                sidebar.classList.remove('-translate-x-full');
-                overlay.classList.remove('hidden');
-            }
-        }
+    function closeModal() {
+        document.getElementById('add-court-modal').classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+    }
 
-        // Modal open/close
-        function openModal() {
-            document.getElementById('add-court-modal').classList.remove('hidden');
-            document.body.classList.add('overflow-hidden');
-        }
+    // Close modal on Escape key
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeModal();
+    });
 
-        function closeModal() {
-            document.getElementById('add-court-modal').classList.add('hidden');
-            document.body.classList.remove('overflow-hidden');
-        }
+    // Upload zone click handler
+    document.getElementById('upload-zone').addEventListener('click', function () {
+        document.getElementById('court-image').click();
+    });
 
-        // Close modal on Escape key
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape') closeModal();
-        });
-
-        // Upload zone click handler
-        document.getElementById('upload-zone').addEventListener('click', function () {
-            document.getElementById('court-image').click();
-        });
-
-        // Upload zone drag-and-drop visual feedback
-        const uploadZone = document.getElementById('upload-zone');
-        uploadZone.addEventListener('dragover', function (e) {
-            e.preventDefault();
-            this.classList.add('border-[#0047D4]', 'bg-blue-50/30');
-        });
-        uploadZone.addEventListener('dragleave', function () {
-            this.classList.remove('border-[#0047D4]', 'bg-blue-50/30');
-        });
-        uploadZone.addEventListener('drop', function (e) {
-            e.preventDefault();
-            this.classList.remove('border-[#0047D4]', 'bg-blue-50/30');
-        });
-    </script>
-</body>
-</html>
+    // Upload zone drag-and-drop visual feedback
+    const uploadZone = document.getElementById('upload-zone');
+    uploadZone.addEventListener('dragover', function (e) {
+        e.preventDefault();
+        this.classList.add('border-[#0047D4]', 'bg-blue-50/30');
+    });
+    uploadZone.addEventListener('dragleave', function () {
+        this.classList.remove('border-[#0047D4]', 'bg-blue-50/30');
+    });
+    uploadZone.addEventListener('drop', function (e) {
+        e.preventDefault();
+        this.classList.remove('border-[#0047D4]', 'bg-blue-50/30');
+    });
+</script>
+@endpush
