@@ -37,9 +37,7 @@ Route::middleware('auth')->group(function () {
         return view('booking');
     })->name('booking');
 
-    Route::get('/bookings', function () {
-        return view('booking-history');
-    })->name('bookings');
+    Route::get('/bookings', [\App\Http\Controllers\BookingController::class, 'index'])->name('bookings');
 
     Route::post('/logout', [AuthController::class, 'logout'])
         ->name('logout');

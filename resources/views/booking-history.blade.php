@@ -9,16 +9,7 @@
 <body class="h-full font-sans antialiased text-gray-900 bg-[#F7F8FA]">
 
     @php
-        $user = ['first' => 'Rizky', 'initials' => 'RM'];
-
-        // Placeholder booking history (front-end only).
-        $history = [
-            ['id' => 'SPO-10482', 'court' => 'Futsal — Synthetic Grass', 'date' => 'Jun 02, 2026', 'time' => '19:00 — 20:00', 'amount' => 'Rp120.000', 'pay' => 'Paid',     'status' => 'Completed'],
-            ['id' => 'SPO-10455', 'court' => 'Basketball',               'date' => 'May 28, 2026', 'time' => '17:00 — 18:00', 'amount' => 'Rp150.000', 'pay' => 'Paid',     'status' => 'Completed'],
-            ['id' => 'SPO-10431', 'court' => 'Badminton',                'date' => 'Jun 21, 2026', 'time' => '11:00 — 12:00', 'amount' => 'Rp50.000',  'pay' => 'Deposit',  'status' => 'Upcoming'],
-            ['id' => 'SPO-10398', 'court' => 'Premium Futsal — Vinyl',   'date' => 'May 14, 2026', 'time' => '20:00 — 21:00', 'amount' => 'Rp180.000', 'pay' => 'Refunded', 'status' => 'Cancelled'],
-            ['id' => 'SPO-10377', 'court' => 'Futsal — Synthetic Grass', 'date' => 'May 09, 2026', 'time' => '18:00 — 19:00', 'amount' => 'Rp120.000', 'pay' => 'Paid',     'status' => 'Completed'],
-        ];
+        // $history and $user are now provided by the BookingController
 
         $payStyles = [
             'Paid'     => 'bg-emerald-50 text-emerald-700',
