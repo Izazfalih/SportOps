@@ -6,7 +6,11 @@
 @section('content')
 
     @php
-$kpis = [
+$staff = [
+            'name' => Auth::user()->name ?? 'Pak Joko (Staff)',
+        ];
+
+        $kpis = [
             ['label' => "Today's Bookings", 'value' => 8, 'color' => 'blue',  'icon' => '<rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>'],
             ['label' => 'Checked In',       'value' => 3, 'color' => 'green', 'icon' => '<path d="M20 6 9 17l-5-5"/>'],
             ['label' => 'Pending Check-In',  'value' => 4, 'color' => 'amber', 'icon' => '<circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>'],

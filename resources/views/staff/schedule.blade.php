@@ -1,7 +1,7 @@
 @extends('layouts.staff')
 
-@section('title', 'Today's Schedule')
-@section('page-title', 'Today's Schedule')
+@section('title', "Today's Schedule")
+@section('page-title', "Today's Schedule")
 @section('page-subtitle', 'All bookings for today')
 
 @push('styles')
