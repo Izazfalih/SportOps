@@ -42,7 +42,11 @@ Route::middleware('auth')->group(function () {
     // ────────────── Admin Routes ──────────────
     Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\AdminController::class, 'dashboard'])->name('dashboard');
-        Route::get('/courts', fn () => view('admin.courts'))->name('courts');
+        Route::get('/courts', [\App\Http\Controllers\AdminFieldController::class, 'index'])->name('courts.index');
+        Route::post('/courts', [\App\Http\Controllers\AdminFieldController::class, 'store'])->name('courts.store');
+        Route::put('/courts/{id}', [\App\Http\Controllers\AdminFieldController::class, 'update'])->name('courts.update');
+        Route::patch('/courts/{id}/toggle-status', [\App\Http\Controllers\AdminFieldController::class, 'toggleStatus'])->name('courts.toggle-status');
+        Route::delete('/courts/{id}', [\App\Http\Controllers\AdminFieldController::class, 'destroy'])->name('courts.destroy');
         Route::get('/bookings', fn () => view('admin.bookings'))->name('bookings');
         Route::get('/users', fn () => view('admin.users'))->name('users');
         Route::get('/reports', fn () => view('admin.reports'))->name('reports');
