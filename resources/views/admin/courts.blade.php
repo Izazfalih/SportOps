@@ -73,7 +73,7 @@ $courts = [
                 </div>
 
                 {{-- Stats Row --}}
-                <div class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
+                <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     <div class="rounded-2xl border border-gray-100 bg-white p-4 shadow-xs">
                         <p class="text-xs font-bold uppercase tracking-wider text-gray-400">Total Courts</p>
                         <p class="mt-1 text-2xl font-extrabold text-gray-900">{{ count($courts) }}</p>

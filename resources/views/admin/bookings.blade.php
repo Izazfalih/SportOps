@@ -112,7 +112,7 @@ $statuses = ['All', 'Pending Payment', 'DP Paid', 'Fully Paid', 'Checked In', 'C
                 </div>
 
                 {{-- -------- Summary Cards -------- --}}
-                <div class="mt-5 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+                <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
                     @foreach ($summaryCards as $card)
                         @php $c = $cardColors[$card['color']]; @endphp
                         <div class="rounded-2xl border border-gray-100 bg-white p-4 shadow-xs sm:p-5">
@@ -250,6 +250,66 @@ $statuses = ['All', 'Pending Payment', 'DP Paid', 'Fully Paid', 'Checked In', 'C
                         </div>
                     </div>
                 </div>
+
+                {{-- Booking details --}}
+                <div class="rounded-2xl bg-gray-50 p-4 space-y-3">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400">Booking Details</h3>
+                    <div class="grid grid-cols-2 gap-3 text-sm">
+                        <div>
+                            <p class="text-xs text-gray-400">Sport</p>
+                            <p id="modal-sport" class="font-semibold text-gray-900"></p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-400">Court</p>
+                            <p id="modal-court" class="font-semibold text-gray-900"></p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-400">Date</p>
+                            <p id="modal-date" class="font-semibold text-gray-900"></p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-400">Time</p>
+                            <p id="modal-time" class="font-semibold text-gray-900"></p>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Payment breakdown --}}
+                <div class="rounded-2xl bg-gray-50 p-4 space-y-3">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400">Payment</h3>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-500">Payment Status</span>
+                        <span id="modal-payment-badge" class="inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold"></span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-500">Total Price</span>
+                        <span id="modal-price" class="font-bold text-gray-900"></span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-500">DP Paid</span>
+                        <span id="modal-dp" class="font-semibold text-gray-700"></span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm border-t border-gray-200 pt-2">
+                        <span class="font-semibold text-gray-700">Remaining</span>
+                        <span id="modal-remaining" class="font-bold text-gray-900"></span>
+                    </div>
+                </div>
+
+                {{-- Timeline --}}
+                <div>
+                    <h3 class="mb-3 text-xs font-bold uppercase tracking-wider text-gray-400">Activity Timeline</h3>
+                    <div id="modal-timeline" class="space-y-0"></div>
+                </div>
+            </div>
+
+            {{-- Modal footer --}}
+            <div class="sticky bottom-0 flex items-center justify-end gap-3 border-t border-gray-100 bg-white px-6 py-4 rounded-b-3xl">
+                <button type="button" onclick="closeModal()" class="rounded-xl border border-gray-200 bg-white px-5 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors duration-150">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
 
 @endsection
 

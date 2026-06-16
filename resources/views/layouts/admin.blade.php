@@ -30,35 +30,35 @@
     <div id="sidebar-overlay" class="fixed inset-0 z-40 bg-gray-900/50 backdrop-blur-sm transition-opacity duration-300 opacity-0 pointer-events-none lg:hidden" onclick="closeSidebar()"></div>
 
     {{-- ==================== SIDEBAR ==================== --}}
-    <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 flex w-[280px] flex-col bg-white border-r border-gray-100 shadow-lg shadow-gray-200/50 transition-transform duration-300 ease-in-out -translate-x-full lg:translate-x-0 lg:shadow-xs">
+    <aside id="sidebar" class="group fixed inset-y-0 left-0 z-50 flex w-72 flex-col bg-white border-r border-gray-100 shadow-lg shadow-gray-200/50 transition-all duration-300 ease-in-out -translate-x-full lg:translate-x-0 lg:w-20 hover:lg:w-72 lg:shadow-xs overflow-hidden">
 
         {{-- Brand --}}
-        <div class="flex items-center gap-3 border-b border-gray-100 px-6 py-5">
-            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#0047D4] to-indigo-600 shadow-lg shadow-blue-500/20">
-                <svg class="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-            </div>
-            <div>
+        <div class="flex items-center gap-3 border-b border-gray-100 px-5 py-5 min-w-[18rem]">
+            <img src="{{ asset('images/logo.png') }}" alt="SportOps" class="h-10 w-10 shrink-0 object-contain">
+            <div class="transition-opacity duration-300 opacity-100 lg:opacity-0 group-hover:lg:opacity-100">
                 <span class="text-lg font-extrabold tracking-tight text-gray-900">SportOps</span>
                 <p class="text-[11px] font-medium text-gray-400">Admin Panel</p>
             </div>
         </div>
 
         {{-- Navigation --}}
-        <nav class="flex-1 overflow-y-auto px-4 py-5">
-            <p class="mb-3 px-3 text-[11px] font-bold uppercase tracking-widest text-gray-400">Menu</p>
-            <ul class="space-y-1">
+        <nav class="flex-1 overflow-y-auto overflow-x-hidden px-3 py-5">
+            <p class="mb-3 px-3 text-[11px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap transition-opacity duration-300 opacity-100 lg:opacity-0 group-hover:lg:opacity-100">Menu</p>
+            <ul class="space-y-1 min-w-[15rem]">
                 @foreach ($sidebarNav as $item)
                     @php $isActive = request()->routeIs($item['route']); @endphp
                     <li>
                         <a href="{{ route($item['route']) }}"
-                           class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors duration-150
+                           class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors duration-150 relative
                                   {{ $isActive
                                       ? 'bg-blue-50 font-semibold text-[#0047D4]'
                                       : 'font-medium text-gray-600 hover:bg-gray-50 hover:text-[#0047D4]' }}">
                             <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg {{ $isActive ? 'bg-[#0047D4] text-white shadow-lg shadow-blue-500/20' : 'bg-gray-50 text-gray-500' }}">
                                 <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{!! $item['icon'] !!}</svg>
                             </span>
-                            {{ $item['label'] }}
+                            <span class="whitespace-nowrap transition-opacity duration-300 opacity-100 lg:opacity-0 group-hover:lg:opacity-100">
+                                {{ $item['label'] }}
+                            </span>
                         </a>
                     </li>
                 @endforeach
@@ -66,28 +66,30 @@
         </nav>
 
         {{-- Sidebar footer --}}
-        <div class="border-t border-gray-100 px-4 py-4">
+        <div class="border-t border-gray-100 px-3 py-4 min-w-[18rem] overflow-hidden">
             <div class="mb-3 flex items-center gap-3 rounded-xl bg-gray-50 px-3 py-2.5">
                 <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#0047D4] to-indigo-600 text-xs font-bold text-white">{{ $adminUser['initials'] }}</span>
-                <div class="min-w-0">
+                <div class="min-w-0 transition-opacity duration-300 opacity-100 lg:opacity-0 group-hover:lg:opacity-100">
                     <p class="truncate text-sm font-semibold text-gray-900">{{ $adminUser['name'] }}</p>
                     <p class="truncate text-xs text-gray-500">{{ $adminUser['email'] }}</p>
                 </div>
             </div>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
-                <button type="submit" class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-gray-600 transition-colors duration-150 hover:bg-rose-50 hover:text-rose-600">
+                <button type="submit" class="flex w-[15rem] items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-gray-600 transition-colors duration-150 hover:bg-rose-50 hover:text-rose-600">
                     <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gray-50 text-gray-500">
                         <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                     </span>
-                    Logout
+                    <span class="whitespace-nowrap transition-opacity duration-300 opacity-100 lg:opacity-0 group-hover:lg:opacity-100">
+                        Logout
+                    </span>
                 </button>
             </form>
         </div>
     </aside>
 
     {{-- ==================== MAIN CONTENT ==================== --}}
-    <div class="min-h-full transition-all duration-300 lg:ml-[280px]">
+    <div id="main-content" class="min-h-full transition-all duration-300 lg:ml-20">
 
         {{-- Top header bar --}}
         <header class="sticky top-0 z-30 border-b border-gray-100 bg-white/80 backdrop-blur-md">

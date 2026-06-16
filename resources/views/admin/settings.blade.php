@@ -7,7 +7,13 @@
 @section('content')
 
     @php
-$venue = [
+$admin = [
+            'name'     => Auth::user()->name ?? 'Admin',
+            'email'    => Auth::user()->email ?? 'admin@sportops.id',
+            'initials' => collect(explode(' ', Auth::user()->name ?? 'A'))->map(fn($w) => mb_substr($w, 0, 1))->take(2)->join(''),
+        ];
+
+        $venue = [
             'name'    => 'SportOps Arena',
             'address' => 'Jl. Olahraga No. 12, Jakarta Selatan 12345',
             'phone'   => '+62 21 1234 5678',
@@ -30,7 +36,7 @@ $venue = [
     @endphp
 
 
-<div class="mx-auto max-w-4xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+<div class="mx-auto max-w-4xl">
 
                     {{-- Page header --}}
                     <h1 class="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">Settings</h1>
@@ -341,10 +347,6 @@ $venue = [
 
 @push('scripts')
 <script>
-function /* removed - handled by layout */() {
-            document.getElementById('mobile-sidebar').classList.toggle('hidden');
-        }
-
         document.querySelectorAll('.settings-tab').forEach(function (tab) {
             tab.addEventListener('click', function () {
                 document.querySelectorAll('.settings-tab').forEach(function (t) {
