@@ -6,16 +6,7 @@
 @section('content')
 
     @php
-$staff = [
-            'name' => Auth::user()->name ?? 'Pak Joko (Staff)',
-        ];
-
-        $kpis = [
-            ['label' => "Today's Bookings", 'value' => 8, 'color' => 'blue',  'icon' => '<rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>'],
-            ['label' => 'Checked In',       'value' => 3, 'color' => 'green', 'icon' => '<path d="M20 6 9 17l-5-5"/>'],
-            ['label' => 'Pending Check-In',  'value' => 4, 'color' => 'amber', 'icon' => '<circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>'],
-            ['label' => 'Pending Settlement','value' => 2, 'color' => 'rose',  'icon' => '<rect width="20" height="14" x="2" y="5" rx="2"/><path d="M2 10h20"/>'],
-        ];
+        // Data provided by StaffController: $staff, $kpis, $schedule, $courts
 
         $kpiStyles = [
             'blue'  => ['bg' => 'bg-blue-50',  'text' => 'text-[#0047D4]', 'icon_bg' => 'bg-blue-100'],
@@ -24,28 +15,12 @@ $staff = [
             'rose'  => ['bg' => 'bg-rose-50',   'text' => 'text-rose-600',  'icon_bg' => 'bg-rose-100'],
         ];
 
-        $schedule = [
-            ['time' => '10:00 – 11:00', 'customer' => 'Budi Santoso',  'sport' => 'Futsal',     'payment' => 'Fully Paid',  'payment_color' => 'emerald', 'status' => 'Checked In', 'status_color' => 'emerald'],
-            ['time' => '11:00 – 12:00', 'customer' => 'Sarah Putri',   'sport' => 'Badminton',  'payment' => 'DP Paid',     'payment_color' => 'amber',   'status' => 'Booked',     'status_color' => 'amber'],
-            ['time' => '13:00 – 14:00', 'customer' => 'Ahmad Fauzi',   'sport' => 'Basketball', 'payment' => 'Fully Paid',  'payment_color' => 'emerald', 'status' => 'Booked',     'status_color' => 'blue'],
-            ['time' => '14:00 – 15:00', 'customer' => 'Dimas Pratama', 'sport' => 'Tennis',     'payment' => 'Pending',     'payment_color' => 'gray',    'status' => 'Booked',     'status_color' => 'gray'],
-            ['time' => '15:00 – 16:00', 'customer' => 'Rina Wijaya',   'sport' => 'Futsal',     'payment' => 'Fully Paid',  'payment_color' => 'emerald', 'status' => 'Booked',     'status_color' => 'blue'],
-        ];
-
         $badgeStyles = [
             'emerald' => 'bg-emerald-50 text-emerald-700',
             'amber'   => 'bg-amber-50 text-amber-700',
             'blue'    => 'bg-blue-50 text-[#0047D4]',
             'gray'    => 'bg-gray-100 text-gray-600',
             'rose'    => 'bg-rose-50 text-rose-700',
-        ];
-
-        $courts = [
-            ['name' => 'Futsal Court',     'status' => 'In Use',      'color' => 'emerald'],
-            ['name' => 'Badminton Court',   'status' => 'Available',   'color' => 'blue'],
-            ['name' => 'Tennis Court',      'status' => 'Maintenance', 'color' => 'rose'],
-            ['name' => 'Basketball Court',  'status' => 'Booked Next', 'color' => 'amber'],
-            ['name' => 'Volleyball Court',  'status' => 'Available',   'color' => 'blue'],
         ];
 
         $courtDot = [
