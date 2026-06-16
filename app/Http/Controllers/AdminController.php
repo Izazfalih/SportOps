@@ -19,7 +19,7 @@ class AdminController extends Controller
         $todayBookings = Booking::whereDate('created_at', $today)->count();
         $activeBookings = Booking::whereIn('status', ['pending', 'confirmed'])->count();
         $totalUsers = User::count();
-        $totalRevenue = Payment::where('status_pembayaran', 'berhasil')->sum('jumlah_bayar');
+        $totalRevenue = Payment::where('status', 'paid')->sum('nominal');
 
         // Formatted KPIs
         $kpis = [
@@ -78,7 +78,7 @@ class AdminController extends Controller
         // Quick Stats
         $availableCourts = Field::where('status', 'aktif')->count();
         $pendingPayments = Booking::where('status', 'pending')->count();
-        $revenueToday = Payment::whereDate('tanggal_bayar', $today)->where('status_pembayaran', 'berhasil')->sum('jumlah_bayar');
+        $revenueToday = Payment::whereDate('created_at', $today)->where('status', 'paid')->sum('nominal');
         $newUsersWeek = User::where('created_at', '>=', Carbon::now()->subDays(7))->count();
 
         $quickStats = [
@@ -105,8 +105,8 @@ class AdminController extends Controller
         $upcomingBookings = Booking::with(['user', 'field', 'payments'])->orderBy('tanggal', 'desc')->orderBy('jam_mulai', 'desc')->take(10)->get();
         $bookings = [];
         foreach ($upcomingBookings as $b) {
-            $paymentStatus = $b->payments->first() ? $b->payments->first()->status_pembayaran : 'Unpaid';
-            $payColor = $paymentStatus == 'berhasil' ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700';
+            $paymentStatus = $b->payments->first() ? $b->payments->first()->status : 'unpaid';
+            $payColor = $paymentStatus == 'paid' ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700';
 
             $statColor = 'bg-gray-100 text-gray-600';
             if ($b->status === 'confirmed') $statColor = 'bg-blue-50 text-[#0047D4]';

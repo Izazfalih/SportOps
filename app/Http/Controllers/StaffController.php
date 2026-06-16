@@ -24,7 +24,7 @@ class StaffController extends Controller
         $checkedIn = Booking::whereDate('tanggal', $today)->where('status', 'active')->count(); // active implies currently playing/checked in
         $pendingCheckin = Booking::whereDate('tanggal', $today)->where('status', 'confirmed')->count();
         $pendingSettlement = Booking::whereDate('tanggal', $today)->whereHas('payments', function($q) {
-            $q->where('status_pembayaran', '!=', 'berhasil');
+            $q->where('status', '!=', 'paid');
         })->count();
 
         $kpis = [
@@ -43,9 +43,9 @@ class StaffController extends Controller
 
         $schedule = [];
         foreach ($todaysSchedule as $b) {
-            $paymentStatus = $b->payments->first() ? $b->payments->first()->status_pembayaran : 'Unpaid';
-            $payColor = $paymentStatus == 'berhasil' ? 'emerald' : 'amber';
-            if ($paymentStatus == 'Unpaid') $payColor = 'gray';
+            $paymentStatus = $b->payments->first() ? $b->payments->first()->status : 'unpaid';
+            $payColor = $paymentStatus == 'paid' ? 'emerald' : 'amber';
+            if ($paymentStatus == 'unpaid') $payColor = 'gray';
 
             $statusColor = 'gray';
             if ($b->status === 'confirmed') $statusColor = 'blue';

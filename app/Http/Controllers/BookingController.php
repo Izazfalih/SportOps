@@ -96,10 +96,10 @@ class BookingController extends Controller
 
         \App\Models\Payment::create([
             'booking_id' => $booking->id,
-            'metode_pembayaran' => 'qris',
-            'jumlah_bayar' => $validated['amount_paid'],
-            'status_pembayaran' => 'berhasil',
-            'tanggal_bayar' => now()
+            'metode' => 'qris',
+            'nominal' => $validated['amount_paid'],
+            'status' => 'paid',
+            'jenis' => $validated['pay_type'] === 'full' ? 'pelunasan' : 'dp'
         ]);
 
         return response()->json([
