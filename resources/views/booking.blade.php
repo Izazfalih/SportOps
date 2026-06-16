@@ -9,6 +9,7 @@
         [data-step] { animation: fadeUp .35s ease both; }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
     </style>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body class="h-full font-sans antialiased text-gray-900 bg-[#F7F8FA]">
 
@@ -19,6 +20,15 @@
             ['name' => 'Badminton',                'sport' => 'Badminton',      'price' => 50000,  'gradient' => 'from-emerald-500 via-teal-600 to-cyan-700',      'icon' => '<path d="M14 3 4 13l3 3 4 4 10-10"></path><circle cx="6.5" cy="17.5" r="2.5"></circle><path d="m14 3 7 7"></path>', 'desc' => 'BWF-standard court with sprung flooring & good airflow.', 'rating' => '4.8', 'badge' => 'Best value', 'badgeCls' => 'bg-emerald-100 text-emerald-700'],
             ['name' => 'Basketball',               'sport' => 'Basketball',     'price' => 150000, 'gradient' => 'from-orange-400 via-orange-500 to-rose-600',     'icon' => '<circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3v18M5.6 5.6c3.5 3.5 9.3 3.5 12.8 0M5.6 18.4c3.5-3.5 9.3-3.5 12.8 0"></path>', 'desc' => 'Full-size indoor court, maple surface, NBA-spec hoops.', 'rating' => '4.7', 'badge' => '', 'badgeCls' => ''],
         ];
+        
+        if (isset($fields)) {
+            foreach ($courts as &$court) {
+                // Check against database fields
+                $dbField = $fields->firstWhere('jenis_olahraga', $court['sport']);
+                $court['id'] = $dbField ? $dbField->id : null;
+            }
+        }
+
         $times = ['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00','00:00','01:00','02:00'];
 
         $prefill = [
@@ -719,7 +729,8 @@
             }
 
             app.querySelector('[data-confirm]').addEventListener('click', () => {
-                state.bookingId = 'SPO-' + (10000 + Math.floor((hashStr(state.date + state.courtIdx + state.startIdx + Date.now()) % 89999) + 1));
+                // Booking ID will be given by server later
+                state.bookingId = 'SPO-.....';
                 renderPayment();
                 showStep(5);
                 startTimer();
@@ -776,9 +787,53 @@
                 }, 1000);
             }
 
-            app.querySelector('[data-paid]').addEventListener('click', () => {
+            app.querySelector('[data-paid]').addEventListener('click', async () => {
                 if (timerInterval) clearInterval(timerInterval);
-                renderDone(); showStep(6);
+                
+                const c = COURTS[state.courtIdx];
+                const a = payAmounts();
+                const payload = {
+                    field_id: c.id,
+                    tanggal: state.date,
+                    jam_mulai: TIMES[state.startIdx],
+                    durasi: state.duration,
+                    pay_type: state.payType,
+                    total_harga: a.t,
+                    amount_paid: a.pay
+                };
+
+                const btn = app.querySelector('[data-paid]');
+                const origText = btn.innerHTML;
+                btn.innerHTML = 'Processing...';
+                btn.disabled = true;
+
+                try {
+                    const res = await fetch('{{ route("booking.store") }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: JSON.stringify(payload)
+                    });
+                    const data = await res.json();
+                    
+                    if (res.ok && data.success) {
+                        state.bookingId = data.booking_id;
+                        renderDone(); 
+                        showStep(6);
+                    } else {
+                        alert(data.error || 'Terjadi kesalahan saat memproses pesanan.');
+                        btn.innerHTML = origText;
+                        btn.disabled = false;
+                        startTimer();
+                    }
+                } catch (e) {
+                    alert('Gagal menghubungi server.');
+                    btn.innerHTML = origText;
+                    btn.disabled = false;
+                    startTimer();
+                }
             });
 
             // ---- Step 6: confirmation ----

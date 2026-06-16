@@ -31,9 +31,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 
-    Route::get('/booking', function () {
-        return view('booking');
-    })->name('booking');
+    Route::get('/booking', [\App\Http\Controllers\BookingController::class, 'create'])->name('booking');
+    Route::post('/booking', [\App\Http\Controllers\BookingController::class, 'store'])->name('booking.store');
 
     Route::get('/bookings', [\App\Http\Controllers\BookingController::class, 'index'])->name('bookings');
 

@@ -46,4 +46,65 @@ class BookingController extends Controller
 
         return view('booking-history', ['history' => $mappedHistory->toArray(), 'user' => $user]);
     }
+
+    public function create()
+    {
+        $fields = \App\Models\Field::all();
+        return view('booking', compact('fields'));
+    }
+
+    public function store(\Illuminate\Http\Request $request)
+    {
+        $validated = $request->validate([
+            'field_id' => 'required|exists:fields,id',
+            'tanggal' => 'required|date',
+            'jam_mulai' => 'required|date_format:H:i',
+            'durasi' => 'required|integer|min:1',
+            'pay_type' => 'required|in:full,dp',
+            'total_harga' => 'required|numeric',
+            'amount_paid' => 'required|numeric'
+        ]);
+
+        $jamMulai = \Carbon\Carbon::parse($validated['jam_mulai']);
+        $jamSelesai = $jamMulai->copy()->addHours($validated['durasi']);
+
+        // Cek konflik jadwal (sederhana)
+        $conflict = \App\Models\Booking::where('field_id', $validated['field_id'])
+            ->where('tanggal', $validated['tanggal'])
+            ->whereIn('status', ['pending', 'confirmed', 'active'])
+            ->where(function($query) use ($jamMulai, $jamSelesai) {
+                $query->where(function($q) use ($jamMulai, $jamSelesai) {
+                    $q->where('jam_mulai', '<', $jamSelesai->format('H:i'))
+                      ->where('jam_selesai', '>', $jamMulai->format('H:i'));
+                });
+            })->exists();
+
+        if ($conflict) {
+            return response()->json(['error' => 'Jadwal pada jam tersebut sudah dipesan.'], 400);
+        }
+
+        $booking = \App\Models\Booking::create([
+            'user_id' => \Illuminate\Support\Facades\Auth::id(),
+            'field_id' => $validated['field_id'],
+            'tanggal' => $validated['tanggal'],
+            'jam_mulai' => $jamMulai->format('H:i:s'),
+            'jam_selesai' => $jamSelesai->format('H:i:s'),
+            'total_harga' => $validated['total_harga'],
+            'status' => $validated['pay_type'] === 'full' ? 'confirmed' : 'pending',
+            'catatan' => 'Pemesanan dari Web App'
+        ]);
+
+        \App\Models\Payment::create([
+            'booking_id' => $booking->id,
+            'metode_pembayaran' => 'qris',
+            'jumlah_bayar' => $validated['amount_paid'],
+            'status_pembayaran' => 'berhasil',
+            'tanggal_bayar' => now()
+        ]);
+
+        return response()->json([
+            'success' => true, 
+            'booking_id' => 'SPO-' . str_pad($booking->id, 5, '0', STR_PAD_LEFT)
+        ]);
+    }
 }
