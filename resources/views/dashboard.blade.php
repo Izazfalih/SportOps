@@ -9,16 +9,7 @@
 <body class="h-full font-sans antialiased text-gray-900 bg-[#F7F8FA]">
 
     @php
-        // ----------------------------- Placeholder data -----------------------------
-        $user = [
-            'name'     => 'Rizky Maulana',
-            'first'    => 'Rizky',
-            'email'    => 'rizky.maulana@example.com',
-            'initials' => 'RM',
-            'bookings' => 24,
-        ];
-
-        $quickActions = [
+        // $user and $upcomingBooking are provided by the DashboardController        $quickActions = [
             ['label' => 'Book Court',      'href' => route('booking'),  'icon' => '<path d="M5 12h14M12 5v14"></path>'],
             ['label' => 'View Schedule',   'href' => '#schedule',       'icon' => '<rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path>'],
             ['label' => 'My Bookings',     'href' => route('bookings'), 'icon' => '<path d="M3 3v5h5"></path><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"></path><path d="M12 7v5l4 2"></path>'],
@@ -158,27 +149,37 @@
                     <div class="relative">
                         <div class="flex items-center justify-between">
                             <h2 class="text-sm font-bold uppercase tracking-wider text-[#0047D4]">Upcoming Booking</h2>
-                            <span class="rounded-full bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700">Confirmed</span>
+                            @if($upcomingBooking)
+                                <span class="rounded-full bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700">{{ ucfirst($upcomingBooking->status) }}</span>
+                            @endif
                         </div>
-                        <p class="mt-3 text-lg font-extrabold text-gray-900">Badminton</p>
-                        <div class="mt-4 space-y-2.5 text-sm text-gray-600">
-                            <div class="flex items-center gap-2.5">
-                                <svg class="h-4 w-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg>
-                                Saturday, June 6, 2026
+                        
+                        @if($upcomingBooking)
+                            <p class="mt-3 text-lg font-extrabold text-gray-900">{{ $upcomingBooking->field ? $upcomingBooking->field->nama_lapangan : 'Court' }}</p>
+                            <div class="mt-4 space-y-2.5 text-sm text-gray-600">
+                                <div class="flex items-center gap-2.5">
+                                    <svg class="h-4 w-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg>
+                                    {{ \Carbon\Carbon::parse($upcomingBooking->tanggal)->format('l, F j, Y') }}
+                                </div>
+                                <div class="flex items-center gap-2.5">
+                                    <svg class="h-4 w-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
+                                    {{ \Carbon\Carbon::parse($upcomingBooking->jam_mulai)->format('H:i') }} — {{ \Carbon\Carbon::parse($upcomingBooking->jam_selesai)->format('H:i') }}
+                                </div>
+                                <div class="flex items-center gap-2.5">
+                                    <svg class="h-4 w-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"></rect><path d="M2 10h20"></path></svg>
+                                    Total: Rp{{ number_format($upcomingBooking->total_harga, 0, ',', '.') }}
+                                </div>
                             </div>
-                            <div class="flex items-center gap-2.5">
-                                <svg class="h-4 w-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
-                                11:00 — 12:00
+                            <a href="{{ route('bookings') }}" class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#0047D4] px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/10 hover:bg-[#003cb5] active:scale-[0.99] transition-all duration-200">
+                                View Details
+                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+                            </a>
+                        @else
+                            <div class="mt-8 text-center">
+                                <p class="text-sm text-gray-500">You don't have any upcoming bookings.</p>
+                                <a href="{{ route('booking') }}" class="mt-4 inline-block rounded-xl border border-blue-200 bg-white px-4 py-2 text-xs font-semibold text-[#0047D4] shadow-xs hover:bg-blue-50">Book a Court</a>
                             </div>
-                            <div class="flex items-center gap-2.5">
-                                <svg class="h-4 w-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"></rect><path d="M2 10h20"></path></svg>
-                                Deposit paid · Rp25,000
-                            </div>
-                        </div>
-                        <a href="{{ route('bookings') }}" class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#0047D4] px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/10 hover:bg-[#003cb5] active:scale-[0.99] transition-all duration-200">
-                            View Details
-                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
-                        </a>
+                        @endif
                     </div>
                 </section>
 

@@ -29,9 +29,7 @@ Route::middleware('auth')->group(function () {
         return view('home');
     })->name('home');
 
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/booking', function () {
         return view('booking');
