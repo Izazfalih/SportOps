@@ -319,6 +319,54 @@
             'Cancelled': 'bg-rose-50 text-rose-600',
         };
 
+        function openModal(index) {
+            const b = bookings[index];
+            if (!b) return;
+
+            const modal = document.getElementById('booking-modal');
+            const codeStr = 'BK-2026' + String(b.id).padStart(4, '0');
+            
+            document.getElementById('modal-code').textContent = codeStr;
+            document.getElementById('modal-customer').textContent = b.user?.name || 'Unknown';
+            document.getElementById('modal-phone').textContent = b.user?.phone || '-';
+            document.getElementById('modal-sport').textContent = b.field?.jenis_olahraga || 'N/A';
+            document.getElementById('modal-court').textContent = b.field?.nama_lapangan || 'N/A';
+            document.getElementById('modal-date').textContent = new Date(b.tanggal).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+            document.getElementById('modal-time').textContent = b.jam_mulai.substring(0, 5) + ' - ' + b.jam_selesai.substring(0, 5);
+
+            let paymentStatus = 'Unpaid';
+            if (b.payments && b.payments.length > 0) {
+                const pstat = b.payments[0].status;
+                if (pstat === 'paid') paymentStatus = 'Fully Paid';
+                else if (pstat === 'dp') paymentStatus = 'DP Paid';
+                else paymentStatus = 'Pending';
+            }
+            
+            // Map db status to label
+            let statusLabel = 'Pending Payment';
+            if (b.status === 'confirmed') statusLabel = 'Confirmed';
+            else if (b.status === 'active') statusLabel = 'Checked In';
+            else if (b.status === 'completed') statusLabel = 'Completed';
+            else if (b.status === 'cancelled') statusLabel = 'Cancelled';
+            else if (b.status === 'pending') statusLabel = 'Pending Payment';
+
+            const pBadge = document.getElementById('modal-payment-badge');
+            pBadge.className = 'inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold ' + (paymentBadgeClasses[paymentStatus] || 'bg-gray-100 text-gray-500');
+            pBadge.textContent = paymentStatus;
+
+            const sBadge = document.getElementById('modal-status-badge');
+            sBadge.className = 'inline-flex rounded-full px-3 py-1 text-xs font-semibold ' + (statusBadgeClasses[statusLabel] || 'bg-gray-100 text-gray-600');
+            sBadge.textContent = statusLabel;
+
+            const formatter = new Intl.NumberFormat('id-ID');
+            const total = parseInt(b.total_harga);
+            const paid = b.payments && b.payments.length > 0 ? parseInt(b.payments[0].jumlah) : 0;
+            const remain = total - paid;
+
+            document.getElementById('modal-price').textContent = 'Rp ' + formatter.format(total);
+            document.getElementById('modal-dp').textContent = 'Rp ' + formatter.format(paid);
+            document.getElementById('modal-remaining').textContent = 'Rp ' + formatter.format(remain > 0 ? remain : 0);
+
             // Build dynamic timeline
             const timelineEl = document.getElementById('modal-timeline');
             
@@ -338,7 +386,7 @@
             // Step 2: Payment
             if (b.payments && b.payments.length > 0) {
                 const pay = b.payments[0];
-                if (pay.status === 'paid') {
+                if (pay.status === 'paid' || pay.status === 'dp') {
                     steps.push({ label: 'Payment Received', time: formatTime(pay.updated_at || pay.created_at), active: true });
                 }
             }
