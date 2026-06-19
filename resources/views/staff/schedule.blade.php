@@ -21,57 +21,7 @@
 @section('content')
 
     @php
-$currentDate = 'Tuesday, 10 June 2026';
-        $currentDateShort = '10 Jun 2026';
-
-        $courts = ['Futsal', 'Badminton', 'Tennis', 'Basketball', 'Volleyball'];
-
-        $timeSlots = [];
-        for ($h = 8; $h <= 21; $h++) {
-            $timeSlots[] = str_pad($h, 2, '0', STR_PAD_LEFT) . ':00';
-        }
-
-        $bookings = [
-            '08:00' => [
-                'Futsal' => ['status' => 'booked', 'customer' => 'Ahmad', 'payment' => 'Fully Paid'],
-            ],
-            '09:00' => [
-                'Futsal'    => ['status' => 'booked', 'customer' => 'Budi', 'payment' => 'DP Paid'],
-                'Badminton' => ['status' => 'booked', 'customer' => 'Sarah', 'payment' => 'Fully Paid'],
-            ],
-            '10:00' => [
-                'Futsal'     => ['status' => 'active', 'customer' => 'Riko', 'payment' => 'Fully Paid'],
-                'Basketball' => ['status' => 'booked', 'customer' => 'Dimas', 'payment' => 'Fully Paid'],
-            ],
-            '11:00' => [
-                'Badminton'  => ['status' => 'booked', 'customer' => 'Rina', 'payment' => 'DP Paid'],
-                'Volleyball' => ['status' => 'booked', 'customer' => 'Fajar', 'payment' => 'Fully Paid'],
-            ],
-            '12:00' => [
-                'Futsal'    => ['status' => 'completed', 'customer' => 'Riko', 'payment' => 'Fully Paid'],
-                'Badminton' => ['status' => 'completed', 'customer' => 'Rina', 'payment' => 'DP Paid'],
-            ],
-            '13:00' => [
-                'Futsal'     => ['status' => 'booked', 'customer' => 'Hendra', 'payment' => 'Pending'],
-                'Basketball' => ['status' => 'booked', 'customer' => 'Tommy', 'payment' => 'Fully Paid'],
-            ],
-            '14:00' => [
-                'Badminton'  => ['status' => 'booked', 'customer' => 'Lisa', 'payment' => 'Fully Paid'],
-                'Volleyball' => ['status' => 'booked', 'customer' => 'Andi', 'payment' => 'DP Paid'],
-            ],
-            '15:00' => [
-                'Futsal' => ['status' => 'booked', 'customer' => 'Yoga', 'payment' => 'Fully Paid'],
-            ],
-        ];
-
-        $stats = [
-            'total'       => 70,
-            'booked'      => 12,
-            'available'   => 44,
-            'maintenance' => 14,
-        ];
-
-        $activeFilter = 'all';
+        // Data handled by StaffController
     @endphp
 
 
@@ -85,16 +35,16 @@ $currentDate = 'Tuesday, 10 June 2026';
                     </div>
                     {{-- Date Navigation --}}
                     <div class="flex items-center gap-2">
-                        <button type="button" class="inline-flex items-center justify-center rounded-xl border border-gray-200 bg-white p-2.5 text-gray-500 shadow-xs hover:border-blue-200 hover:text-[#0047D4] transition-colors duration-150" aria-label="Previous day">
+                        <a href="{{ route('staff.schedule', ['date' => $prevDate, 'filter' => $activeFilter]) }}" class="inline-flex items-center justify-center rounded-xl border border-gray-200 bg-white p-2.5 text-gray-500 shadow-xs hover:border-blue-200 hover:text-[#0047D4] transition-colors duration-150" aria-label="Previous day">
                             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg>
-                        </button>
+                        </a>
                         <div class="flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 shadow-xs">
                             <svg class="h-4 w-4 text-[#0047D4]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg>
                             <span class="text-sm font-semibold text-gray-900">{{ $currentDate }}</span>
                         </div>
-                        <button type="button" class="inline-flex items-center justify-center rounded-xl border border-gray-200 bg-white p-2.5 text-gray-500 shadow-xs hover:border-blue-200 hover:text-[#0047D4] transition-colors duration-150" aria-label="Next day">
+                        <a href="{{ route('staff.schedule', ['date' => $nextDate, 'filter' => $activeFilter]) }}" class="inline-flex items-center justify-center rounded-xl border border-gray-200 bg-white p-2.5 text-gray-500 shadow-xs hover:border-blue-200 hover:text-[#0047D4] transition-colors duration-150" aria-label="Next day">
                             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"></path></svg>
-                        </button>
+                        </a>
                     </div>
                 </div>
 
@@ -111,13 +61,13 @@ $currentDate = 'Tuesday, 10 June 2026';
                         ];
                     @endphp
                     @foreach ($filters as $filter)
-                        <button type="button"
+                        <a href="{{ route('staff.schedule', ['date' => $dateParam, 'filter' => $filter['key']]) }}"
                                 class="inline-flex items-center whitespace-nowrap rounded-xl px-4 py-2 text-sm font-semibold transition-all duration-150
                                        {{ $filter['key'] === $activeFilter
                                            ? 'bg-[#0047D4] text-white shadow-lg shadow-blue-500/10'
                                            : 'bg-white text-gray-600 border border-gray-200 shadow-xs hover:border-blue-200 hover:text-[#0047D4]' }}">
                             {{ $filter['label'] }}
-                        </button>
+                        </a>
                     @endforeach
                 </div>
 
@@ -134,28 +84,28 @@ $currentDate = 'Tuesday, 10 June 2026';
                                     @foreach ($courts as $court)
                                         <th class="border-b border-r border-gray-100 last:border-r-0 px-3 py-3 text-center text-xs font-bold uppercase tracking-wider text-gray-500">
                                             <div class="flex items-center justify-center gap-1.5">
-                                                @if ($court === 'Futsal')
+                                                @if ($court['sport'] === 'Futsal')
                                                     <span class="flex h-5 w-5 items-center justify-center rounded-md bg-emerald-50 text-emerald-600">
                                                         <svg class="h-3 w-3" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"></circle></svg>
                                                     </span>
-                                                @elseif ($court === 'Badminton')
+                                                @elseif ($court['sport'] === 'Badminton')
                                                     <span class="flex h-5 w-5 items-center justify-center rounded-md bg-purple-50 text-purple-600">
                                                         <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle></svg>
                                                     </span>
-                                                @elseif ($court === 'Tennis')
+                                                @elseif ($court['sport'] === 'Tennis')
                                                     <span class="flex h-5 w-5 items-center justify-center rounded-md bg-amber-50 text-amber-600">
                                                         <svg class="h-3 w-3" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"></circle></svg>
                                                     </span>
-                                                @elseif ($court === 'Basketball')
+                                                @elseif ($court['sport'] === 'Basketball')
                                                     <span class="flex h-5 w-5 items-center justify-center rounded-md bg-orange-50 text-orange-600">
                                                         <svg class="h-3 w-3" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"></circle></svg>
                                                     </span>
-                                                @elseif ($court === 'Volleyball')
+                                                @elseif ($court['sport'] === 'Volleyball')
                                                     <span class="flex h-5 w-5 items-center justify-center rounded-md bg-sky-50 text-sky-600">
                                                         <svg class="h-3 w-3" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"></circle></svg>
                                                     </span>
                                                 @endif
-                                                {{ $court }}
+                                                {{ $court['name'] }}
                                             </div>
                                         </th>
                                     @endforeach
@@ -176,11 +126,11 @@ $currentDate = 'Tuesday, 10 June 2026';
                                         {{-- Court Columns --}}
                                         @foreach ($courts as $court)
                                             @php
-                                                $booking = $bookings[$time][$court] ?? null;
-                                                $isTennis = $court === 'Tennis';
+                                                $booking = $bookings[$time][$court['id']] ?? null;
+                                                $isMaintenance = $court['status'] === 'maintenance';
                                             @endphp
                                             <td class="border-b border-r border-gray-100 last:border-r-0 px-2 py-1.5">
-                                                @if ($isTennis)
+                                                @if ($isMaintenance)
                                                     {{-- Maintenance Cell --}}
                                                     <div class="maintenance-stripes flex items-center justify-center gap-1.5 rounded-xl px-3 py-3 min-h-[52px]">
                                                         <svg class="h-3.5 w-3.5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
@@ -227,9 +177,9 @@ $currentDate = 'Tuesday, 10 June 2026';
                                                     @endif
                                                 @else
                                                     {{-- Available Cell --}}
-                                                    <div class="flex items-center justify-center rounded-xl border border-dashed border-gray-200 px-3 py-3 min-h-[52px] hover:border-blue-300 hover:bg-blue-50/50 transition-colors duration-150 cursor-pointer group">
+                                                    <a href="{{ route('staff.offline-booking', ['date' => $dateParam, 'time' => $time . ' - ' . $nextHour, 'field_id' => $court['id']]) }}" class="flex items-center justify-center rounded-xl border border-dashed border-gray-200 px-3 py-3 min-h-[52px] hover:border-blue-300 hover:bg-blue-50/50 transition-colors duration-150 cursor-pointer group">
                                                         <span class="text-xs text-gray-400 group-hover:text-[#0047D4] transition-colors duration-150">Available</span>
-                                                    </div>
+                                                    </a>
                                                 @endif
                                             </td>
                                         @endforeach
