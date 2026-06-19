@@ -18,7 +18,7 @@
 
         $sidebarNav = [
             ['label' => 'Dashboard',         'route' => 'admin.dashboard', 'icon' => '<rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/>'],
-            ['label' => 'Courts Management', 'route' => 'admin.courts',    'icon' => '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 12h18"/><path d="M12 3v18"/>'],
+            ['label' => 'Courts Management', 'route' => 'admin.courts.index',    'icon' => '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 12h18"/><path d="M12 3v18"/>'],
             ['label' => 'Bookings',          'route' => 'admin.bookings',  'icon' => '<rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/>'],
             ['label' => 'Users',             'route' => 'admin.users',     'icon' => '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>'],
             ['label' => 'Financial Reports', 'route' => 'admin.reports',   'icon' => '<path d="M3 3v18h18"/><path d="M7 16l4-8 4 4 4-6"/>'],

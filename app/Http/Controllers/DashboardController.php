@@ -10,6 +10,13 @@ class DashboardController extends Controller
     public function index()
     {
         $authUser = Auth::user();
+
+        // Redirect admin and staff to their respective dashboards
+        if ($authUser->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        } elseif ($authUser->role === 'penjaga') {
+            return redirect()->route('staff.dashboard');
+        }
         
         // Menghitung total pesanan
         $totalBookings = $authUser->bookings()->count();
@@ -32,6 +39,6 @@ class DashboardController extends Controller
             ->orderBy('jam_mulai', 'asc')
             ->first();
 
-        return view('dashboard', compact('user', 'upcomingBooking'));
+        return view('user.dashboard', compact('user', 'upcomingBooking'));
     }
 }

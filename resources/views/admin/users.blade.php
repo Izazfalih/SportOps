@@ -6,96 +6,7 @@
 
 @section('content')
 
-    @php
-        $users = [
-            [
-                'name' => 'Ahmad Fauzi',
-                'email' => 'ahmad.fauzi@gmail.com',
-                'phone' => '0812-3456-7890',
-                'role' => 'Admin',
-                'status' => 'Active',
-                'joined' => '2024-01-15',
-            ],
-            [
-                'name' => 'Siti Nurhaliza',
-                'email' => 'siti.nurhaliza@yahoo.com',
-                'phone' => '0856-1234-5678',
-                'role' => 'User',
-                'status' => 'Active',
-                'joined' => '2024-03-22',
-            ],
-            [
-                'name' => 'Budi Santoso',
-                'email' => 'budi.santoso@gmail.com',
-                'phone' => '0878-9012-3456',
-                'role' => 'Staff',
-                'status' => 'Active',
-                'joined' => '2024-02-10',
-            ],
-            [
-                'name' => 'Dewi Lestari',
-                'email' => 'dewi.lestari@outlook.com',
-                'phone' => '0813-5678-9012',
-                'role' => 'User',
-                'status' => 'Disabled',
-                'joined' => '2024-05-18',
-            ],
-            [
-                'name' => 'Rizky Maulana',
-                'email' => 'rizky.maulana@gmail.com',
-                'phone' => '0821-3456-7890',
-                'role' => 'User',
-                'status' => 'Active',
-                'joined' => '2024-04-07',
-            ],
-            [
-                'name' => 'Putri Ayu Wulandari',
-                'email' => 'putri.ayu@gmail.com',
-                'phone' => '0857-6789-0123',
-                'role' => 'Staff',
-                'status' => 'Active',
-                'joined' => '2024-06-01',
-            ],
-            [
-                'name' => 'Hendra Wijaya',
-                'email' => 'hendra.wijaya@yahoo.com',
-                'phone' => '0896-1234-5678',
-                'role' => 'User',
-                'status' => 'Active',
-                'joined' => '2025-01-12',
-            ],
-            [
-                'name' => 'Mega Puspitasari',
-                'email' => 'mega.puspita@gmail.com',
-                'phone' => '0812-8901-2345',
-                'role' => 'User',
-                'status' => 'Disabled',
-                'joined' => '2025-02-28',
-            ],
-            [
-                'name' => 'Irfan Hakim',
-                'email' => 'irfan.hakim@gmail.com',
-                'phone' => '0878-2345-6789',
-                'role' => 'Admin',
-                'status' => 'Active',
-                'joined' => '2024-01-15',
-            ],
-            [
-                'name' => 'Rina Marlina',
-                'email' => 'rina.marlina@outlook.com',
-                'phone' => '0856-7890-1234',
-                'role' => 'User',
-                'status' => 'Active',
-                'joined' => '2025-06-03',
-            ],
-        ];
 
-        $stats = [
-            'total_users' => 328,
-            'active_staff' => 4,
-            'new_this_month' => 28,
-        ];
-    @endphp
 
 
     {{-- Page header --}}
@@ -129,7 +40,7 @@
     </div>
 
     {{-- Filter / Search bar --}}
-    <div class="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
+    <form method="GET" action="{{ route('admin.users') }}" class="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
         <div class="relative flex-1">
             <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400">
                 <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -138,23 +49,24 @@
                 </svg>
             </div>
 
-            <input type="text" placeholder="Search by name or email..."
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by name or email..."
                 class="w-full h-14 rounded-xl border border-gray-200 bg-white pl-12 pr-4 text-sm text-gray-900 placeholder:text-gray-400 focus:border-[#0047D4] focus:outline-none focus:ring-2 focus:ring-blue-500/10 transition-colors" />
         </div>
-        <select
+        <select name="role"
             class="rounded-xl border border-gray-200 bg-white py-2.5 px-4 pr-9 text-sm font-medium text-gray-700 shadow-xs focus:border-[#0047D4] focus:outline-none focus:ring-2 focus:ring-blue-500/10 transition-colors duration-150">
-            <option>All Roles</option>
-            <option>User</option>
-            <option>Admin</option>
-            <option>Staff</option>
+            <option {{ request('role') == 'All Roles' ? 'selected' : '' }}>All Roles</option>
+            <option value="User" {{ request('role') == 'User' ? 'selected' : '' }}>User</option>
+            <option value="Admin" {{ request('role') == 'Admin' ? 'selected' : '' }}>Admin</option>
+            <option value="Staff" {{ request('role') == 'Staff' ? 'selected' : '' }}>Staff</option>
         </select>
-        <select
+        <select name="status"
             class="rounded-xl border border-gray-200 bg-white py-2.5 px-4 pr-9 text-sm font-medium text-gray-700 shadow-xs focus:border-[#0047D4] focus:outline-none focus:ring-2 focus:ring-blue-500/10 transition-colors duration-150">
-            <option>All Status</option>
-            <option>Active</option>
-            <option>Disabled</option>
+            <option {{ request('status') == 'All Status' ? 'selected' : '' }}>All Status</option>
+            <option value="Active" {{ request('status') == 'Active' ? 'selected' : '' }}>Active</option>
+            <option value="Disabled" {{ request('status') == 'Disabled' ? 'selected' : '' }}>Disabled</option>
         </select>
-    </div>
+        <button type="submit" class="rounded-xl bg-gray-100 px-5 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-200 transition-colors">Filter</button>
+    </form>
 
     <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
     {{-- Total Users --}}
@@ -246,24 +158,24 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-50">
-                    @foreach ($users as $index => $u)
+                    @foreach ($usersData as $index => $u)
                         <tr class="hover:bg-gray-50/50 transition-colors duration-100">
                             <td class="whitespace-nowrap px-5 py-3.5">
                                 <div class="flex items-center gap-3">
                                     <span
                                         class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[#0047D4] to-indigo-600 text-xs font-bold text-white">
-                                        {{ collect(explode(' ', $u['name']))->map(fn($w) => strtoupper(mb_substr($w, 0, 1)))->take(2)->join('') }}
+                                        {{ collect(explode(' ', $u->name))->map(fn($w) => strtoupper(mb_substr($w, 0, 1)))->take(2)->join('') }}
                                     </span>
-                                    <span class="font-semibold text-gray-900">{{ $u['name'] }}</span>
+                                    <span class="font-semibold text-gray-900">{{ $u->name }}</span>
                                 </div>
                             </td>
-                            <td class="whitespace-nowrap px-5 py-3.5 text-gray-600">{{ $u['email'] }}</td>
-                            <td class="whitespace-nowrap px-5 py-3.5 text-gray-600">{{ $u['phone'] }}</td>
+                            <td class="whitespace-nowrap px-5 py-3.5 text-gray-600">{{ $u->email }}</td>
+                            <td class="whitespace-nowrap px-5 py-3.5 text-gray-600">{{ $u->phone }}</td>
                             <td class="whitespace-nowrap px-5 py-3.5">
-                                @if ($u['role'] === 'Admin')
+                                @if (strtolower($u->role) === 'admin')
                                     <span
                                         class="inline-flex items-center rounded-lg bg-blue-50 px-2.5 py-1 text-xs font-semibold text-[#0047D4]">Admin</span>
-                                @elseif ($u['role'] === 'Staff')
+                                @elseif (strtolower($u->role) === 'penjaga' || strtolower($u->role) === 'staff')
                                     <span
                                         class="inline-flex items-center rounded-lg bg-purple-50 px-2.5 py-1 text-xs font-semibold text-purple-700">Staff</span>
                                 @else
@@ -272,7 +184,7 @@
                                 @endif
                             </td>
                             <td class="whitespace-nowrap px-5 py-3.5">
-                                @if ($u['status'] === 'Active')
+                                @if ($u->is_active)
                                     <span class="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-700">
                                         <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span> Active
                                     </span>
@@ -283,18 +195,21 @@
                                 @endif
                             </td>
                             <td class="whitespace-nowrap px-5 py-3.5 text-gray-500">
-                                {{ \Carbon\Carbon::parse($u['joined'])->format('M d, Y') }}</td>
+                                {{ \Carbon\Carbon::parse($u->created_at)->format('M d, Y') }}</td>
                             <td class="whitespace-nowrap px-5 py-3.5 text-right">
                                 <div class="flex items-center justify-end gap-2">
                                     <button type="button" onclick="openEditModal({{ $index }})"
                                         class="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 hover:border-[#0047D4] hover:text-[#0047D4] transition-colors duration-150">Edit</button>
-                                    @if ($u['status'] === 'Active')
-                                        <button type="button"
-                                            class="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-semibold text-rose-600 hover:bg-rose-50 hover:border-rose-200 transition-colors duration-150">Disable</button>
-                                    @else
-                                        <button type="button"
-                                            class="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-semibold text-emerald-600 hover:bg-emerald-50 hover:border-emerald-200 transition-colors duration-150">Enable</button>
-                                    @endif
+                                    <form action="{{ route('admin.users.toggle', $u->id) }}" method="POST" class="inline-block">
+                                        @csrf
+                                        @if ($u->is_active)
+                                            <button type="submit"
+                                                class="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-semibold text-rose-600 hover:bg-rose-50 hover:border-rose-200 transition-colors duration-150">Disable</button>
+                                        @else
+                                            <button type="submit"
+                                                class="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-semibold text-emerald-600 hover:bg-emerald-50 hover:border-emerald-200 transition-colors duration-150">Enable</button>
+                                        @endif
+                                    </form>
                                 </div>
                             </td>
                         </tr>
@@ -305,23 +220,11 @@
 
         {{-- Pagination --}}
         <div class="flex flex-col items-center justify-between gap-3 border-t border-gray-100 px-5 py-4 sm:flex-row">
-            <p class="text-sm text-gray-500">Showing <span class="font-semibold text-gray-700">1</span> to <span
-                    class="font-semibold text-gray-700">10</span> of <span class="font-semibold text-gray-700">328</span>
+            <p class="text-sm text-gray-500">Showing <span class="font-semibold text-gray-700">{{ $usersData->firstItem() ?? 0 }}</span> to <span
+                    class="font-semibold text-gray-700">{{ $usersData->lastItem() ?? 0 }}</span> of <span class="font-semibold text-gray-700">{{ $usersData->total() }}</span>
                 users</p>
             <div class="flex items-center gap-1.5">
-                <button
-                    class="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm font-medium text-gray-400 cursor-not-allowed"
-                    disabled>Previous</button>
-                <button class="rounded-lg bg-[#0047D4] px-3 py-1.5 text-sm font-semibold text-white shadow-xs">1</button>
-                <button
-                    class="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:border-[#0047D4] hover:text-[#0047D4] transition-colors duration-150">2</button>
-                <button
-                    class="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:border-[#0047D4] hover:text-[#0047D4] transition-colors duration-150">3</button>
-                <span class="px-1 text-gray-400">...</span>
-                <button
-                    class="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:border-[#0047D4] hover:text-[#0047D4] transition-colors duration-150">33</button>
-                <button
-                    class="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:border-[#0047D4] hover:text-[#0047D4] transition-colors duration-150">Next</button>
+                {{ $usersData->withQueryString()->links('pagination::tailwind') }}
             </div>
         </div>
     </div>
@@ -342,39 +245,40 @@
                 </button>
             </div>
 
-            <form class="mt-6 space-y-4">
+            <form method="POST" action="{{ route('admin.users.store') }}" class="mt-6 space-y-4">
+                @csrf
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-1.5">Name</label>
-                    <input type="text" placeholder="Full name"
+                    <input type="text" name="name" required placeholder="Full name"
                         class="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-900 shadow-xs placeholder:text-gray-400 focus:border-[#0047D4] focus:outline-none focus:ring-2 focus:ring-blue-500/10 transition-colors duration-150">
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-1.5">Email</label>
-                    <input type="email" placeholder="email@example.com"
+                    <input type="email" name="email" required placeholder="email@example.com"
                         class="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-900 shadow-xs placeholder:text-gray-400 focus:border-[#0047D4] focus:outline-none focus:ring-2 focus:ring-blue-500/10 transition-colors duration-150">
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-1.5">Phone</label>
-                    <input type="tel" placeholder="0812-xxxx-xxxx"
+                    <input type="tel" name="phone" required placeholder="0812-xxxx-xxxx"
                         class="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-900 shadow-xs placeholder:text-gray-400 focus:border-[#0047D4] focus:outline-none focus:ring-2 focus:ring-blue-500/10 transition-colors duration-150">
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-1.5">Role</label>
-                    <select id="create-role"
+                    <select id="create-role" name="role" required
                         class="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-700 shadow-xs focus:border-[#0047D4] focus:outline-none focus:ring-2 focus:ring-blue-500/10 transition-colors duration-150">
-                        <option>User</option>
-                        <option>Admin</option>
-                        <option>Staff</option>
+                        <option value="User">User</option>
+                        <option value="Admin">Admin</option>
+                        <option value="Staff">Staff</option>
                     </select>
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-1.5">Password</label>
-                    <input type="password" placeholder="Min. 8 characters"
+                    <input type="password" name="password" required placeholder="Min. 8 characters"
                         class="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-900 shadow-xs placeholder:text-gray-400 focus:border-[#0047D4] focus:outline-none focus:ring-2 focus:ring-blue-500/10 transition-colors duration-150">
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-1.5">Confirm Password</label>
-                    <input type="password" placeholder="Repeat password"
+                    <input type="password" name="password_confirmation" required placeholder="Repeat password"
                         class="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-900 shadow-xs placeholder:text-gray-400 focus:border-[#0047D4] focus:outline-none focus:ring-2 focus:ring-blue-500/10 transition-colors duration-150">
                 </div>
                 <div class="flex items-center justify-end gap-3 pt-2">
@@ -403,34 +307,37 @@
                 </button>
             </div>
 
-            <form class="mt-6 space-y-4">
+            <form id="edit-form" method="POST" action="" class="mt-6 space-y-4">
+                @csrf
+                @method('PUT')
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-1.5">Name</label>
-                    <input type="text" id="edit-name"
+                    <input type="text" id="edit-name" name="name" required
                         class="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-900 shadow-xs focus:border-[#0047D4] focus:outline-none focus:ring-2 focus:ring-blue-500/10 transition-colors duration-150">
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-1.5">Email</label>
-                    <input type="email" id="edit-email"
+                    <input type="email" id="edit-email" name="email" required
                         class="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-900 shadow-xs focus:border-[#0047D4] focus:outline-none focus:ring-2 focus:ring-blue-500/10 transition-colors duration-150">
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-1.5">Phone</label>
-                    <input type="tel" id="edit-phone"
+                    <input type="tel" id="edit-phone" name="phone" required
                         class="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-900 shadow-xs focus:border-[#0047D4] focus:outline-none focus:ring-2 focus:ring-blue-500/10 transition-colors duration-150">
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-1.5">Role</label>
-                    <select id="edit-role"
+                    <select id="edit-role" name="role" required
                         class="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-700 shadow-xs focus:border-[#0047D4] focus:outline-none focus:ring-2 focus:ring-blue-500/10 transition-colors duration-150">
-                        <option>User</option>
-                        <option>Admin</option>
-                        <option>Staff</option>
+                        <option value="User">User</option>
+                        <option value="Admin">Admin</option>
+                        <option value="Staff">Staff</option>
                     </select>
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-1.5">Status</label>
                     <div class="flex items-center gap-3">
+                        <input type="hidden" name="is_active" id="edit-is-active" value="1">
                         <button type="button" id="edit-status-toggle" onclick="toggleEditStatus()"
                             class="relative inline-flex h-6 w-11 items-center rounded-full bg-emerald-500 transition-colors duration-200">
                             <span id="edit-status-dot"
@@ -454,7 +361,7 @@
 
 @push('scripts')
     <script>
-        const usersData = @json($users);
+        const usersData = @json($usersData->items());
         let editStatusActive = true;
 
         function openModal(id) {
@@ -469,12 +376,20 @@
 
         function openEditModal(index) {
             const user = usersData[index];
+            const editForm = document.getElementById('edit-form');
+            editForm.action = `/admin/users/${user.id}`;
             document.getElementById('edit-name').value = user.name;
             document.getElementById('edit-email').value = user.email;
             document.getElementById('edit-phone').value = user.phone;
-            document.getElementById('edit-role').value = user.role;
+            
+            // Format role string correctly (capitalize first letter)
+            let capRole = user.role.charAt(0).toUpperCase() + user.role.slice(1);
+            if (capRole === 'Penjaga') {
+                capRole = 'Staff';
+            }
+            document.getElementById('edit-role').value = capRole;
 
-            editStatusActive = user.status === 'Active';
+            editStatusActive = user.is_active ? true : false;
             updateStatusToggle();
             openModal('edit-user-modal');
         }
@@ -488,6 +403,7 @@
             const toggle = document.getElementById('edit-status-toggle');
             const dot = document.getElementById('edit-status-dot');
             const label = document.getElementById('edit-status-label');
+            const inputHidden = document.getElementById('edit-is-active');
 
             if (editStatusActive) {
                 toggle.className =
@@ -496,6 +412,8 @@
                     'inline-block h-4 w-4 translate-x-6 rounded-full bg-white shadow-sm transition-transform duration-200';
                 label.textContent = 'Active';
                 label.className = 'text-sm font-medium text-emerald-700';
+                inputHidden.value = 1;
+                inputHidden.disabled = false;
             } else {
                 toggle.className =
                     'relative inline-flex h-6 w-11 items-center rounded-full bg-gray-300 transition-colors duration-200';
@@ -503,6 +421,7 @@
                     'inline-block h-4 w-4 translate-x-1 rounded-full bg-white shadow-sm transition-transform duration-200';
                 label.textContent = 'Disabled';
                 label.className = 'text-sm font-medium text-rose-600';
+                inputHidden.disabled = true; // when submitted without it, will be false
             }
         }
 

@@ -26,9 +26,16 @@ class AdminFieldController extends Controller
             'deskripsi' => 'nullable|string',
         ]);
 
-        // Assumes we only have 1 venue for now "SportOps Arena" (ID 1)
-        // If it doesn't exist, we fall back to creating one or picking the first.
-        $venueId = Venue::first()->id ?? 1;
+        // Ensure a venue exists to satisfy the foreign key constraint
+        $venue = Venue::first();
+        if (!$venue) {
+            $venue = Venue::create([
+                'nama_venue' => 'SportOps Arena',
+                'alamat' => 'Jl. Olahraga No. 1, Jakarta',
+                'kontak' => '081234567890',
+            ]);
+        }
+        $venueId = $venue->id;
 
         Field::create([
             'venue_id' => $venueId,

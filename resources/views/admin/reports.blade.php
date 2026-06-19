@@ -14,51 +14,7 @@
 
 @section('content')
 
-    @php
-$summaryCards = [
-            ['label' => 'Total Revenue',      'value' => 'Rp 45,800,000', 'badge' => '+12.5%', 'badgeColor' => 'green', 'icon' => 'revenue'],
-            ['label' => 'Total DP Payments',   'value' => 'Rp 18,200,000', 'badge' => null,     'badgeColor' => null,    'icon' => 'dp'],
-            ['label' => 'Total Full Payments', 'value' => 'Rp 27,600,000', 'badge' => null,     'badgeColor' => null,    'icon' => 'full'],
-            ['label' => 'Outstanding Balance', 'value' => 'Rp 3,400,000',  'badge' => null,     'badgeColor' => 'amber', 'icon' => 'outstanding'],
-        ];
 
-        $revenueData = [
-            ['month' => 'Jan', 'value' => 5.2, 'label' => 'Rp 5.2M'],
-            ['month' => 'Feb', 'value' => 6.1, 'label' => 'Rp 6.1M'],
-            ['month' => 'Mar', 'value' => 7.8, 'label' => 'Rp 7.8M'],
-            ['month' => 'Apr', 'value' => 8.2, 'label' => 'Rp 8.2M'],
-            ['month' => 'May', 'value' => 9.3, 'label' => 'Rp 9.3M'],
-            ['month' => 'Jun', 'value' => 9.2, 'label' => 'Rp 9.2M'],
-        ];
-        $revenueMax = 10;
-
-        $bookingData = [
-            ['month' => 'Jan', 'value' => 42, 'label' => '42'],
-            ['month' => 'Feb', 'value' => 51, 'label' => '51'],
-            ['month' => 'Mar', 'value' => 68, 'label' => '68'],
-            ['month' => 'Apr', 'value' => 72, 'label' => '72'],
-            ['month' => 'May', 'value' => 85, 'label' => '85'],
-            ['month' => 'Jun', 'value' => 78, 'label' => '78'],
-        ];
-        $bookingMax = 90;
-
-        $sportRevenue = [
-            ['sport' => 'Futsal',      'amount' => 'Rp 18,500,000', 'pct' => 40.4, 'color' => '#0047D4'],
-            ['sport' => 'Basketball',  'amount' => 'Rp 10,200,000', 'pct' => 22.3, 'color' => '#6366f1'],
-            ['sport' => 'Tennis',      'amount' => 'Rp 8,400,000',  'pct' => 18.3, 'color' => '#0ea5e9'],
-            ['sport' => 'Volleyball',  'amount' => 'Rp 5,100,000',  'pct' => 11.1, 'color' => '#10b981'],
-            ['sport' => 'Badminton',   'amount' => 'Rp 3,600,000',  'pct' => 7.9,  'color' => '#f59e0b'],
-        ];
-
-        $transactions = [
-            ['date' => '2026-06-10', 'code' => 'BK-20260610-001', 'customer' => 'Rizky Maulana',  'sport' => 'Futsal',      'amount' => 'Rp 400,000', 'type' => 'Full',  'status' => 'Completed'],
-            ['date' => '2026-06-09', 'code' => 'BK-20260609-003', 'customer' => 'Sari Dewi',       'sport' => 'Basketball',  'amount' => 'Rp 150,000', 'type' => 'DP',    'status' => 'Pending'],
-            ['date' => '2026-06-09', 'code' => 'BK-20260609-002', 'customer' => 'Ahmad Fauzan',    'sport' => 'Tennis',       'amount' => 'Rp 300,000', 'type' => 'Full',  'status' => 'Completed'],
-            ['date' => '2026-06-08', 'code' => 'BK-20260608-005', 'customer' => 'Linda Kartika',   'sport' => 'Badminton',    'amount' => 'Rp 100,000', 'type' => 'DP',    'status' => 'Pending'],
-            ['date' => '2026-06-08', 'code' => 'BK-20260608-002', 'customer' => 'Budi Santoso',    'sport' => 'Volleyball',   'amount' => 'Rp 250,000', 'type' => 'Full',  'status' => 'Completed'],
-            ['date' => '2026-06-07', 'code' => 'BK-20260607-001', 'customer' => 'Mega Putri',      'sport' => 'Futsal',       'amount' => 'Rp 200,000', 'type' => 'DP',    'status' => 'Refunded'],
-        ];
-    @endphp
 
 
 {{-- ==================== PAGE HEADER ==================== --}}
@@ -72,22 +28,22 @@ $summaryCards = [
                             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
                             Print
                         </button>
-                        <button class="inline-flex items-center gap-2 rounded-xl bg-[#0047D4] px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/10 hover:bg-[#003cb5] active:scale-[0.99] transition-all duration-200">
+                        <a href="{{ route('admin.reports.export') }}" class="inline-flex items-center gap-2 rounded-xl bg-[#0047D4] px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/10 hover:bg-[#003cb5] active:scale-[0.99] transition-all duration-200">
                             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                             Export Report
-                        </button>
+                        </a>
                     </div>
                 </div>
 
                 {{-- ==================== TIME PERIOD TABS ==================== --}}
                 <div class="mt-6 flex items-center gap-1 rounded-xl bg-white border border-gray-100 p-1 shadow-xs w-fit">
-                    @foreach (['Daily', 'Weekly', 'Monthly', 'Annual'] as $period)
-                        <button class="rounded-lg px-4 py-2 text-sm font-semibold transition-colors duration-150
-                            {{ $period === 'Monthly'
+                    @foreach (['Daily', 'Weekly', 'Monthly', 'Annual'] as $p)
+                        <a href="{{ route('admin.reports', ['period' => strtolower($p)]) }}" class="rounded-lg px-4 py-2 text-sm font-semibold transition-colors duration-150
+                            {{ strtolower($period ?? 'monthly') === strtolower($p)
                                 ? 'bg-[#0047D4] text-white shadow-lg shadow-blue-500/10'
                                 : 'text-gray-600 hover:bg-gray-50 hover:text-[#0047D4]' }}">
-                            {{ $period }}
-                        </button>
+                            {{ $p }}
+                        </a>
                     @endforeach
                 </div>
 
@@ -246,20 +202,20 @@ $summaryCards = [
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 text-center whitespace-nowrap">
-                                            @if ($tx['status'] === 'Completed')
+                                            @if ($tx['status'] === 'Completed' || $tx['status'] === 'Paid')
                                                 <span class="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700">
                                                     <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
                                                     Completed
                                                 </span>
-                                            @elseif ($tx['status'] === 'Pending')
+                                            @elseif ($tx['status'] === 'Pending' || $tx['status'] === 'Unpaid')
                                                 <span class="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700">
                                                     <span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span>
                                                     Pending
                                                 </span>
-                                            @elseif ($tx['status'] === 'Refunded')
+                                            @elseif ($tx['status'] === 'Refunded' || $tx['status'] === 'Cancelled')
                                                 <span class="inline-flex items-center gap-1 rounded-full bg-rose-50 px-2.5 py-1 text-xs font-semibold text-rose-700">
                                                     <span class="h-1.5 w-1.5 rounded-full bg-rose-500"></span>
-                                                    Refunded
+                                                    {{ $tx['status'] }}
                                                 </span>
                                             @endif
                                         </td>
