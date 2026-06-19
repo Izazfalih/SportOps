@@ -6,107 +6,7 @@
 
 @section('content')
 
-    @php
-$pendingCheckins = [
-            [
-                'code'        => 'BK-20260610-002',
-                'customer'    => 'Sarah Putri',
-                'sport'       => 'Badminton',
-                'court'       => 'Court B1',
-                'date'        => '10 Jun 2026',
-                'time'        => '11:00 – 12:00',
-                'payment'     => 'DP Paid',
-                'payColor'    => 'bg-amber-50 text-amber-700',
-                'totalPrice'  => 200000,
-                'paidAmount'  => 100000,
-                'remaining'   => 100000,
-                'warning'     => null,
-            ],
-            [
-                'code'        => 'BK-20260610-003',
-                'customer'    => 'Ahmad Fauzi',
-                'sport'       => 'Basketball',
-                'court'       => 'Court K1',
-                'date'        => '10 Jun 2026',
-                'time'        => '13:00 – 14:00',
-                'payment'     => 'Fully Paid',
-                'payColor'    => 'bg-emerald-50 text-emerald-700',
-                'totalPrice'  => 300000,
-                'paidAmount'  => 300000,
-                'remaining'   => 0,
-                'warning'     => null,
-            ],
-            [
-                'code'        => 'BK-20260610-004',
-                'customer'    => 'Dimas Pratama',
-                'sport'       => 'Tennis',
-                'court'       => 'Court T1',
-                'date'        => '10 Jun 2026',
-                'time'        => '14:00 – 15:00',
-                'payment'     => 'Fully Paid',
-                'payColor'    => 'bg-emerald-50 text-emerald-700',
-                'totalPrice'  => 250000,
-                'paidAmount'  => 250000,
-                'remaining'   => 0,
-                'warning'     => 'Court under maintenance — please reassign or inform customer',
-            ],
-            [
-                'code'        => 'BK-20260610-005',
-                'customer'    => 'Rina Wijaya',
-                'sport'       => 'Futsal',
-                'court'       => 'Court F2',
-                'date'        => '10 Jun 2026',
-                'time'        => '15:00 – 16:00',
-                'payment'     => 'Fully Paid',
-                'payColor'    => 'bg-emerald-50 text-emerald-700',
-                'totalPrice'  => 350000,
-                'paidAmount'  => 350000,
-                'remaining'   => 0,
-                'warning'     => null,
-            ],
-            [
-                'code'        => 'BK-20260610-006',
-                'customer'    => 'Fajar Hidayat',
-                'sport'       => 'Volleyball',
-                'court'       => 'Court V1',
-                'date'        => '10 Jun 2026',
-                'time'        => '16:00 – 17:00',
-                'payment'     => 'DP Paid',
-                'payColor'    => 'bg-amber-50 text-amber-700',
-                'totalPrice'  => 280000,
-                'paidAmount'  => 140000,
-                'remaining'   => 140000,
-                'warning'     => null,
-            ],
-        ];
 
-        $checkedIn = [
-            [
-                'code'      => 'BK-20260610-001',
-                'customer'  => 'Budi Santoso',
-                'sport'     => 'Futsal',
-                'court'     => 'Court F1',
-                'time'      => '10:00 – 11:00',
-                'checkedAt' => '09:55',
-            ],
-            [
-                'code'      => 'BK-20260610-007',
-                'customer'  => 'Riko Aditya',
-                'sport'     => 'Futsal',
-                'court'     => 'Court F3',
-                'time'      => '08:00 – 09:00',
-                'checkedAt' => '07:58',
-            ],
-            [
-                'code'      => 'BK-20260610-008',
-                'customer'  => 'Yoga Permana',
-                'sport'     => 'Badminton',
-                'court'     => 'Court B2',
-                'time'      => '09:00 – 10:00',
-                'checkedAt' => '08:52',
-            ],
-        ];
-    @endphp
 
 
 {{-- Search section --}}
@@ -176,12 +76,14 @@ $pendingCheckins = [
 
                             {{-- Action --}}
                             <div class="mt-5">
-                                <button type="button"
-                                        onclick="openCheckinModal({{ json_encode($booking) }})"
-                                        class="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-emerald-500/10 transition-colors duration-150 hover:bg-emerald-600">
-                                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                                    Check In
-                                </button>
+                                <form action="{{ route('staff.checkin.process', $booking['id']) }}" method="POST">
+                                    @csrf
+                                    <button type="submit"
+                                            class="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-emerald-500/10 transition-colors duration-150 hover:bg-emerald-600">
+                                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                        Check In
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     @endforeach

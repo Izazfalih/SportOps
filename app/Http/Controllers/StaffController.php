@@ -202,6 +202,77 @@ class StaffController extends Controller
         ));
     }
 
+    public function checkin()
+    {
+        $today = \Carbon\Carbon::today();
+
+        // Get bookings for today that are confirmed (pending check-in) or active (already checked in)
+        $bookings = \App\Models\Booking::with(['user', 'field', 'payments'])
+            ->whereDate('tanggal', $today)
+            ->whereIn('status', ['confirmed', 'active'])
+            ->orderBy('jam_mulai', 'asc')
+            ->get();
+
+        $pendingCheckins = [];
+        $checkedIn = [];
+
+        foreach ($bookings as $b) {
+            $paymentStatus = 'Pending';
+            $totalPaid = $b->payments->where('status', 'paid')->sum('nominal');
+            $dpPaid = $b->payments->where('status', 'dp')->sum('nominal');
+            $paidAmount = $totalPaid + $dpPaid;
+            $remaining = $b->total_harga - $paidAmount;
+            
+            if ($totalPaid >= $b->total_harga) {
+                $paymentStatus = 'Fully Paid';
+            } elseif ($paidAmount > 0) {
+                $paymentStatus = 'DP Paid';
+            }
+
+            $payColor = $paymentStatus === 'Fully Paid' ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700';
+
+            // Check if field is maintenance
+            $warning = null;
+            if ($b->field && $b->field->status === 'maintenance') {
+                $warning = 'Court under maintenance — please reassign or inform customer';
+            }
+
+            $data = [
+                'id'          => $b->id,
+                'code'        => 'BK-2026' . str_pad($b->id, 4, '0', STR_PAD_LEFT),
+                'customer'    => $b->user ? $b->user->name : 'Unknown',
+                'sport'       => $b->field ? $b->field->jenis_olahraga : 'N/A',
+                'court'       => $b->field ? $b->field->nama_lapangan : 'N/A',
+                'date'        => \Carbon\Carbon::parse($b->tanggal)->format('d M Y'),
+                'time'        => \Carbon\Carbon::parse($b->jam_mulai)->format('H:i') . ' – ' . \Carbon\Carbon::parse($b->jam_selesai)->format('H:i'),
+                'payment'     => $paymentStatus,
+                'payColor'    => $payColor,
+                'totalPrice'  => $b->total_harga,
+                'paidAmount'  => $paidAmount,
+                'remaining'   => $remaining,
+                'warning'     => $warning,
+                'checkedAt'   => $b->updated_at->format('H:i'),
+            ];
+
+            if ($b->status === 'confirmed') {
+                $pendingCheckins[] = $data;
+            } else {
+                $checkedIn[] = $data;
+            }
+        }
+
+        return view('staff.checkin', compact('pendingCheckins', 'checkedIn'));
+    }
+
+    public function processCheckin(\Illuminate\Http\Request $request, $id)
+    {
+        $booking = \App\Models\Booking::findOrFail($id);
+        if ($booking->status === 'confirmed') {
+            $booking->update(['status' => 'active']); // 'active' means they are checked in / playing
+        }
+        return redirect()->route('staff.checkin')->with('success', 'Customer checked in successfully!');
+    }
+
     public function offlineBooking()
     {
         $staff = ['name' => Auth::user()->name ?? 'Staff'];

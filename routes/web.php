@@ -62,7 +62,8 @@ Route::middleware('auth')->group(function () {
     Route::middleware('staff')->prefix('staff')->name('staff.')->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\StaffController::class, 'dashboard'])->name('dashboard');
         Route::get('/schedule', [\App\Http\Controllers\StaffController::class, 'schedule'])->name('schedule');
-        Route::get('/checkin', fn () => view('staff.checkin'))->name('checkin');
+        Route::get('/checkin', [\App\Http\Controllers\StaffController::class, 'checkin'])->name('checkin');
+        Route::post('/checkin/{id}', [\App\Http\Controllers\StaffController::class, 'processCheckin'])->name('checkin.process');
         Route::get('/offline-booking', [\App\Http\Controllers\StaffController::class, 'offlineBooking'])->name('offline-booking');
         Route::post('/offline-booking', [\App\Http\Controllers\StaffController::class, 'storeOfflineBooking'])->name('offline-booking.store');
         Route::get('/settlement', [\App\Http\Controllers\StaffController::class, 'settlement'])->name('settlement');
