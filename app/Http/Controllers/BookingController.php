@@ -44,13 +44,16 @@ class BookingController extends Controller
             ];
         });
 
-        return view('booking-history', ['history' => $mappedHistory->toArray(), 'user' => $user]);
+        return view('user.booking-history', ['history' => $mappedHistory->toArray(), 'user' => $user]);
     }
 
     public function create()
     {
         $fields = \App\Models\Field::all();
-        return view('booking', compact('fields'));
+        $bookings = \App\Models\Booking::where('tanggal', '>=', date('Y-m-d'))
+            ->whereIn('status', ['pending', 'confirmed'])
+            ->get(['field_id', 'tanggal', 'jam_mulai', 'jam_selesai']);
+        return view('user.booking', compact('fields', 'bookings'));
     }
 
     public function store(\Illuminate\Http\Request $request)
