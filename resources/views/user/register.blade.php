@@ -27,18 +27,7 @@
                     <p class="mt-2 text-sm text-gray-500 leading-relaxed">
                         Create your admin account to manage facilities and bookings seamlessly.
                     </p>
-                </div>
-
-                <!-- Progress Bar -->
-                <div class="mt-6">
-                    <div class="flex justify-between items-center mb-2">
-                        <span class="text-xs font-bold text-[#0047D4]">Step 1 of 3: Details</span>
-                        <span class="text-xs font-bold text-gray-400">33%</span>
-                    </div>
-                    <div class="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
-                        <div class="h-full bg-[#0047D4] rounded-full w-[33%] transition-all duration-300"></div>
-                    </div>
-                </div>
+                </div> 
 
                 <!-- Form Section -->
                 <div class="mt-8">
