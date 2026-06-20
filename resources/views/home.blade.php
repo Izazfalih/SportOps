@@ -88,9 +88,9 @@
         <div class="pointer-events-none absolute -top-24 right-0 h-[28rem] w-[28rem] rounded-full bg-blue-300/30 blur-3xl"></div>
         <div class="pointer-events-none absolute top-72 -left-24 h-[26rem] w-[26rem] rounded-full bg-[#D7F23D]/40 blur-3xl"></div>
 
-        <div class="relative mx-auto max-w-3xl px-4 pt-20 pb-12 text-center sm:px-6 sm:pt-28 lg:px-8">
+        <div class="relative mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8 py-10">
             <!-- Headline -->
-            <h1 class="mt-7 text-4xl font-extrabold leading-[1.1] tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
+            <h1 class="text-4xl font-extrabold leading-[1.1] tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
                 Book your perfect court.<br>
                 Play your best game.
             </h1>
@@ -286,9 +286,9 @@
             @endforelse
         </div>
         
-        @auth
         <div class="mt-12 max-w-2xl mx-auto rounded-2xl border border-gray-100 bg-white p-6 shadow-xs">
             <h3 class="text-lg font-bold text-gray-900 mb-4">Leave a Review</h3>
+            @auth
             <form action="{{ route('reviews.store') }}" method="POST">
                 @csrf
                 <div class="mb-4">
@@ -309,8 +309,15 @@
                     Submit Review
                 </button>
             </form>
+            @else
+            <div class="text-center py-6">
+                <p class="text-gray-500 mb-4">You must be logged in to leave a review.</p>
+                <a href="{{ route('login') }}" class="inline-flex items-center justify-center rounded-xl bg-[#0047D4] px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/10 hover:bg-[#003cb5] transition-colors duration-150">
+                    Log In to Review
+                </a>
+            </div>
+            @endauth
         </div>
-        @endauth
     </section>
 
     <!-- ============================ FOOTER ============================ -->

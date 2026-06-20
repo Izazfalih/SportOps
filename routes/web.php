@@ -25,9 +25,7 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
 
-    Route::get('/home', function () {
-        return view('user.home');
-    })->name('home');
+    // user.home route removed to allow route('home') to resolve to the landing page
 
     Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 

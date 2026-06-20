@@ -12,7 +12,7 @@
         // $user and $upcomingBooking are provided by the DashboardController
         $quickActions = [
             ['label' => 'Book Court',      'href' => route('booking'),  'icon' => '<path d="M5 12h14M12 5v14"></path>'],
-            ['label' => 'View Schedule',   'href' => '#schedule',       'icon' => '<rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path>'],
+            ['label' => 'Leave a Review',  'href' => route('home') . '#reviews', 'icon' => '<path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.3 5.9 20.4l1.4-6.8L2.2 9l6.9-.7L12 2Z"></path>'],
             ['label' => 'My Bookings',     'href' => route('bookings'), 'icon' => '<path d="M3 3v5h5"></path><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"></path><path d="M12 7v5l4 2"></path>'],
             ['label' => 'Edit Profile',    'href' => '#profile',        'icon' => '<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle>'],
         ];
@@ -34,7 +34,7 @@
                 <a href="#" class="rounded-lg bg-blue-50 px-3.5 py-2 text-sm font-semibold text-[#0047D4]">Dashboard</a>
                 <a href="{{ route('booking') }}" class="rounded-lg px-3.5 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-[#0047D4] transition-colors duration-150">Book a Court</a>
                 <a href="{{ route('bookings') }}" class="rounded-lg px-3.5 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-[#0047D4] transition-colors duration-150">My Bookings</a>
-                <a href="#schedule" class="rounded-lg px-3.5 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-[#0047D4] transition-colors duration-150">Schedule</a>
+                <a href="{{ route('home') }}" class="rounded-lg px-3.5 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-[#0047D4] transition-colors duration-150">Landing Page</a>
             </div>
 
             <!-- Right cluster -->
@@ -88,7 +88,7 @@
                 <a href="#" class="rounded-lg bg-blue-50 px-3 py-2.5 text-sm font-semibold text-[#0047D4]">Dashboard</a>
                 <a href="{{ route('booking') }}" class="rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50">Book a Court</a>
                 <a href="{{ route('bookings') }}" class="rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50">My Bookings</a>
-                <a href="#schedule" class="rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50">Schedule</a>
+                <a href="{{ route('home') }}" class="rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50">Landing Page</a>
             </div>
         </div>
     </header>
