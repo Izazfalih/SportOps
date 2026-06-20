@@ -142,7 +142,7 @@
                     <p class="text-xs text-gray-400">Common staff operations</p>
 
                     <div class="mt-5 space-y-3">
-                        <a href="{{ route('staff.checkin') }}" class="group flex items-center gap-3 rounded-xl border border-gray-100 bg-white p-3.5 shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-emerald-200 hover:shadow-md">
+                        <a href="{{ route('staff.verification') }}" class="group flex items-center gap-3 rounded-xl border border-gray-100 bg-white p-3.5 shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-emerald-200 hover:shadow-md">
                             <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 transition-colors duration-200 group-hover:bg-emerald-600 group-hover:text-white">
                                 <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
                             </span>

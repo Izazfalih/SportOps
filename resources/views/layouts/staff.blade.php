@@ -19,7 +19,7 @@
         $sidebarNav = [
             ['label' => 'Dashboard',        'route' => 'staff.dashboard',       'icon' => '<rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/>'],
             ['label' => "Today's Schedule",  'route' => 'staff.schedule',        'icon' => '<rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>'],
-            ['label' => 'Check-In',          'route' => 'staff.checkin',         'icon' => '<path d="M20 6 9 17l-5-5"/>'],
+            ['label' => 'Verification',          'route' => 'staff.verification',         'icon' => '<path d="M20 6 9 17l-5-5"/>'],
             ['label' => 'Offline Booking',   'route' => 'staff.offline-booking', 'icon' => '<path d="M5 12h14M12 5v14"/>'],
             ['label' => 'Settlement',        'route' => 'staff.settlement',      'icon' => '<rect width="20" height="14" x="2" y="5" rx="2"/><path d="M2 10h20"/>'],
         ];

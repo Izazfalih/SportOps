@@ -83,7 +83,7 @@
     </header>
 
     <!-- ============================ HERO ============================ -->
-    <section class="relative overflow-hidden">
+    <section class="relative overflow-hidden min-h-[calc(100vh-76px)] flex flex-col justify-center">
         <!-- Decorative gradient blobs -->
         <div class="pointer-events-none absolute -top-24 right-0 h-[28rem] w-[28rem] rounded-full bg-blue-300/30 blur-3xl"></div>
         <div class="pointer-events-none absolute top-72 -left-24 h-[26rem] w-[26rem] rounded-full bg-[#D7F23D]/40 blur-3xl"></div>
@@ -239,59 +239,78 @@
         </div>
 
         @php
-            $reviews = [
-                [
-                    'quote' => 'Booking used to mean calling the front desk and hoping the slot was free. Now I just check the schedule and pay the deposit online. Game-changer for our weekly futsal nights.',
-                    'name' => 'Andi Pratama',
-                    'role' => 'Futsal team captain',
-                    'initial' => 'A',
-                    'color' => 'bg-blue-100 text-[#0047D4]',
-                ],
-                [
-                    'quote' => 'The premium vinyl court is spotless and the AC actually works. Spectator seating made it easy for parents to watch the kids play. Worth every rupiah.',
-                    'name' => 'Siti Rahmawati',
-                    'role' => 'Badminton coach',
-                    'initial' => 'S',
-                    'color' => 'bg-emerald-100 text-emerald-700',
-                ],
-                [
-                    'quote' => 'No more double bookings. The live schedule shows exactly what is open, and the digital scoreboard on the basketball court is a nice touch for our pick-up games.',
-                    'name' => 'Budi Santoso',
-                    'role' => 'Basketball organizer',
-                    'initial' => 'B',
-                    'color' => 'bg-amber-100 text-amber-700',
-                ],
+            $reviews = \App\Models\Review::latest()->take(3)->get();
+            $colors = [
+                'bg-blue-100 text-[#0047D4]',
+                'bg-emerald-100 text-emerald-700',
+                'bg-amber-100 text-amber-700',
+                'bg-purple-100 text-purple-700',
             ];
         @endphp
 
         <div class="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
-            @foreach ($reviews as $review)
+            @forelse ($reviews as $index => $review)
                 <figure class="flex flex-col rounded-2xl border border-gray-100 bg-white p-6 shadow-xs">
                     <!-- Stars -->
                     <div class="flex gap-0.5 text-[#D7B400]">
-                        @for ($i = 0; $i < 5; $i++)
+                        @for ($i = 0; $i < $review->rating; $i++)
                             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="m12 2 2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.3 5.9 20.4l1.4-6.8L2.2 9l6.9-.7L12 2Z"></path>
+                            </svg>
+                        @endfor
+                        @for ($i = $review->rating; $i < 5; $i++)
+                            <svg class="h-4 w-4 text-gray-300" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="m12 2 2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.3 5.9 20.4l1.4-6.8L2.2 9l6.9-.7L12 2Z"></path>
                             </svg>
                         @endfor
                     </div>
 
                     <blockquote class="mt-4 flex-1 text-sm leading-relaxed text-gray-600">
-                        &ldquo;{{ $review['quote'] }}&rdquo;
+                        &ldquo;{{ $review->comment }}&rdquo;
                     </blockquote>
 
                     <figcaption class="mt-5 flex items-center gap-3 border-t border-gray-100 pt-5">
-                        <span class="flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold {{ $review['color'] }}">
-                            {{ $review['initial'] }}
+                        <span class="flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold {{ $colors[$index % count($colors)] }}">
+                            {{ substr($review->name, 0, 1) }}
                         </span>
                         <div>
-                            <p class="text-sm font-bold text-gray-900">{{ $review['name'] }}</p>
-                            <p class="text-xs text-gray-500">{{ $review['role'] }}</p>
+                            <p class="text-sm font-bold text-gray-900">{{ $review->name }}</p>
+                            <p class="text-xs text-gray-500">{{ $review->role ?? 'Guest' }}</p>
                         </div>
                     </figcaption>
                 </figure>
-            @endforeach
+            @empty
+                <div class="col-span-3 text-center py-10 text-gray-500">
+                    No reviews yet. Be the first to leave a review!
+                </div>
+            @endforelse
         </div>
+        
+        @auth
+        <div class="mt-12 max-w-2xl mx-auto rounded-2xl border border-gray-100 bg-white p-6 shadow-xs">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">Leave a Review</h3>
+            <form action="{{ route('reviews.store') }}" method="POST">
+                @csrf
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Rating</label>
+                    <select name="rating" class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2 text-sm focus:border-[#0047D4] focus:bg-white focus:ring-2 focus:ring-blue-100" required>
+                        <option value="5">5 Stars - Excellent</option>
+                        <option value="4">4 Stars - Good</option>
+                        <option value="3">3 Stars - Average</option>
+                        <option value="2">2 Stars - Poor</option>
+                        <option value="1">1 Star - Terrible</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Comment</label>
+                    <textarea name="comment" rows="3" class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2 text-sm focus:border-[#0047D4] focus:bg-white focus:ring-2 focus:ring-blue-100" placeholder="Share your experience with us..." required></textarea>
+                </div>
+                <button type="submit" class="inline-flex w-full items-center justify-center rounded-xl bg-[#0047D4] px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/10 hover:bg-[#003cb5] transition-colors duration-150">
+                    Submit Review
+                </button>
+            </form>
+        </div>
+        @endauth
     </section>
 
     <!-- ============================ FOOTER ============================ -->

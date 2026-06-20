@@ -29,8 +29,8 @@ class StaffController extends Controller
 
         $kpis = [
             ['label' => "Today's Bookings", 'value' => $todayBookings, 'color' => 'blue',  'icon' => '<rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>'],
-            ['label' => 'Checked In',       'value' => $checkedIn, 'color' => 'green', 'icon' => '<path d="M20 6 9 17l-5-5"/>'],
-            ['label' => 'Pending Check-In',  'value' => $pendingCheckin, 'color' => 'amber', 'icon' => '<circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>'],
+            ['label' => 'Active / Playing',       'value' => $checkedIn, 'color' => 'green', 'icon' => '<path d="M20 6 9 17l-5-5"/>'],
+            ['label' => 'Pending Verification',  'value' => $pendingCheckin, 'color' => 'amber', 'icon' => '<circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>'],
             ['label' => 'Pending Settlement','value' => $pendingSettlement, 'color' => 'rose',  'icon' => '<rect width="20" height="14" x="2" y="5" rx="2"/><path d="M2 10h20"/>'],
         ];
 
@@ -159,10 +159,7 @@ class StaffController extends Controller
             $bookings[$time] = [];
 
             foreach ($courts as $court) {
-                if ($court['status'] === 'maintenance') {
-                    $stats['maintenance']++;
-                    continue; // Skip looking for bookings, handled in view
-                }
+                // Maintenance removed per user request
 
                 $b = $allBookings->where('field_id', $court['id'])
                     ->filter(function($booking) use ($jam_mulai, $jam_selesai) {
@@ -202,19 +199,19 @@ class StaffController extends Controller
         ));
     }
 
-    public function checkin()
+    public function verification()
     {
         $today = \Carbon\Carbon::today();
 
-        // Get bookings for today that are confirmed (pending check-in) or active (already checked in)
         $bookings = \App\Models\Booking::with(['user', 'field', 'payments'])
             ->whereDate('tanggal', $today)
-            ->whereIn('status', ['confirmed', 'active'])
+            ->whereIn('status', ['confirmed', 'active', 'completed'])
             ->orderBy('jam_mulai', 'asc')
             ->get();
 
-        $pendingCheckins = [];
-        $checkedIn = [];
+        $bookedList = [];
+        $activeList = [];
+        $completedList = [];
 
         foreach ($bookings as $b) {
             $paymentStatus = 'Pending';
@@ -231,12 +228,6 @@ class StaffController extends Controller
 
             $payColor = $paymentStatus === 'Fully Paid' ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700';
 
-            // Check if field is maintenance
-            $warning = null;
-            if ($b->field && $b->field->status === 'maintenance') {
-                $warning = 'Court under maintenance — please reassign or inform customer';
-            }
-
             $data = [
                 'id'          => $b->id,
                 'code'        => 'BK-2026' . str_pad($b->id, 4, '0', STR_PAD_LEFT),
@@ -250,27 +241,35 @@ class StaffController extends Controller
                 'totalPrice'  => $b->total_harga,
                 'paidAmount'  => $paidAmount,
                 'remaining'   => $remaining,
-                'warning'     => $warning,
+                'warning'     => null,
                 'checkedAt'   => $b->updated_at->format('H:i'),
             ];
 
             if ($b->status === 'confirmed') {
-                $pendingCheckins[] = $data;
+                $bookedList[] = $data;
+            } elseif ($b->status === 'active') {
+                $activeList[] = $data;
             } else {
-                $checkedIn[] = $data;
+                $completedList[] = $data;
             }
         }
 
-        return view('staff.checkin', compact('pendingCheckins', 'checkedIn'));
+        return view('staff.verification', compact('bookedList', 'activeList', 'completedList'));
     }
 
-    public function processCheckin(\Illuminate\Http\Request $request, $id)
+    public function processVerification(\Illuminate\Http\Request $request, $id)
     {
         $booking = \App\Models\Booking::findOrFail($id);
+        
         if ($booking->status === 'confirmed') {
-            $booking->update(['status' => 'active']); // 'active' means they are checked in / playing
+            $booking->update(['status' => 'active']);
+            return redirect()->route('staff.verification')->with('success', 'Customer marked as Active!');
+        } elseif ($booking->status === 'active') {
+            $booking->update(['status' => 'completed']);
+            return redirect()->route('staff.verification')->with('success', 'Booking marked as Completed!');
         }
-        return redirect()->route('staff.checkin')->with('success', 'Customer checked in successfully!');
+        
+        return redirect()->route('staff.verification');
     }
 
     public function offlineBooking()

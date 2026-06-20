@@ -130,13 +130,7 @@
                                                 $isMaintenance = $court['status'] === 'maintenance';
                                             @endphp
                                             <td class="border-b border-r border-gray-100 last:border-r-0 px-2 py-1.5">
-                                                @if ($isMaintenance)
-                                                    {{-- Maintenance Cell --}}
-                                                    <div class="maintenance-stripes flex items-center justify-center gap-1.5 rounded-xl px-3 py-3 min-h-[52px]">
-                                                        <svg class="h-3.5 w-3.5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
-                                                        <span class="text-xs font-semibold text-gray-500">Maintenance</span>
-                                                    </div>
-                                                @elseif ($booking)
+                                                @if ($booking)
                                                     @if ($booking['status'] === 'booked')
                                                         {{-- Booked Cell --}}
                                                         <div class="flex flex-col items-start gap-1 rounded-xl bg-blue-50 border border-blue-100 px-3 py-2.5 min-h-[52px]">
@@ -209,14 +203,10 @@
                         <span class="h-3 w-6 rounded bg-gray-100 border border-gray-300"></span>
                         <span class="text-xs text-gray-600">Completed</span>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <span class="h-3 w-6 rounded maintenance-stripes border border-gray-300"></span>
-                        <span class="text-xs text-gray-600">Maintenance</span>
-                    </div>
                 </div>
 
                 {{-- -------- Summary Stats -------- --}}
-                <div class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
+                <div class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3">
                     {{-- Total Slots --}}
                     <div class="rounded-2xl border border-gray-100 bg-white p-5 shadow-xs">
                         <div class="flex items-center gap-3">
@@ -250,18 +240,6 @@
                             <div>
                                 <p class="text-2xl font-extrabold text-emerald-600">{{ $stats['available'] }}</p>
                                 <p class="text-xs font-medium text-gray-500">Available</p>
-                            </div>
-                        </div>
-                    </div>
-                    {{-- Maintenance --}}
-                    <div class="rounded-2xl border border-gray-100 bg-white p-5 shadow-xs">
-                        <div class="flex items-center gap-3">
-                            <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 text-amber-600">
-                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
-                            </span>
-                            <div>
-                                <p class="text-2xl font-extrabold text-amber-600">{{ $stats['maintenance'] }}</p>
-                                <p class="text-xs font-medium text-gray-500">Maintenance</p>
                             </div>
                         </div>
                     </div>
