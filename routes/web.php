@@ -4,8 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
-    return redirect()->route('dashboard');
-});
+     return view('home');
+})->name('home');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', function () {

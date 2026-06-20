@@ -89,12 +89,6 @@
         <div class="pointer-events-none absolute top-72 -left-24 h-[26rem] w-[26rem] rounded-full bg-[#D7F23D]/40 blur-3xl"></div>
 
         <div class="relative mx-auto max-w-3xl px-4 pt-20 pb-12 text-center sm:px-6 sm:pt-28 lg:px-8">
-            <!-- Pill badge -->
-            <div class="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white/70 px-4 py-1.5 shadow-xs backdrop-blur">
-                <span class="h-2 w-2 rounded-full bg-[#A8C70E]"></span>
-                <span class="text-xs font-semibold text-gray-700">SportOps Arena · 4 courts, one venue</span>
-            </div>
-
             <!-- Headline -->
             <h1 class="mt-7 text-4xl font-extrabold leading-[1.1] tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
                 Book your perfect court.<br>
