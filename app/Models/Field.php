@@ -11,6 +11,8 @@ class Field extends Model
         'nama_lapangan',
         'jenis_olahraga',
         'status',
+        'harga',
+        'deskripsi',
     ];
 
     public function venue()

@@ -5,95 +5,34 @@
 @section('page-subtitle', 'Complete remaining payment balances')
 
 @section('content')
-
-    @php
-$pendingSettlements = [
-            [
-                'code'      => 'BK-20260610-002',
-                'customer'  => 'Sarah Putri',
-                'sport'     => 'Badminton',
-                'court'     => 'Court A2',
-                'date'      => '10 Jun 2026',
-                'time'      => '11:00 – 12:00',
-                'total'     => 75000,
-                'dp'        => 37500,
-                'remaining' => 37500,
-            ],
-            [
-                'code'      => 'BK-20260610-006',
-                'customer'  => 'Fajar Hidayat',
-                'sport'     => 'Volleyball',
-                'court'     => 'Court V1',
-                'date'      => '10 Jun 2026',
-                'time'      => '16:00 – 17:00',
-                'total'     => 100000,
-                'dp'        => 50000,
-                'remaining' => 50000,
-            ],
-            [
-                'code'      => 'BK-20260609-015',
-                'customer'  => 'Andi Wijaya',
-                'sport'     => 'Futsal',
-                'court'     => 'Court F1',
-                'date'      => '9 Jun 2026',
-                'time'      => 'Yesterday',
-                'total'     => 150000,
-                'dp'        => 75000,
-                'remaining' => 75000,
-            ],
-            [
-                'code'      => 'BK-20260608-022',
-                'customer'  => 'Lisa Permata',
-                'sport'     => 'Basketball',
-                'court'     => 'Court B1',
-                'date'      => '8 Jun 2026',
-                'time'      => '2 days ago',
-                'total'     => 200000,
-                'dp'        => 100000,
-                'remaining' => 100000,
-            ],
-            [
-                'code'      => 'BK-20260610-011',
-                'customer'  => 'Dimas Pratama',
-                'sport'     => 'Badminton',
-                'court'     => 'Court A1',
-                'date'      => '10 Jun 2026',
-                'time'      => '14:00 – 15:00',
-                'total'     => 75000,
-                'dp'        => 37500,
-                'remaining' => 37500,
-            ],
-        ];
-
-        $recentlySettled = [
-            [
-                'code'      => 'BK-20260610-001',
-                'customer'  => 'Budi Santoso',
-                'sport'     => 'Futsal',
-                'amount'    => 75000,
-                'time'      => '10:05',
-            ],
-            [
-                'code'      => 'BK-20260610-008',
-                'customer'  => 'Yoga Permana',
-                'sport'     => 'Badminton',
-                'amount'    => 37500,
-                'time'      => '09:15',
-            ],
-            [
-                'code'      => 'BK-20260610-007',
-                'customer'  => 'Riko Aditya',
-                'sport'     => 'Futsal',
-                'amount'    => 75000,
-                'time'      => '08:30',
-            ],
-        ];
-
-        $totalOutstanding = collect($pendingSettlements)->sum('remaining');
-        $settledToday = collect($recentlySettled)->sum('amount');
-    @endphp
-
-
+    @if(session('success'))
+        <div class="mb-6 rounded-xl border border-emerald-100 bg-emerald-50 p-4">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-emerald-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm font-medium text-emerald-800">{{ session('success') }}</p>
+                </div>
+            </div>
+        </div>
+    @endif
+    @if(session('error'))
+        <div class="mb-6 rounded-xl border border-rose-100 bg-rose-50 p-4">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-rose-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm font-medium text-rose-800">{{ session('error') }}</p>
+                </div>
+            </div>
+        </div>
+    @endif    {{-- Data handled by StaffController --}}
 {{-- Summary cards --}}
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 {{-- Pending Settlements --}}
@@ -125,7 +64,7 @@ $pendingSettlements = [
                             <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                         </span>
                     </div>
-                    <p class="mt-3 text-2xl font-extrabold tracking-tight text-emerald-600">Rp {{ number_format($settledToday, 0, ',', '.') }}</p>
+                    <p class="mt-3 text-2xl font-extrabold tracking-tight text-emerald-600">Rp {{ number_format($settledTodayAmount, 0, ',', '.') }}</p>
                     <p class="mt-1 text-sm text-gray-500">Settled Today</p>
                 </div>
             </div>
@@ -188,7 +127,7 @@ $pendingSettlements = [
                                         <span class="inline-flex items-center rounded-full bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700">DP Paid</span>
                                     </td>
                                     <td class="px-6 py-4">
-                                        <button type="button" onclick="openSettleModal({{ $index }})" class="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-4 py-2 text-xs font-semibold text-white shadow-lg shadow-emerald-500/10 transition-colors duration-150 hover:bg-emerald-700">
+                                        <button type="button" onclick="openSettleModal({{ $s['id'] }}, {{ $s['remaining'] }})" class="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-4 py-2 text-xs font-semibold text-white shadow-lg shadow-emerald-500/10 transition-colors duration-150 hover:bg-emerald-700">
                                             <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                                             Settle Payment
                                         </button>
@@ -238,7 +177,7 @@ $pendingSettlements = [
                                     <p class="text-xs font-medium text-rose-500">Remaining Balance</p>
                                     <p class="text-lg font-extrabold text-rose-600">Rp {{ number_format($s['remaining'], 0, ',', '.') }}</p>
                                 </div>
-                                <button type="button" onclick="openSettleModal({{ $index }})" class="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-emerald-500/10 transition-colors duration-150 hover:bg-emerald-700">
+                                <button type="button" onclick="openSettleModal({{ $s['id'] }}, {{ $s['remaining'] }})" class="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-emerald-500/10 transition-colors duration-150 hover:bg-emerald-700">
                                     <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                                     Settle
                                 </button>
@@ -261,10 +200,10 @@ $pendingSettlements = [
                         <h2 class="text-base font-bold text-gray-900">Recently Settled</h2>
                         <span class="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700">{{ count($recentlySettled) }} today</span>
                     </div>
-                    <svg id="recent-chevron" class="h-5 w-5 text-gray-400 transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                    <svg id="recent-chevron" class="h-5 w-5 text-gray-400 transition-transform duration-200 {{ count($recentlySettled) > 0 ? 'rotate-180' : '' }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                 </button>
 
-                <div id="recent-body" class="border-t border-gray-100">
+                <div id="recent-body" class="border-t border-gray-100 {{ count($recentlySettled) > 0 ? '' : 'hidden' }}">
                     <div class="divide-y divide-gray-50">
                         @foreach ($recentlySettled as $settled)
                             <div class="flex items-center gap-4 px-6 py-4">
@@ -288,5 +227,104 @@ $pendingSettlements = [
                     </div>
                 </div>
             </div>
+
+            {{-- Settlement Modal --}}
+            <div id="settle-modal" class="fixed inset-0 z-50 hidden">
+                <div class="absolute inset-0 bg-gray-900/40 backdrop-blur-sm transition-opacity" onclick="closeSettleModal()"></div>
+                <div class="flex min-h-screen items-center justify-center p-4">
+                    <div class="relative w-full max-w-md scale-95 transform rounded-2xl bg-white p-6 opacity-0 shadow-2xl transition-all duration-200" id="settle-modal-content">
+                        <div class="mb-5 flex items-center justify-between">
+                            <h3 class="text-xl font-extrabold text-gray-900">Settle Payment</h3>
+                            <button type="button" onclick="closeSettleModal()" class="rounded-lg p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600">
+                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                            </button>
+                        </div>
+                        <form id="settle-form" method="POST" action="">
+                            @csrf
+                            <div class="mb-5 rounded-xl bg-gray-50 p-4">
+                                <p class="text-sm font-medium text-gray-500">Amount to Settle</p>
+                                <p class="mt-1 text-2xl font-extrabold text-[#0047D4]" id="modal-amount">Rp 0</p>
+                            </div>
+
+                            <div class="mb-6">
+                                <label class="mb-3 block text-sm font-bold text-gray-700">Payment Method <span class="text-rose-500">*</span></label>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <label class="group relative flex cursor-pointer items-center justify-center rounded-xl border-2 border-gray-100 bg-white p-4 transition-all duration-200 hover:border-blue-100 has-[:checked]:border-[#0047D4] has-[:checked]:bg-blue-50/50">
+                                        <input type="radio" name="metode" value="cash" class="peer sr-only" checked>
+                                        <div class="flex flex-col items-center gap-2">
+                                            <svg class="h-6 w-6 text-gray-400 transition-colors duration-200 group-has-[:checked]:text-[#0047D4]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+                                            <span class="text-sm font-bold text-gray-600 group-has-[:checked]:text-[#0047D4]">Cash</span>
+                                        </div>
+                                    </label>
+                                    <label class="group relative flex cursor-pointer items-center justify-center rounded-xl border-2 border-gray-100 bg-white p-4 transition-all duration-200 hover:border-blue-100 has-[:checked]:border-[#0047D4] has-[:checked]:bg-blue-50/50">
+                                        <input type="radio" name="metode" value="transfer" class="peer sr-only">
+                                        <div class="flex flex-col items-center gap-2">
+                                            <svg class="h-6 w-6 text-gray-400 transition-colors duration-200 group-has-[:checked]:text-[#0047D4]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+                                            <span class="text-sm font-bold text-gray-600 group-has-[:checked]:text-[#0047D4]">Transfer</span>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="w-full rounded-xl bg-[#0047D4] px-4 py-3.5 text-sm font-bold text-white shadow-lg shadow-blue-500/30 transition-all duration-200 hover:bg-blue-800 hover:shadow-blue-500/40">
+                                Confirm Settlement
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            @push('scripts')
+            <script>
+                // Modal handlers
+                const settleModal = document.getElementById('settle-modal');
+                const modalContent = document.getElementById('settle-modal-content');
+                const settleForm = document.getElementById('settle-form');
+                const modalAmount = document.getElementById('modal-amount');
+
+                function openSettleModal(bookingId, remainingAmount) {
+                    // Update the form action URL
+                    settleForm.action = `/staff/settlement/${bookingId}`;
+                    
+                    // Format and display the amount
+                    const formattedAmount = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(remainingAmount);
+                    modalAmount.textContent = formattedAmount;
+
+                    settleModal.classList.remove('hidden');
+                    // Small delay to allow display:block to apply before animating opacity
+                    setTimeout(() => {
+                        modalContent.classList.remove('opacity-0', 'scale-95');
+                        modalContent.classList.add('opacity-100', 'scale-100');
+                    }, 10);
+                }
+
+                function closeSettleModal() {
+                    modalContent.classList.remove('opacity-100', 'scale-100');
+                    modalContent.classList.add('opacity-0', 'scale-95');
+                    setTimeout(() => {
+                        settleModal.classList.add('hidden');
+                    }, 200);
+                }
+
+                // Close on escape key
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && !settleModal.classList.contains('hidden')) {
+                        closeSettleModal();
+                    }
+                });
+
+                function toggleRecent() {
+                    const body = document.getElementById('recent-body');
+                    const chevron = document.getElementById('recent-chevron');
+                    if (body.classList.contains('hidden')) {
+                        body.classList.remove('hidden');
+                        chevron.classList.add('rotate-180');
+                    } else {
+                        body.classList.add('hidden');
+                        chevron.classList.remove('rotate-180');
+                    }
+                }
+            </script>
+            @endpush
 
 @endsection

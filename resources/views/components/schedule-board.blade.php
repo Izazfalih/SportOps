@@ -5,8 +5,18 @@
 ])
 
 @php
-    // Canonical SportOps Arena courts — one per sport, matching the Home pricing section.
-    $courts = ['Futsal — Synthetic Grass', 'Premium Futsal — Vinyl', 'Badminton', 'Basketball'];
+    $fields = \App\Models\Field::all();
+    $courts = [];
+    $courtIds = [];
+    foreach ($fields as $f) {
+        $courts[] = $f->nama_lapangan;
+        $courtIds[] = $f->id;
+    }
+    
+    $bookings = \App\Models\Booking::where('tanggal', '>=', date('Y-m-d'))
+        ->whereIn('status', ['pending', 'confirmed'])
+        ->get(['field_id', 'tanggal', 'jam_mulai', 'jam_selesai']);
+
     $times  = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00', '01:00', '02:00'];
     $wrapClass = $inMain
         ? 'mt-8'
@@ -18,6 +28,8 @@
          data-authed="{{ $authed ? '1' : '0' }}"
          data-book-url="{{ $authed ? route('booking') : route('login') }}"
          data-courts='@json($courts)'
+         data-court-ids='@json($courtIds)'
+         data-bookings='@json($bookings)'
          data-times='@json($times)'>
 
     <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
@@ -94,20 +106,22 @@
 
 <script>
     (function () {
-        // Deterministic "booked" pattern so a given date always shows the same availability.
-        function hashStr(s) {
-            let h = 0;
-            for (let i = 0; i < s.length; i++) { h = (h * 31 + s.charCodeAt(i)) >>> 0; }
-            return h;
-        }
-        function isBooked(dateStr, courtIdx, timeIdx) {
-            // Avalanche-mix the seed so availability looks naturally scattered (not clustered per court).
-            let h = hashStr(dateStr);
-            h = (h ^ ((courtIdx + 1) * 0x9e3779b1)) >>> 0;
-            h = (h ^ ((timeIdx + 1) * 0x85ebca77)) >>> 0;
-            h = Math.imul(h ^ (h >>> 13), 0xc2b2ae35) >>> 0;
-            h = (h ^ (h >>> 16)) >>> 0;
-            return (h % 100) < 33; // ~33% booked
+        function isBooked(dateStr, courtIdx, timeIdx, board) {
+            if (courtIdx === null || dateStr === null) return false;
+            const courtsIds = JSON.parse(board.dataset.courtIds);
+            const bookings = JSON.parse(board.dataset.bookings);
+            const times = JSON.parse(board.dataset.times);
+            
+            const courtId = courtsIds[courtIdx];
+            const timeStr = times[timeIdx];
+            const checkTimeInt = parseInt(timeStr.replace(':', ''), 10);
+            
+            return bookings.some(b => {
+                if (b.field_id !== courtId || b.tanggal !== dateStr) return false;
+                const startInt = parseInt(b.jam_mulai.substring(0, 5).replace(':', ''), 10);
+                const endInt = parseInt(b.jam_selesai.substring(0, 5).replace(':', ''), 10);
+                return checkTimeInt >= startInt && checkTimeInt < endInt;
+            });
         }
         function ymd(d) {
             const m = String(d.getMonth() + 1).padStart(2, '0');
@@ -146,7 +160,7 @@
                     html += '<td class="' + timeCellCls + '">' + times[ti] + '</td>';
                     for (let ci = 0; ci < courts.length; ci++) {
                         html += '<td class="' + tdCls + '">';
-                        if (isBooked(ds, ci, ti)) {
+                        if (isBooked(ds, ci, ti, board)) {
                             html += '<span class="' + bookedCls + '">Booked</span>';
                         } else {
                             var href = bookUrl;

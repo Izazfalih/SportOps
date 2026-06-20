@@ -42,5 +42,33 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make('password'),
             ]
         );
+        // Venue
+        $venue = \App\Models\Venue::updateOrCreate(
+            ['nama_venue' => 'SportOps Arena'],
+            [
+                'alamat' => 'Jl. Olahraga No. 1, Jakarta',
+                'kontak' => '081200001111',
+                'jam_buka' => '08:00',
+                'jam_tutup' => '23:00'
+            ]
+        );
+
+        // Fields
+        \App\Models\Field::updateOrCreate(
+            ['nama_lapangan' => 'Futsal — Synthetic Grass'],
+            ['venue_id' => $venue->id, 'jenis_olahraga' => 'Futsal', 'status' => 'aktif']
+        );
+        \App\Models\Field::updateOrCreate(
+            ['nama_lapangan' => 'Premium Futsal — Vinyl'],
+            ['venue_id' => $venue->id, 'jenis_olahraga' => 'Premium Futsal', 'status' => 'aktif']
+        );
+        \App\Models\Field::updateOrCreate(
+            ['nama_lapangan' => 'Badminton'],
+            ['venue_id' => $venue->id, 'jenis_olahraga' => 'Badminton', 'status' => 'aktif']
+        );
+        \App\Models\Field::updateOrCreate(
+            ['nama_lapangan' => 'Basketball'],
+            ['venue_id' => $venue->id, 'jenis_olahraga' => 'Basketball', 'status' => 'aktif']
+        );
     }
 }

@@ -7,78 +7,7 @@
 @section('content')
 
     @php
-$sports = [
-            ['id' => 'futsal',      'name' => 'Futsal',      'price' => 150000, 'icon' => '⚽', 'available' => true],
-            ['id' => 'badminton',   'name' => 'Badminton',   'price' => 75000,  'icon' => '🏸', 'available' => true],
-            ['id' => 'tennis',      'name' => 'Tennis',      'price' => 120000, 'icon' => '🎾', 'available' => false, 'note' => 'Maintenance'],
-            ['id' => 'basketball',  'name' => 'Basketball',  'price' => 200000, 'icon' => '🏀', 'available' => true],
-            ['id' => 'volleyball',  'name' => 'Volleyball',  'price' => 100000, 'icon' => '🏐', 'available' => true],
-        ];
-
-        $timeSlots = [
-            ['time' => '08:00 – 09:00', 'hour' => '08:00', 'status' => 'available'],
-            ['time' => '09:00 – 10:00', 'hour' => '09:00', 'status' => 'booked'],
-            ['time' => '10:00 – 11:00', 'hour' => '10:00', 'status' => 'available'],
-            ['time' => '11:00 – 12:00', 'hour' => '11:00', 'status' => 'available'],
-            ['time' => '12:00 – 13:00', 'hour' => '12:00', 'status' => 'booked'],
-            ['time' => '13:00 – 14:00', 'hour' => '13:00', 'status' => 'available'],
-            ['time' => '14:00 – 15:00', 'hour' => '14:00', 'status' => 'booked'],
-            ['time' => '15:00 – 16:00', 'hour' => '15:00', 'status' => 'available'],
-            ['time' => '16:00 – 17:00', 'hour' => '16:00', 'status' => 'available'],
-            ['time' => '17:00 – 18:00', 'hour' => '17:00', 'status' => 'available'],
-            ['time' => '18:00 – 19:00', 'hour' => '18:00', 'status' => 'booked'],
-            ['time' => '19:00 – 20:00', 'hour' => '19:00', 'status' => 'available'],
-            ['time' => '20:00 – 21:00', 'hour' => '20:00', 'status' => 'available'],
-            ['time' => '21:00 – 22:00', 'hour' => '21:00', 'status' => 'available'],
-        ];
-
-        $courtSchedules = [
-            [
-                'court' => 'Futsal Court A',
-                'sport' => 'Futsal',
-                'color' => 'bg-blue-500',
-                'slots' => [
-                    ['time' => '09:00 – 10:00', 'customer' => 'Ahmad Fauzi'],
-                    ['time' => '12:00 – 13:00', 'customer' => 'Budi Santoso'],
-                    ['time' => '14:00 – 15:00', 'customer' => 'Rina A.'],
-                    ['time' => '18:00 – 19:00', 'customer' => 'Dimas P.'],
-                ],
-            ],
-            [
-                'court' => 'Badminton Court 1',
-                'sport' => 'Badminton',
-                'color' => 'bg-emerald-500',
-                'slots' => [
-                    ['time' => '10:00 – 11:00', 'customer' => 'Sarah Putri'],
-                    ['time' => '15:00 – 16:00', 'customer' => 'Fajar H.'],
-                ],
-            ],
-            [
-                'court' => 'Basketball Court',
-                'sport' => 'Basketball',
-                'color' => 'bg-amber-500',
-                'slots' => [
-                    ['time' => '09:00 – 10:00', 'customer' => 'Team Alpha'],
-                    ['time' => '14:00 – 15:00', 'customer' => 'Team Bravo'],
-                    ['time' => '18:00 – 19:00', 'customer' => 'Team Charlie'],
-                ],
-            ],
-            [
-                'court' => 'Volleyball Court',
-                'sport' => 'Volleyball',
-                'color' => 'bg-violet-500',
-                'slots' => [
-                    ['time' => '11:00 – 12:00', 'customer' => 'Club Merpati'],
-                ],
-            ],
-            [
-                'court' => 'Tennis Court',
-                'sport' => 'Tennis',
-                'color' => 'bg-rose-400',
-                'slots' => [],
-                'note'  => 'Under Maintenance',
-            ],
-        ];
+        // Data $sports, $timeSlots, and $courtSchedules are passed from StaffController
     @endphp
 
 
@@ -95,18 +24,51 @@ $sports = [
                             <p class="mt-1 text-sm text-gray-500">Fill in the details below to book a court for a walk-in customer.</p>
                         </div>
 
-                        <form id="booking-form" class="p-6 space-y-6" onsubmit="return false;">
+                        @if(session('success'))
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    const data = @json(session('success'));
+                                    document.getElementById('success-code').textContent = data.code;
+                                    document.getElementById('success-customer').textContent = data.customer;
+                                    document.getElementById('success-court').textContent = data.court;
+                                    document.getElementById('success-datetime').textContent = data.datetime;
+                                    document.getElementById('success-payment').textContent = data.payment;
+                                    
+                                    document.getElementById('booking-form-card').classList.add('hidden');
+                                    document.getElementById('booking-success').classList.remove('hidden');
+                                });
+                            </script>
+                        @endif
+
+                        @if(session('error'))
+                            <div class="mx-6 mt-6 mb-0 rounded-xl bg-rose-50 p-4 border border-rose-200">
+                                <p class="text-sm font-semibold text-rose-800">{{ session('error') }}</p>
+                            </div>
+                        @endif
+                        
+                        @if($errors->any())
+                            <div class="mx-6 mt-6 mb-0 rounded-xl bg-rose-50 p-4 border border-rose-200">
+                                <ul class="list-disc pl-5 text-sm font-medium text-rose-700">
+                                    @foreach($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+                        <form id="booking-form" action="{{ route('staff.offline-booking.store') }}" method="POST" class="p-6 space-y-6">
+                            @csrf
 
                             {{-- Customer Info --}}
                             <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
                                 <div>
                                     <label for="customer-name" class="block text-sm font-semibold text-gray-700 mb-1.5">Customer Name <span class="text-rose-500">*</span></label>
-                                    <input type="text" id="customer-name" required placeholder="e.g. Ahmad Fauzi"
+                                    <input type="text" id="customer-name" name="customer_name" required placeholder="e.g. Ahmad Fauzi" value="{{ old('customer_name') }}"
                                            class="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 placeholder-gray-400 shadow-xs transition-colors duration-150 focus:border-[#0047D4] focus:ring-2 focus:ring-blue-500/10 focus:outline-none">
                                 </div>
                                 <div>
                                     <label for="phone-number" class="block text-sm font-semibold text-gray-700 mb-1.5">Phone Number <span class="text-rose-500">*</span></label>
-                                    <input type="tel" id="phone-number" required placeholder="e.g. 08123456789"
+                                    <input type="tel" id="phone-number" name="phone_number" required placeholder="e.g. 08123456789" value="{{ old('phone_number') }}"
                                            class="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 placeholder-gray-400 shadow-xs transition-colors duration-150 focus:border-[#0047D4] focus:ring-2 focus:ring-blue-500/10 focus:outline-none">
                                 </div>
                             </div>
@@ -116,23 +78,20 @@ $sports = [
                                 <label class="block text-sm font-semibold text-gray-700 mb-3">Select Sport <span class="text-rose-500">*</span></label>
                                 <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
                                     @foreach ($sports as $sport)
-                                        <button type="button"
-                                                data-sport="{{ $sport['id'] }}"
-                                                data-price="{{ $sport['price'] }}"
-                                                data-name="{{ $sport['name'] }}"
-                                                onclick="{{ $sport['available'] ? 'selectSport(this)' : '' }}"
-                                                class="sport-card group relative flex flex-col items-center gap-2 rounded-2xl border-2 p-4 text-center transition-all duration-200
-                                                       {{ $sport['available']
-                                                           ? 'border-gray-100 bg-white hover:border-blue-200 hover:shadow-md hover:-translate-y-0.5 cursor-pointer'
-                                                           : 'border-gray-100 bg-gray-50 opacity-60 cursor-not-allowed' }}"
-                                                {{ !$sport['available'] ? 'disabled' : '' }}>
-                                            <span class="text-2xl">{{ $sport['icon'] }}</span>
-                                            <span class="text-sm font-bold text-gray-900">{{ $sport['name'] }}</span>
-                                            <span class="text-xs font-medium text-gray-500">Rp {{ number_format($sport['price'], 0, ',', '.') }}/hr</span>
-                                            @if (!$sport['available'])
-                                                <span class="absolute -top-2 -right-2 rounded-full bg-rose-100 px-2 py-0.5 text-[10px] font-bold text-rose-600">{{ $sport['note'] ?? 'Unavailable' }}</span>
-                                            @endif
-                                        </button>
+                                        <label class="sport-card group cursor-pointer">
+                                            <input type="radio" name="field_id" value="{{ $sport['id'] }}" class="peer sr-only" {{ !$sport['available'] ? 'disabled' : '' }} data-price="{{ $sport['price'] }}" data-name="{{ $sport['name'] }}" onchange="updateSummary()" {{ (old('field_id') ?? request('field_id')) == $sport['id'] ? 'checked' : '' }}>
+                                            <div class="relative flex flex-col items-center gap-2 rounded-2xl border-2 p-4 text-center transition-all duration-200
+                                                        {{ $sport['available']
+                                                            ? 'border-gray-100 bg-white peer-checked:border-[#0047D4] peer-checked:bg-blue-50/50 hover:border-blue-200 peer-checked:shadow-md'
+                                                            : 'border-gray-100 bg-gray-50 opacity-60' }}">
+                                                <span class="text-2xl">{{ $sport['icon'] }}</span>
+                                                <span class="text-sm font-bold text-gray-900">{{ $sport['name'] }}</span>
+                                                <span class="text-xs font-medium text-gray-500">Rp {{ number_format($sport['price'], 0, ',', '.') }}/hr</span>
+                                                @if (!$sport['available'])
+                                                    <span class="absolute -top-2 -right-2 rounded-full bg-rose-100 px-2 py-0.5 text-[10px] font-bold text-rose-600">{{ $sport['note'] ?? 'Unavailable' }}</span>
+                                                @endif
+                                            </div>
+                                        </label>
                                     @endforeach
                                 </div>
                             </div>
@@ -140,8 +99,8 @@ $sports = [
                             {{-- Date Picker --}}
                             <div>
                                 <label for="booking-date" class="block text-sm font-semibold text-gray-700 mb-1.5">Date</label>
-                                <input type="date" id="booking-date" value="{{ date('Y-m-d') }}"
-                                       class="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 shadow-xs transition-colors duration-150 focus:border-[#0047D4] focus:ring-2 focus:ring-blue-500/10 focus:outline-none sm:max-w-xs">
+                                <input type="date" id="booking-date" name="booking_date" value="{{ old('booking_date', request('date', date('Y-m-d'))) }}"
+                                       class="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 shadow-xs transition-colors duration-150 focus:border-[#0047D4] focus:ring-2 focus:ring-blue-500/10 focus:outline-none sm:max-w-xs" onchange="updateSummary()">
                             </div>
 
                             {{-- Available Time Slots --}}
@@ -156,14 +115,13 @@ $sports = [
                                                 <span class="mt-0.5 text-[10px] font-bold uppercase tracking-wide text-gray-400">Booked</span>
                                             </div>
                                         @else
-                                            <button type="button"
-                                                    data-time="{{ $slot['time'] }}"
-                                                    data-hour="{{ $slot['hour'] }}"
-                                                    onclick="selectTimeSlot(this)"
-                                                    class="time-slot flex flex-col items-center justify-center rounded-xl border-2 border-blue-100 bg-blue-50/40 px-2 py-3 transition-all duration-200 hover:border-[#0047D4] hover:bg-blue-50 hover:shadow-md cursor-pointer">
-                                                <span class="text-sm font-semibold text-gray-700">{{ $slot['hour'] }}</span>
-                                                <span class="mt-0.5 text-[10px] font-medium text-blue-600">Available</span>
-                                            </button>
+                                            <label class="time-slot cursor-pointer">
+                                                <input type="radio" name="time" value="{{ $slot['time'] }}" class="peer sr-only" data-hour="{{ $slot['hour'] }}" onchange="updateSummary()" {{ (old('time') ?? request('time')) == $slot['time'] ? 'checked' : '' }}>
+                                                <div class="flex flex-col items-center justify-center rounded-xl border-2 border-blue-100 bg-blue-50/40 px-2 py-3 transition-all duration-200 peer-checked:border-[#0047D4] peer-checked:bg-[#0047D4] hover:border-[#0047D4]">
+                                                    <span class="text-sm font-semibold peer-checked:text-white text-gray-700">{{ $slot['hour'] }}</span>
+                                                    <span class="mt-0.5 text-[10px] font-medium peer-checked:text-blue-100 text-blue-600">Available</span>
+                                                </div>
+                                            </label>
                                         @endif
                                     @endforeach
                                 </div>
@@ -174,7 +132,7 @@ $sports = [
                                 <label class="block text-sm font-semibold text-gray-700 mb-3">Payment Type <span class="text-rose-500">*</span></label>
                                 <div class="flex flex-wrap gap-3">
                                     <label class="payment-option group">
-                                        <input type="radio" name="payment-type" value="dp" class="peer sr-only" checked onchange="updateSummary()">
+                                        <input type="radio" name="payment_type" value="dp" class="peer sr-only" checked onchange="updateSummary()">
                                         <div class="flex items-center gap-3 rounded-xl border-2 border-gray-100 bg-white px-5 py-3.5 cursor-pointer transition-all duration-200 peer-checked:border-[#0047D4] peer-checked:bg-blue-50/50 peer-checked:shadow-lg peer-checked:shadow-blue-500/10 hover:border-blue-200">
                                             <span class="flex h-5 w-5 items-center justify-center rounded-full border-2 border-gray-300 transition-colors duration-200 peer-checked:border-[#0047D4] peer-checked:bg-[#0047D4] group-has-[:checked]:border-[#0047D4] group-has-[:checked]:bg-[#0047D4]">
                                                 <svg class="h-3 w-3 text-white opacity-0 transition-opacity duration-200 group-has-[:checked]:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -186,7 +144,7 @@ $sports = [
                                         </div>
                                     </label>
                                     <label class="payment-option group">
-                                        <input type="radio" name="payment-type" value="full" class="peer sr-only" onchange="updateSummary()">
+                                        <input type="radio" name="payment_type" value="full" class="peer sr-only" onchange="updateSummary()">
                                         <div class="flex items-center gap-3 rounded-xl border-2 border-gray-100 bg-white px-5 py-3.5 cursor-pointer transition-all duration-200 peer-checked:border-[#0047D4] peer-checked:bg-blue-50/50 peer-checked:shadow-lg peer-checked:shadow-blue-500/10 hover:border-blue-200">
                                             <span class="flex h-5 w-5 items-center justify-center rounded-full border-2 border-gray-300 transition-colors duration-200 group-has-[:checked]:border-[#0047D4] group-has-[:checked]:bg-[#0047D4]">
                                                 <svg class="h-3 w-3 text-white opacity-0 transition-opacity duration-200 group-has-[:checked]:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -230,7 +188,7 @@ $sports = [
                             </div>
 
                             {{-- Submit Button --}}
-                            <button type="button" id="submit-booking" onclick="createBooking()"
+                            <button type="submit" id="submit-booking"
                                     class="flex w-full items-center justify-center gap-2 rounded-xl bg-[#0047D4] px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-blue-500/10 transition-all duration-200 hover:bg-[#003cb5] active:scale-[0.99]">
                                 <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5v14"/></svg>
                                 Create Booking
@@ -377,6 +335,45 @@ $sports = [
                         </div>
                     </div>
                 </div>
+                </div>
             </div>
 
+            @push('scripts')
+            <script>
+                function updateSummary() {
+                    const selectedSport = document.querySelector('input[name="field_id"]:checked');
+                    const selectedDate = document.getElementById('booking-date').value;
+                    const selectedTime = document.querySelector('input[name="time"]:checked');
+                    const paymentType = document.querySelector('input[name="payment_type"]:checked').value;
+
+                    const summaryBox = document.getElementById('booking-summary');
+                    const btnSubmit = document.getElementById('submit-booking');
+
+                    if (selectedSport && selectedDate && selectedTime) {
+                        summaryBox.classList.remove('hidden');
+                        
+                        const price = parseInt(selectedSport.dataset.price);
+                        const sportName = selectedSport.dataset.name;
+                        const timeRange = selectedTime.value;
+
+                        document.getElementById('summary-court').textContent = sportName;
+                        document.getElementById('summary-date').textContent = selectedDate;
+                        document.getElementById('summary-time').textContent = timeRange;
+                        
+                        const formattedPrice = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(price);
+                        document.getElementById('summary-price').textContent = formattedPrice;
+
+                        const paymentAmount = paymentType === 'dp' ? price / 2 : price;
+                        const formattedPayment = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(paymentAmount);
+                        document.getElementById('summary-payment').textContent = formattedPayment;
+                        document.getElementById('summary-payment-label').textContent = paymentType === 'dp' ? 'Down Payment (50%)' : 'Full Payment';
+                    } else {
+                        summaryBox.classList.add('hidden');
+                    }
+                }
+
+                // init on load
+                updateSummary();
+            </script>
+            @endpush
 @endsection

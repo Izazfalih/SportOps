@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" class="h-full bg-[#F7F8FA] scroll-smooth">
 <head>
@@ -9,16 +10,48 @@
         [data-step] { animation: fadeUp .35s ease both; }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
     </style>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body class="h-full font-sans antialiased text-gray-900 bg-[#F7F8FA]">
 
     @php
-        $courts = [
-            ['name' => 'Futsal — Synthetic Grass', 'sport' => 'Futsal',         'price' => 120000, 'gradient' => 'from-blue-500 via-blue-600 to-indigo-700',     'icon' => '<circle cx="12" cy="12" r="9"></circle><path d="m12 3 2.5 4.5L12 12 9.5 7.5 12 3Z"></path><path d="m21 12-5 .8-2.5-4.3M3 12l5 .8 2.5-4.3M16.5 19.5 14 15l4.5-1.5M7.5 19.5 10 15 5.5 13.5"></path>', 'desc' => 'FIFA-grade synthetic grass, floodlit, fits 10–12 players.', 'rating' => '4.9', 'badge' => 'Popular', 'badgeCls' => 'bg-[#D7F23D] text-[#1c2a00]'],
-            ['name' => 'Premium Futsal — Vinyl',   'sport' => 'Premium Futsal', 'price' => 180000, 'gradient' => 'from-violet-500 via-purple-600 to-fuchsia-700', 'icon' => '<circle cx="12" cy="12" r="9"></circle><path d="m12 3 2.5 4.5L12 12 9.5 7.5 12 3Z"></path><path d="m21 12-5 .8-2.5-4.3M3 12l5 .8 2.5-4.3M16.5 19.5 14 15l4.5-1.5M7.5 19.5 10 15 5.5 13.5"></path>', 'desc' => 'Pro-grade vinyl floor, cushioned, premium lighting setup.', 'rating' => '4.8', 'badge' => 'Premium', 'badgeCls' => 'bg-violet-100 text-violet-700'],
-            ['name' => 'Badminton',                'sport' => 'Badminton',      'price' => 50000,  'gradient' => 'from-emerald-500 via-teal-600 to-cyan-700',      'icon' => '<path d="M14 3 4 13l3 3 4 4 10-10"></path><circle cx="6.5" cy="17.5" r="2.5"></circle><path d="m14 3 7 7"></path>', 'desc' => 'BWF-standard court with sprung flooring & good airflow.', 'rating' => '4.8', 'badge' => 'Best value', 'badgeCls' => 'bg-emerald-100 text-emerald-700'],
-            ['name' => 'Basketball',               'sport' => 'Basketball',     'price' => 150000, 'gradient' => 'from-orange-400 via-orange-500 to-rose-600',     'icon' => '<circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3v18M5.6 5.6c3.5 3.5 9.3 3.5 12.8 0M5.6 18.4c3.5-3.5 9.3-3.5 12.8 0"></path>', 'desc' => 'Full-size indoor court, maple surface, NBA-spec hoops.', 'rating' => '4.7', 'badge' => '', 'badgeCls' => ''],
-        ];
+        $courts = [];
+        if (isset($fields)) {
+            foreach ($fields as $field) {
+                $jenis = strtolower($field->jenis_olahraga);
+                $gradient = 'from-emerald-500 via-teal-600 to-cyan-700';
+                $icon = '<circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path>';
+                
+                if (str_contains($jenis, 'futsal')) {
+                    $gradient = 'from-blue-500 via-blue-600 to-indigo-700';
+                    $icon = '<circle cx="12" cy="12" r="9"></circle><path d="m12 3 2.5 4.5L12 12 9.5 7.5 12 3Z"></path><path d="m21 12-5 .8-2.5-4.3M3 12l5 .8 2.5-4.3M16.5 19.5 14 15l4.5-1.5M7.5 19.5 10 15 5.5 13.5"></path>';
+                } elseif (str_contains($jenis, 'badminton')) {
+                    $gradient = 'from-emerald-500 via-teal-600 to-cyan-700';
+                    $icon = '<path d="M14 3 4 13l3 3 4 4 10-10"></path><circle cx="6.5" cy="17.5" r="2.5"></circle><path d="m14 3 7 7"></path>';
+                } elseif (str_contains($jenis, 'basket')) {
+                    $gradient = 'from-orange-400 via-orange-500 to-rose-600';
+                    $icon = '<circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3v18M5.6 5.6c3.5 3.5 9.3 3.5 12.8 0M5.6 18.4c3.5-3.5 9.3-3.5 12.8 0"></path>';
+                } elseif (str_contains($jenis, 'voli') || str_contains($jenis, 'volleyball')) {
+                    $gradient = 'from-violet-500 via-purple-600 to-fuchsia-700';
+                    $icon = '<circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path>';
+                }
+
+                $courts[] = [
+                    'id'       => $field->id,
+                    'name'     => $field->nama_lapangan,
+                    'sport'    => ucfirst($field->jenis_olahraga),
+                    'price'    => $field->harga,
+                    'gradient' => $gradient,
+                    'icon'     => $icon,
+                    'desc'     => $field->deskripsi ?: 'No description provided.',
+                    'rating'   => '5.0',
+                    'badge'    => $field->status === 'aktif' ? 'Active' : 'Maintenance',
+                    'badgeCls' => $field->status === 'aktif' ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700',
+                    'status'   => $field->status,
+                ];
+            }
+        }
+
         $times = ['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00','00:00','01:00','02:00'];
 
         $prefill = [
@@ -49,6 +82,7 @@
           data-courts='@json($courts)'
           data-times='@json($times)'
           data-prefill='@json($prefill)'
+          data-bookings='@json($bookings ?? [])'
           data-dashboard-url="{{ route('dashboard') }}"
           data-bookings-url="{{ route('bookings') }}">
 
@@ -84,8 +118,8 @@
 
             <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
                 @foreach ($courts as $i => $court)
-                    <button type="button" data-court-pick="{{ $i }}"
-                        class="group relative overflow-hidden rounded-3xl border-2 border-gray-100 bg-white text-left shadow-xs transition-all duration-200 hover:-translate-y-1 hover:border-blue-300 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-blue-100">
+                    <button type="button" data-court-pick="{{ $i }}" {{ $court['status'] !== 'aktif' ? 'disabled' : '' }}
+                        class="group relative overflow-hidden rounded-3xl border-2 border-gray-100 bg-white text-left shadow-xs transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed {{ $court['status'] === 'aktif' ? 'hover:-translate-y-1 hover:border-blue-300 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-blue-100' : '' }}">
                         <!-- Gradient header with decorative orb -->
                         <div class="relative h-32 bg-gradient-to-br {{ $court['gradient'] }} overflow-hidden">
                             <div class="absolute inset-0 bg-black/10"></div>
@@ -490,6 +524,7 @@
             const COURTS = JSON.parse(app.dataset.courts);
             const TIMES = JSON.parse(app.dataset.times);
             const PREFILL = JSON.parse(app.dataset.prefill);
+            const BOOKINGS = JSON.parse(app.dataset.bookings);
 
             const state = {
                 courtIdx: null,
@@ -512,14 +547,23 @@
             function shortDate(s) {
                 return parseYmd(s).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
             }
-            function hashStr(s) { let h = 0; for (let i = 0; i < s.length; i++) { h = (h * 31 + s.charCodeAt(i)) >>> 0; } return h; }
             function isBooked(dateStr, courtIdx, timeIdx) {
-                let h = hashStr(dateStr);
-                h = (h ^ ((courtIdx + 1) * 0x9e3779b1)) >>> 0;
-                h = (h ^ ((timeIdx + 1) * 0x85ebca77)) >>> 0;
-                h = Math.imul(h ^ (h >>> 13), 0xc2b2ae35) >>> 0;
-                h = (h ^ (h >>> 16)) >>> 0;
-                return (h % 100) < 33;
+                if (courtIdx === null || dateStr === null) return false;
+                const courtId = COURTS[courtIdx].id;
+                const timeStr = TIMES[timeIdx];
+                
+                // Parse checking time to a comparable integer (HHMM)
+                const checkTimeInt = parseInt(timeStr.replace(':', ''), 10);
+                
+                return BOOKINGS.some(b => {
+                    if (b.field_id !== courtId || b.tanggal !== dateStr) return false;
+                    
+                    const startInt = parseInt(b.jam_mulai.substring(0, 5).replace(':', ''), 10);
+                    const endInt = parseInt(b.jam_selesai.substring(0, 5).replace(':', ''), 10);
+                    
+                    // A slot is booked if its time falls strictly within [start, end)
+                    return checkTimeInt >= startInt && checkTimeInt < endInt;
+                });
             }
             function endTimeLabel(startIdx, duration) {
                 const endIdx = startIdx + duration;
@@ -719,7 +763,8 @@
             }
 
             app.querySelector('[data-confirm]').addEventListener('click', () => {
-                state.bookingId = 'SPO-' + (10000 + Math.floor((hashStr(state.date + state.courtIdx + state.startIdx + Date.now()) % 89999) + 1));
+                // Booking ID will be given by server later
+                state.bookingId = 'SPO-.....';
                 renderPayment();
                 showStep(5);
                 startTimer();
@@ -776,9 +821,53 @@
                 }, 1000);
             }
 
-            app.querySelector('[data-paid]').addEventListener('click', () => {
+            app.querySelector('[data-paid]').addEventListener('click', async () => {
                 if (timerInterval) clearInterval(timerInterval);
-                renderDone(); showStep(6);
+                
+                const c = COURTS[state.courtIdx];
+                const a = payAmounts();
+                const payload = {
+                    field_id: c.id,
+                    tanggal: state.date,
+                    jam_mulai: TIMES[state.startIdx],
+                    durasi: state.duration,
+                    pay_type: state.payType,
+                    total_harga: a.t,
+                    amount_paid: a.pay
+                };
+
+                const btn = app.querySelector('[data-paid]');
+                const origText = btn.innerHTML;
+                btn.innerHTML = 'Processing...';
+                btn.disabled = true;
+
+                try {
+                    const res = await fetch('{{ route("booking.store") }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: JSON.stringify(payload)
+                    });
+                    const data = await res.json();
+                    
+                    if (res.ok && data.success) {
+                        state.bookingId = data.booking_id;
+                        renderDone(); 
+                        showStep(6);
+                    } else {
+                        alert(data.error || 'Terjadi kesalahan saat memproses pesanan.');
+                        btn.innerHTML = origText;
+                        btn.disabled = false;
+                        startTimer();
+                    }
+                } catch (e) {
+                    alert('Gagal menghubungi server.');
+                    btn.innerHTML = origText;
+                    btn.disabled = false;
+                    startTimer();
+                }
             });
 
             // ---- Step 6: confirmation ----

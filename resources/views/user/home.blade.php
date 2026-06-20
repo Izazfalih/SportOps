@@ -133,36 +133,31 @@
         </div>
 
         @php
-            $courts = [
-                [
-                    'name' => 'Futsal — Synthetic Grass',
-                    'type' => 'Standard court',
-                    'price' => '120,000',
-                    'features' => ['Indoor', 'Synthetic grass surface', 'LED lighting', 'Standard 5-a-side court', 'Parking area', 'Restrooms', 'Waiting area'],
-                    'popular' => false,
-                ],
-                [
-                    'name' => 'Premium Futsal — Vinyl',
-                    'type' => 'Premium court',
-                    'price' => '180,000',
-                    'features' => ['Air-conditioned indoor court', 'Premium vinyl flooring', 'Professional LED lighting', 'Spectator seating', 'Changing rooms', 'Showers', 'Spacious parking area', 'WiFi'],
-                    'popular' => true,
-                ],
-                [
-                    'name' => 'Badminton',
-                    'type' => 'Indoor court',
-                    'price' => '50,000',
-                    'features' => ['Wooden/vinyl flooring', '2 standard nets', 'Air conditioning or industrial fans', 'Racket rental', 'Shuttlecock available', 'Restrooms', 'Seating area'],
-                    'popular' => false,
-                ],
-                [
-                    'name' => 'Basketball',
-                    'type' => 'Full court',
-                    'price' => '150,000',
-                    'features' => ['Full court', 'Standard hoops', 'Night lighting', 'Digital scoreboard', 'Small spectator stand', 'Changing rooms', 'Parking area'],
-                    'popular' => false,
-                ],
-            ];
+            $fields = \App\Models\Field::all();
+            $courts = [];
+            foreach ($fields as $index => $field) {
+                $jenis = strtolower($field->jenis_olahraga);
+                $type = 'Court';
+                $features = ['Indoor venue', 'Parking area', 'Restrooms', 'Waiting area'];
+                
+                if (str_contains($jenis, 'futsal')) {
+                    $type = 'Futsal Court';
+                    $features[] = 'Scoreboard';
+                } elseif (str_contains($jenis, 'badminton')) {
+                    $type = 'Badminton Court';
+                } elseif (str_contains($jenis, 'basket')) {
+                    $type = 'Basketball Court';
+                    $features[] = 'Standard hoops';
+                }
+
+                $courts[] = [
+                    'name' => $field->nama_lapangan,
+                    'type' => $type,
+                    'price' => number_format($field->harga, 0, ',', '.'),
+                    'features' => $features,
+                    'popular' => $index === 0, // make first one popular
+                ];
+            }
         @endphp
 
         <div class="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
