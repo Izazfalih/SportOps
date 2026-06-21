@@ -192,40 +192,91 @@
     </section>
 
     <!-- ============================ GALLERY ============================ -->
-    <section id="gallery" class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+    <section id="gallery" class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div class="text-center">
-            <h2 class="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">Gallery</h2>
+            <p class="text-xs font-bold uppercase tracking-widest text-[#0047D4]">Explore</p>
+            <h2 class="mt-2 text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">Our Arena in Pictures</h2>
             <p class="mx-auto mt-2 max-w-xl text-sm text-gray-500">
-                A look inside SportOps Arena. Photos of our courts and facilities are coming soon.
+                A look inside SportOps Arena — world-class courts, vibrant atmosphere, unforgettable games.
             </p>
         </div>
 
-        @php
-            // Placeholder tiles until real photos are added. `span` lets a couple of tiles span 2 cols for a mosaic look.
-            $gallery = [
-                ['label' => 'Futsal — Synthetic Grass', 'span' => 'sm:col-span-2'],
-                ['label' => 'Premium Futsal — Vinyl', 'span' => ''],
-                ['label' => 'Badminton Hall', 'span' => ''],
-                ['label' => 'Basketball Court', 'span' => ''],
-                ['label' => 'Lounge & Waiting Area', 'span' => ''],
-                ['label' => 'Night Lighting', 'span' => 'sm:col-span-2'],
-            ];
-        @endphp
 
-        <div class="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
-            @foreach ($gallery as $tile)
-                <div class="group relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-2xl border border-gray-100 bg-gradient-to-br from-gray-100 to-gray-200 {{ $tile['span'] }}">
-                    <div class="flex flex-col items-center gap-2 text-gray-400">
-                        <svg class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                            <rect width="18" height="18" x="3" y="3" rx="2"></rect>
-                            <circle cx="9" cy="9" r="2"></circle>
-                            <path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"></path>
-                        </svg>
-                        <span class="px-2 text-center text-xs font-medium">{{ $tile['label'] }}</span>
-                    </div>
-                    <span class="absolute bottom-2 right-2 rounded-full bg-white/70 px-2 py-0.5 text-[10px] font-semibold text-gray-500 backdrop-blur">Coming soon</span>
-                </div>
-            @endforeach
+        <div class="mt-10 grid grid-cols-2 auto-rows-[160px] gap-3 sm:grid-cols-4 sm:auto-rows-[190px] sm:gap-4">
+
+            {{-- 1 · Indoor Arena — top left --}}
+            <div class="group relative overflow-hidden rounded-2xl ring-1 ring-black/5
+                        sm:col-start-1 sm:row-start-1">
+                <img src="{{ asset('images/img1.png') }}" alt="Indoor Arena"
+                     class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">
+                <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-black/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+                <span class="absolute bottom-3 left-3 rounded-full bg-white/85 px-3 py-1 text-[11px] font-semibold text-gray-800 shadow-sm backdrop-blur translate-y-2 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                    Indoor Arena
+                </span>
+            </div>
+
+            {{-- 2 · Court Facilities — top center --}}
+            <div class="group relative overflow-hidden rounded-2xl ring-1 ring-black/5
+                        sm:col-start-2 sm:row-start-1">
+                <img src="{{ asset('images/img3.png') }}" alt="Court Facilities"
+                     class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">
+                <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-black/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+                <span class="absolute bottom-3 left-3 rounded-full bg-white/85 px-3 py-1 text-[11px] font-semibold text-gray-800 shadow-sm backdrop-blur translate-y-2 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                    Court Facilities
+                </span>
+            </div>
+
+            {{-- 3 · Premium Court — HERO, top-right spanning 2 cols × 2 rows --}}
+            <div class="group relative overflow-hidden rounded-2xl ring-1 ring-black/5
+                        col-span-2 row-span-2
+                        sm:col-start-3 sm:col-span-2 sm:row-start-1 sm:row-span-2">
+                <img src="{{ asset('images/img4.png') }}" alt="Premium Court"
+                     class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy">
+                <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+                <span class="absolute bottom-4 left-4 rounded-full bg-white/85 px-4 py-1.5 text-xs font-semibold text-gray-800 shadow-sm backdrop-blur translate-y-2 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                    Premium Court
+                </span>
+                {{-- Badge --}}
+                <span class="absolute top-3 right-3 flex items-center gap-1 rounded-full bg-[#0047D4]/90 px-2.5 py-1 text-[10px] font-bold text-white backdrop-blur-sm shadow">
+                    <svg class="h-3 w-3" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.3 5.9 20.4l1.4-6.8L2.2 9l6.9-.7L12 2Z"></path></svg>
+                    Featured
+                </span>
+            </div>
+
+            {{-- 4 · Playing Atmosphere — middle-left, tall spanning 2 rows --}}
+            <div class="group relative overflow-hidden rounded-2xl ring-1 ring-black/5
+                        row-span-2
+                        sm:col-start-1 sm:row-start-2 sm:row-span-2">
+                <img src="{{ asset('images/img5.png') }}" alt="Playing Atmosphere"
+                     class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">
+                <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-black/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+                <span class="absolute bottom-3 left-3 rounded-full bg-white/85 px-3 py-1 text-[11px] font-semibold text-gray-800 shadow-sm backdrop-blur translate-y-2 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                    Playing Atmosphere
+                </span>
+            </div>
+
+            {{-- 5 · Night Session — center --}}
+            <div class="group relative overflow-hidden rounded-2xl ring-1 ring-black/5
+                        sm:col-start-2 sm:row-start-2">
+                <img src="{{ asset('images/img6.png') }}" alt="Night Session"
+                     class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">
+                <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-black/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+                <span class="absolute bottom-3 left-3 rounded-full bg-white/85 px-3 py-1 text-[11px] font-semibold text-gray-800 shadow-sm backdrop-blur translate-y-2 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                    Night Session
+                </span>
+            </div>
+
+            {{-- 6 · Venue Overview — bottom-right, wide spanning 3 cols --}}
+            <div class="group relative overflow-hidden rounded-2xl ring-1 ring-black/5
+                        col-span-2
+                        sm:col-start-2 sm:col-span-3 sm:row-start-3">
+                <img src="{{ asset('images/img8.png') }}" alt="Venue Overview"
+                     class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">
+                <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-black/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+                <span class="absolute bottom-3 left-3 rounded-full bg-white/85 px-3 py-1 text-[11px] font-semibold text-gray-800 shadow-sm backdrop-blur translate-y-2 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                    Venue Overview
+                </span>
+            </div>
         </div>
     </section>
 
