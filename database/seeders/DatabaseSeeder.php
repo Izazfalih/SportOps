@@ -48,8 +48,8 @@ class DatabaseSeeder extends Seeder
             [
                 'alamat' => 'Jl. Olahraga No. 1, Jakarta',
                 'kontak' => '081200001111',
-                'jam_buka' => '08:00',
-                'jam_tutup' => '23:00'
+                'open_time' => '08:00',
+                'close_time' => '23:00'
             ]
         );
 
