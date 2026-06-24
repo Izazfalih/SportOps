@@ -14,7 +14,7 @@ class BookingController extends Controller
         
         // Mengambil riwayat booking milik user yang sedang login beserta data lapangan
         $history = $user->bookings()->with('field')->orderBy('tanggal', 'desc')->orderBy('jam_mulai', 'desc')->get();
-
+      
         // Map status untuk frontend
         $mappedHistory = $history->map(function ($booking) {
             // Logika sederhana untuk status pembayaran berdasarkan status booking
