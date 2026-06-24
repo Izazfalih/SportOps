@@ -6,7 +6,7 @@
     <title>My Bookings | SportOps</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="h-full font-sans antialiased text-gray-900 bg-[#F7F8FA]">
+<body class="flex flex-col min-h-screen font-sans antialiased text-gray-900 bg-[#F7F8FA]">
 
     @php
         // $history and $user are now provided by the BookingController
@@ -51,12 +51,11 @@
                     <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5v14"></path></svg>
                     <span class="hidden sm:inline">New booking</span>
                 </a>
-                <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#0047D4] to-indigo-600 text-xs font-bold text-white">{{ $user['initials'] }}</span>
             </div>
         </nav>
     </header>
 
-    <main class="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8" id="history-page">
+    <main class="flex-1 w-full mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8" id="history-page">
 
         <!-- Header -->
         <div class="flex flex-col gap-1">
@@ -151,9 +150,7 @@
         <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 py-6 sm:flex-row sm:px-6 lg:px-8">
             <p class="text-sm text-gray-400">&copy; {{ date('Y') }} SportOps. All rights reserved.</p>
             <div class="flex items-center gap-5 text-sm text-gray-400">
-                <a href="#" class="hover:text-[#0047D4] transition-colors duration-150">Help</a>
-                <a href="#" class="hover:text-[#0047D4] transition-colors duration-150">Privacy</a>
-                <a href="#" class="hover:text-[#0047D4] transition-colors duration-150">Terms</a>
+                <span>Jl. Olahraga No. 12, Jakarta</span>
             </div>
         </div>
     </footer>

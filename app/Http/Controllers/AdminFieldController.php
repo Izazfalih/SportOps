@@ -24,6 +24,7 @@ class AdminFieldController extends Controller
             'jenis_olahraga' => 'required|string|max:255',
             'harga' => 'required|numeric|min:0',
             'deskripsi' => 'nullable|string',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         // Ensure a venue exists to satisfy the foreign key constraint
@@ -37,12 +38,18 @@ class AdminFieldController extends Controller
         }
         $venueId = $venue->id;
 
+        $fotoPath = null;
+        if ($request->hasFile('foto')) {
+            $fotoPath = $request->file('foto')->store('fields', 'public');
+        }
+
         Field::create([
             'venue_id' => $venueId,
             'nama_lapangan' => $validated['nama_lapangan'],
             'jenis_olahraga' => $validated['jenis_olahraga'],
             'harga' => $validated['harga'],
             'deskripsi' => $validated['deskripsi'],
+            'foto' => $fotoPath,
             'status' => 'aktif',
         ]);
 
@@ -58,16 +65,27 @@ class AdminFieldController extends Controller
             'jenis_olahraga' => 'required|string|max:255',
             'harga' => 'required|numeric|min:0',
             'deskripsi' => 'nullable|string',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'status' => 'required|in:aktif,maintenance',
         ]);
 
-        $court->update([
+        $data = [
             'nama_lapangan' => $validated['nama_lapangan'],
             'jenis_olahraga' => $validated['jenis_olahraga'],
             'harga' => $validated['harga'],
             'deskripsi' => $validated['deskripsi'],
             'status' => $validated['status'],
-        ]);
+        ];
+
+        if ($request->hasFile('foto')) {
+            // Delete old photo if exists
+            if ($court->foto && \Storage::disk('public')->exists($court->foto)) {
+                \Storage::disk('public')->delete($court->foto);
+            }
+            $data['foto'] = $request->file('foto')->store('fields', 'public');
+        }
+
+        $court->update($data);
 
         return redirect()->route('admin.courts.index')->with('success', 'Court updated successfully!');
     }

@@ -97,7 +97,7 @@
             <div class="mt-6 rounded-2xl border border-gray-100 bg-white shadow-xs">
                 <div class="flex items-center justify-between border-b border-gray-100 px-6 py-4">
                     <h2 class="text-base font-bold text-gray-900">Upcoming Bookings</h2>
-                    <a href="#" class="inline-flex items-center gap-1.5 rounded-xl bg-[#0047D4] px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-blue-500/10 hover:bg-[#003cb5] transition-colors duration-150">
+                    <a href="{{ route('booking') }}" class="inline-flex items-center gap-1.5 rounded-xl bg-[#0047D4] px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-blue-500/10 hover:bg-[#003cb5] transition-colors duration-150">
                         <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5v14"/></svg>
                         Add Booking
                     </a>
@@ -149,7 +149,7 @@
                 {{-- Table footer --}}
                 <div class="flex items-center justify-between border-t border-gray-100 px-6 py-3.5">
                     <p class="text-sm text-gray-500">Showing <span class="font-semibold text-gray-700">{{ count($bookings) }}</span> upcoming bookings</p>
-                    <a href="#" class="text-sm font-semibold text-[#0047D4] hover:text-[#003cb5] transition-colors duration-150">View all bookings →</a>
+                    <a href="{{ route('admin.bookings') }}" class="text-sm font-semibold text-[#0047D4] hover:text-[#003cb5] transition-colors duration-150">View all bookings →</a>
                 </div>
             </div>
 

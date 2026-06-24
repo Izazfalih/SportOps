@@ -29,6 +29,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 
+    Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+
     Route::get('/booking', [\App\Http\Controllers\BookingController::class, 'create'])->name('booking');
     Route::post('/booking', [\App\Http\Controllers\BookingController::class, 'store'])->name('booking.store');
 

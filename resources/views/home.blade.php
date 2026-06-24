@@ -182,7 +182,7 @@
                         @endforeach
                     </ul>
 
-                    <a href="{{ route('register') }}"
+                    <a href="{{ route('login') }}"
                        class="mt-7 inline-flex w-full items-center justify-center rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 active:scale-[0.99] {{ $court['popular'] ? 'bg-[#0047D4] text-white shadow-lg shadow-blue-500/10 hover:bg-[#003cb5] hover:shadow-blue-500/20' : 'border border-gray-200 text-[#0047D4] hover:border-[#0047D4] hover:bg-blue-50' }}">
                         Book Now
                     </a>
@@ -337,38 +337,7 @@
             @endforelse
         </div>
         
-        <div class="mt-12 max-w-2xl mx-auto rounded-2xl border border-gray-100 bg-white p-6 shadow-xs">
-            <h3 class="text-lg font-bold text-gray-900 mb-4">Leave a Review</h3>
-            @auth
-            <form action="{{ route('reviews.store') }}" method="POST">
-                @csrf
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Rating</label>
-                    <select name="rating" class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2 text-sm focus:border-[#0047D4] focus:bg-white focus:ring-2 focus:ring-blue-100" required>
-                        <option value="5">5 Stars - Excellent</option>
-                        <option value="4">4 Stars - Good</option>
-                        <option value="3">3 Stars - Average</option>
-                        <option value="2">2 Stars - Poor</option>
-                        <option value="1">1 Star - Terrible</option>
-                    </select>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Comment</label>
-                    <textarea name="comment" rows="3" class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2 text-sm focus:border-[#0047D4] focus:bg-white focus:ring-2 focus:ring-blue-100" placeholder="Share your experience with us..." required></textarea>
-                </div>
-                <button type="submit" class="inline-flex w-full items-center justify-center rounded-xl bg-[#0047D4] px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/10 hover:bg-[#003cb5] transition-colors duration-150">
-                    Submit Review
-                </button>
-            </form>
-            @else
-            <div class="text-center py-6">
-                <p class="text-gray-500 mb-4">You must be logged in to leave a review.</p>
-                <a href="{{ route('login') }}" class="inline-flex items-center justify-center rounded-xl bg-[#0047D4] px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/10 hover:bg-[#003cb5] transition-colors duration-150">
-                    Log In to Review
-                </a>
-            </div>
-            @endauth
-        </div>
+
     </section>
 
     <!-- ============================ FOOTER ============================ -->
@@ -386,17 +355,17 @@
                     </a>
                     <h4 class="mt-6 text-xs font-bold uppercase tracking-wider text-gray-900">Social Media</h4>
                     <div class="mt-4 flex items-center gap-3 text-gray-400">
-                        <a href="#" class="rounded-lg border border-gray-150 p-2 hover:border-[#0047D4] hover:text-[#0047D4] transition-colors duration-150" aria-label="Twitter">
+                        <a href="https://x.com" target="_blank" rel="noopener noreferrer" class="rounded-lg border border-gray-150 p-2 hover:border-[#0047D4] hover:text-[#0047D4] transition-colors duration-150" aria-label="Twitter">
                             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z"></path></svg>
                         </a>
-                        <a href="#" class="rounded-lg border border-gray-150 p-2 hover:border-[#0047D4] hover:text-[#0047D4] transition-colors duration-150" aria-label="Instagram">
+                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="rounded-lg border border-gray-150 p-2 hover:border-[#0047D4] hover:text-[#0047D4] transition-colors duration-150" aria-label="Instagram">
                             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <rect width="20" height="20" x="2" y="2" rx="5"></rect>
                                 <circle cx="12" cy="12" r="4"></circle>
                                 <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"></circle>
                             </svg>
                         </a>
-                        <a href="#" class="rounded-lg border border-gray-150 p-2 hover:border-[#0047D4] hover:text-[#0047D4] transition-colors duration-150" aria-label="Facebook">
+                        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="rounded-lg border border-gray-150 p-2 hover:border-[#0047D4] hover:text-[#0047D4] transition-colors duration-150" aria-label="Facebook">
                             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987H7.898V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12Z"></path></svg>
                         </a>
                     </div>
@@ -442,7 +411,6 @@
                     <ul class="mt-4 space-y-3 text-sm">
                         <li><a href="#schedule" class="text-gray-500 hover:text-[#0047D4] transition-colors duration-150">Schedule</a></li>
                         <li><a href="#pricing" class="text-gray-500 hover:text-[#0047D4] transition-colors duration-150">Pricing</a></li>
-                        <li><a href="#pricing" class="text-gray-500 hover:text-[#0047D4] transition-colors duration-150">Courts</a></li>
                         <li><a href="{{ route('register') }}" class="text-gray-500 hover:text-[#0047D4] transition-colors duration-150">Sign Up</a></li>
                     </ul>
                 </div>

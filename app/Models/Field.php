@@ -13,6 +13,7 @@ class Field extends Model
         'status',
         'harga',
         'deskripsi',
+        'foto',
     ];
 
     public function venue()

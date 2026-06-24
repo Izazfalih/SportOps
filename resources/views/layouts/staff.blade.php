@@ -102,8 +102,42 @@
                     <p class="text-xs text-gray-400">@yield('page-subtitle', now()->format('l, d F Y'))</p>
                 </div>
 
-                {{-- Staff avatar --}}
+                {{-- Right cluster (Notif + Avatar) --}}
                 <div class="flex items-center gap-3">
+                    {{-- Notifications --}}
+                    <div class="relative">
+                        <button type="button" onclick="toggleStaffNotifMenu()" class="relative inline-flex items-center justify-center rounded-xl border border-gray-150 bg-white p-2.5 text-gray-500 shadow-xs hover:text-[#0047D4] hover:border-blue-200 transition-colors duration-150" aria-label="Notifications">
+                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M10.268 21a2 2 0 0 0 3.464 0"/>
+                                <path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/>
+                            </svg>
+                            <span id="staff-notif-badge" class="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#0047D4] text-[9px] font-bold text-white ring-2 ring-white">2</span>
+                        </button>
+
+                        <div id="staff-notif-menu" class="hidden absolute right-0 mt-2 w-72 sm:w-80 overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-xl shadow-gray-900/10">
+                            <div class="border-b border-gray-50 px-4 py-3 flex items-center justify-between">
+                                <p class="text-sm font-bold text-gray-900">Notifications</p>
+                                <span class="text-xs text-[#0047D4] cursor-pointer hover:underline">Mark all as read</span>
+                            </div>
+                            <div class="max-h-64 overflow-y-auto">
+                                <a href="#" class="block px-4 py-3 hover:bg-gray-50 border-b border-gray-50 last:border-0 transition-colors">
+                                    <p class="text-sm font-semibold text-gray-900">New Booking Check-in</p>
+                                    <p class="text-xs text-gray-500 mt-0.5">Booking BK-20260015 has been checked in.</p>
+                                    <p class="text-[10px] text-gray-400 mt-1">Just now</p>
+                                </a>
+                                <a href="#" class="block px-4 py-3 hover:bg-gray-50 border-b border-gray-50 last:border-0 transition-colors">
+                                    <p class="text-sm font-semibold text-gray-900">Schedule Update</p>
+                                    <p class="text-xs text-gray-500 mt-0.5">Futsal Court B is scheduled for maintenance.</p>
+                                    <p class="text-[10px] text-gray-400 mt-1">2 hours ago</p>
+                                </a>
+                            </div>
+                            <div class="border-t border-gray-50 py-2 text-center">
+                                <a href="#" class="text-xs font-semibold text-[#0047D4] hover:underline">View all notifications</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Staff avatar --}}
                     <div class="hidden text-right sm:block">
                         <p class="text-sm font-semibold text-gray-900">{{ $staffUser['name'] }}</p>
                         <p class="text-xs text-gray-400">{{ $staffUser['role'] }}</p>
@@ -145,6 +179,27 @@
             overlay.classList.add('opacity-0', 'pointer-events-none');
             overlay.classList.remove('opacity-100', 'pointer-events-auto');
         }
+
+        const staffNotifMenu = document.getElementById('staff-notif-menu');
+        const staffNotifBadge = document.getElementById('staff-notif-badge');
+
+        function toggleStaffNotifMenu() {
+            if (staffNotifMenu) {
+                staffNotifMenu.classList.toggle('hidden');
+                // Hide badge when opened
+                if (!staffNotifMenu.classList.contains('hidden') && staffNotifBadge) {
+                    staffNotifBadge.classList.add('hidden');
+                }
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const isClickInsideNotif = event.target.closest('#staff-notif-menu') || event.target.closest('[onclick="toggleStaffNotifMenu()"]');
+            if (!isClickInsideNotif && staffNotifMenu && !staffNotifMenu.classList.contains('hidden')) {
+                staffNotifMenu.classList.add('hidden');
+            }
+        });
     </script>
 
     @stack('scripts')

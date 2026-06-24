@@ -78,6 +78,10 @@
 
                             {{-- Image Placeholder --}}
                             <div class="relative flex h-44 items-center justify-center {{ $colors['icon_bg'] }} overflow-hidden">
+                                @if($court->foto)
+                                    <img src="{{ asset('storage/' . $court->foto) }}" alt="{{ $court->nama_lapangan }}" class="absolute inset-0 h-full w-full object-cover">
+                                    <div class="absolute inset-0 bg-black/10"></div>
+                                @endif
                                 @if (!$isActive)
                                     <div class="absolute inset-0 bg-gray-900/30 backdrop-blur-[1px]"></div>
                                     <span class="absolute right-3 top-3 z-10 rounded-full bg-red-500 px-3 py-1 text-xs font-bold text-white shadow-sm">Maintenance</span>
@@ -159,7 +163,7 @@
                 </div>
 
                 {{-- Form --}}
-                <form id="court-form" action="{{ route('admin.courts.store') }}" method="POST" class="px-6 py-5 space-y-5">
+                <form id="court-form" action="{{ route('admin.courts.store') }}" method="POST" enctype="multipart/form-data" class="px-6 py-5 space-y-5">
                     @csrf
                     <input type="hidden" name="_method" id="form-method" value="POST">
 
@@ -204,6 +208,12 @@
                     <div>
                         <label for="court-desc" class="block text-sm font-semibold text-gray-700">Description</label>
                         <textarea name="deskripsi" id="court-desc" rows="3" placeholder="Brief description of the court..." class="mt-1.5 w-full resize-none rounded-xl border border-gray-200 bg-[#F7F8FA] px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 outline-none transition-colors duration-150 focus:border-[#0047D4] focus:ring-2 focus:ring-blue-500/10"></textarea>
+                    </div>
+
+                    {{-- Foto Lapangan --}}
+                    <div>
+                        <label for="court-foto" class="block text-sm font-semibold text-gray-700">Court Photo (Optional)</label>
+                        <input type="file" name="foto" id="court-foto" accept="image/*" class="mt-1.5 w-full rounded-xl border border-gray-200 bg-[#F7F8FA] px-4 py-2 text-sm text-gray-900 file:mr-4 file:rounded-full file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-[#0047D4] hover:file:bg-blue-100 transition-colors duration-150 focus:border-[#0047D4] focus:ring-2 focus:ring-blue-500/10">
                     </div>
 
                     {{-- Footer --}}
