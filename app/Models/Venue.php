@@ -10,6 +10,14 @@ class Venue extends Model
         'nama_venue',
         'alamat',
         'kontak',
+        'open_time',
+        'close_time',
+        'dp_percentage',
+        'payment_expiry',
+        'notif_new_booking',
+        'notif_payment',
+        'notif_cancel',
+        'merchant_name',
     ];
 
     public function fields()
