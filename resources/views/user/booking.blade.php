@@ -59,6 +59,9 @@
             'date'  => request('date'),
             'time'  => request('time'),
         ];
+        
+        $authUser = Auth::user();
+        $initials = $authUser ? collect(explode(' ', $authUser->name))->map(fn($w) => mb_substr($w, 0, 1))->take(2)->join('') : 'G';
     @endphp
 
     <!-- ============================ TOP NAVIGATION ============================ -->
@@ -70,10 +73,16 @@
                 </div>
                 <span class="hidden text-lg font-extrabold tracking-tight text-gray-900 sm:inline">SportOps</span>
             </a>
-            <a href="{{ route('dashboard') }}" class="inline-flex items-center gap-2 rounded-xl border border-gray-150 bg-white px-3.5 py-2 text-sm font-semibold text-gray-600 shadow-xs hover:border-blue-200 hover:text-[#0047D4] transition-colors duration-150">
-                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
-                Back to Dashboard
-            </a>
+
+            <div class="hidden items-center gap-1 lg:flex">
+                <a href="{{ route('dashboard') }}" class="rounded-lg px-3.5 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-[#0047D4] transition-colors duration-150">Dashboard</a>
+                <a href="{{ route('booking') }}" class="rounded-lg bg-blue-50 px-3.5 py-2 text-sm font-semibold text-[#0047D4]">Book a Court</a>
+                <a href="{{ route('bookings') }}" class="rounded-lg px-3.5 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-[#0047D4] transition-colors duration-150">My Bookings</a>
+            </div>
+
+            <div class="flex items-center gap-2 sm:gap-3">
+                <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#0047D4] to-indigo-600 text-xs font-bold text-white">{{ $initials }}</span>
+            </div>
         </nav>
     </header>
 

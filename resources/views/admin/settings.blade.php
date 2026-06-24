@@ -214,17 +214,7 @@
                         </label>
                     </div>
 
-                    {{-- Cancellations --}}
-                    <div class="flex items-center justify-between py-4">
-                        <div class="pr-4">
-                            <label for="notif-cancellations" class="text-sm font-semibold text-gray-900">Booking Cancellations</label>
-                            <p class="text-xs text-gray-500">Receive an email when a booking is cancelled.</p>
-                        </div>
-                        <label class="relative inline-flex cursor-pointer items-center">
-                            <input type="checkbox" id="notif-cancellations" name="notif_cancel" class="peer sr-only" {{ $venue->notif_cancel ? 'checked' : '' }}>
-                            <div class="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-[#0047D4] peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#0047D4]/20"></div>
-                        </label>
-                    </div>
+
 
                 </div>
 

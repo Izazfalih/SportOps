@@ -12,9 +12,9 @@
         // $user and $upcomingBooking are provided by the DashboardController
         $quickActions = [
             ['label' => 'Book Court',      'href' => route('booking'),  'icon' => '<path d="M5 12h14M12 5v14"></path>'],
-            ['label' => 'Leave a Review',  'href' => route('home') . '#reviews', 'icon' => '<path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.3 5.9 20.4l1.4-6.8L2.2 9l6.9-.7L12 2Z"></path>'],
+            ['label' => 'Leave a Review',  'href' => '#leave-review', 'icon' => '<path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.3 5.9 20.4l1.4-6.8L2.2 9l6.9-.7L12 2Z"></path>'],
             ['label' => 'My Bookings',     'href' => route('bookings'), 'icon' => '<path d="M3 3v5h5"></path><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"></path><path d="M12 7v5l4 2"></path>'],
-            ['label' => 'Edit Profile',    'href' => '#profile',        'icon' => '<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle>'],
+            ['label' => 'Edit Profile',    'href' => route('profile.edit'),        'icon' => '<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle>'],
         ];
     @endphp
 
@@ -34,19 +34,48 @@
                 <a href="#" class="rounded-lg bg-blue-50 px-3.5 py-2 text-sm font-semibold text-[#0047D4]">Dashboard</a>
                 <a href="{{ route('booking') }}" class="rounded-lg px-3.5 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-[#0047D4] transition-colors duration-150">Book a Court</a>
                 <a href="{{ route('bookings') }}" class="rounded-lg px-3.5 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-[#0047D4] transition-colors duration-150">My Bookings</a>
-                <a href="{{ route('home') }}" class="rounded-lg px-3.5 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-[#0047D4] transition-colors duration-150">Landing Page</a>
             </div>
 
             <!-- Right cluster -->
             <div class="flex items-center gap-2 sm:gap-3">
                 <!-- Notifications -->
-                <button type="button" class="relative inline-flex items-center justify-center rounded-xl border border-gray-150 bg-white p-2.5 text-gray-500 shadow-xs hover:text-[#0047D4] hover:border-blue-200 transition-colors duration-150" aria-label="Notifications">
-                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M10.268 21a2 2 0 0 0 3.464 0"></path>
-                        <path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"></path>
-                    </svg>
-                    <span class="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#0047D4] text-[9px] font-bold text-white ring-2 ring-white">3</span>
-                </button>
+                <div class="relative">
+                    <button type="button" onclick="toggleNotifMenu()" class="relative inline-flex items-center justify-center rounded-xl border border-gray-150 bg-white p-2.5 text-gray-500 shadow-xs hover:text-[#0047D4] hover:border-blue-200 transition-colors duration-150" aria-label="Notifications">
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M10.268 21a2 2 0 0 0 3.464 0"></path>
+                            <path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"></path>
+                        </svg>
+                        <span id="notif-badge" class="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#0047D4] text-[9px] font-bold text-white ring-2 ring-white">3</span>
+                    </button>
+
+                    <div id="notif-menu" class="hidden absolute right-0 mt-2 w-72 sm:w-80 overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-xl shadow-gray-900/10">
+                        <div class="border-b border-gray-50 px-4 py-3 flex items-center justify-between">
+                            <p class="text-sm font-bold text-gray-900">Notifications</p>
+                            <span class="text-xs text-[#0047D4] cursor-pointer hover:underline">Mark all as read</span>
+                        </div>
+                        <div id="user-notif-list" class="max-h-64 overflow-y-auto">
+                            <!-- Dummy notifications -->
+                            <a href="#" class="block px-4 py-3 hover:bg-gray-50 border-b border-gray-50 last:border-0 transition-colors">
+                                <p class="text-sm font-semibold text-gray-900">Booking Confirmed</p>
+                                <p class="text-xs text-gray-500 mt-0.5">Your booking for Futsal Court A has been confirmed.</p>
+                                <p class="text-[10px] text-gray-400 mt-1">2 hours ago</p>
+                            </a>
+                            <a href="#" class="block px-4 py-3 hover:bg-gray-50 border-b border-gray-50 last:border-0 transition-colors">
+                                <p class="text-sm font-semibold text-gray-900">Payment Reminder</p>
+                                <p class="text-xs text-gray-500 mt-0.5">Please complete the payment for your upcoming match.</p>
+                                <p class="text-[10px] text-gray-400 mt-1">5 hours ago</p>
+                            </a>
+                            <a href="#" class="block px-4 py-3 hover:bg-gray-50 border-b border-gray-50 last:border-0 transition-colors opacity-60">
+                                <p class="text-sm font-semibold text-gray-900">Welcome to SportOps!</p>
+                                <p class="text-xs text-gray-500 mt-0.5">Thanks for joining us. Book your first court today.</p>
+                                <p class="text-[10px] text-gray-400 mt-1">1 day ago</p>
+                            </a>
+                        </div>
+                        <div id="user-view-all-container" class="border-t border-gray-50 py-2 text-center">
+                            <a href="#" onclick="expandUserNotifList(event)" class="text-xs font-semibold text-[#0047D4] hover:underline">View all notifications</a>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Profile dropdown -->
                 <div class="relative">
@@ -62,7 +91,7 @@
                             <p class="truncate text-xs text-gray-500">{{ $user['email'] }}</p>
                         </div>
                         <div class="py-1">
-                            <a href="#profile" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-[#0047D4]">My Profile</a>
+                            <a href="{{ route('profile.edit') }}" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-[#0047D4]">My Profile</a>
                             <a href="{{ route('bookings') }}" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-[#0047D4]">My Bookings</a>
                             <a href="#" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-[#0047D4]">Settings</a>
                         </div>
@@ -88,7 +117,6 @@
                 <a href="#" class="rounded-lg bg-blue-50 px-3 py-2.5 text-sm font-semibold text-[#0047D4]">Dashboard</a>
                 <a href="{{ route('booking') }}" class="rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50">Book a Court</a>
                 <a href="{{ route('bookings') }}" class="rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50">My Bookings</a>
-                <a href="{{ route('home') }}" class="rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50">Landing Page</a>
             </div>
         </div>
     </header>
@@ -205,6 +233,92 @@
 
         <!-- ---------------------- SCHEDULE (date-aware; logged-in users browse any date) ---------------------- -->
         <x-schedule-board :authed="true" :inMain="true" title="Court Schedule" />
+
+        <!-- ---------------------- LEAVE A REVIEW ---------------------- -->
+        <section id="leave-review" class="mt-8 mx-auto rounded-3xl border border-gray-100 bg-white p-6 shadow-xs sm:p-8">
+            <div class="mb-6">
+                <h2 class="text-xl font-extrabold tracking-tight text-gray-900 sm:text-2xl">Leave a Review</h2>
+                <p class="mt-1 text-sm text-gray-500">Share your experience with us and other players.</p>
+            </div>
+            
+            <form action="{{ route('reviews.store') }}" method="POST">
+                @csrf
+                <div class="mb-5">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Rating</label>
+                    <select name="rating" class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm focus:border-[#0047D4] focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors" required>
+                        <option value="5">5 Stars - Excellent</option>
+                        <option value="4">4 Stars - Good</option>
+                        <option value="3">3 Stars - Average</option>
+                        <option value="2">2 Stars - Poor</option>
+                        <option value="1">1 Star - Terrible</option>
+                    </select>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Comment</label>
+                    <textarea name="comment" rows="4" class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm focus:border-[#0047D4] focus:bg-white focus:ring-2 focus:ring-blue-100 transition-colors" placeholder="Tell us about your game..." required></textarea>
+                </div>
+                <button type="submit" class="inline-flex w-full sm:w-auto items-center justify-center rounded-xl bg-[#0047D4] px-8 py-3 text-sm font-bold text-white shadow-lg shadow-blue-500/10 hover:bg-[#003cb5] active:scale-[0.99] transition-all duration-200">
+                    Submit Review
+                </button>
+            </form>
+        </section>
+        <!-- ---------------------- REVIEWS / TESTIMONIALS ---------------------- -->
+        <section class="mt-12 mx-auto rounded-3xl border border-gray-100 bg-white p-6 shadow-xs sm:p-8">
+            <div class="text-center">
+                <h2 class="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">What Players Say</h2>
+                <p class="mx-auto mt-2 max-w-xl text-sm text-gray-500">
+                    Real feedback from teams and players who book at SportOps Arena.
+                </p>
+            </div>
+
+            @php
+                $reviews = \App\Models\Review::latest()->take(3)->get();
+                $colors = [
+                    'bg-blue-100 text-[#0047D4]',
+                    'bg-emerald-100 text-emerald-700',
+                    'bg-amber-100 text-amber-700',
+                    'bg-purple-100 text-purple-700',
+                ];
+            @endphp
+
+            <div class="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
+                @forelse ($reviews as $index => $review)
+                    <figure class="flex flex-col rounded-2xl border border-gray-100 bg-white p-6 shadow-xs">
+                        <!-- Stars -->
+                        <div class="flex gap-0.5 text-[#D7B400]">
+                            @for ($i = 0; $i < $review->rating; $i++)
+                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="m12 2 2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.3 5.9 20.4l1.4-6.8L2.2 9l6.9-.7L12 2Z"></path>
+                                </svg>
+                            @endfor
+                            @for ($i = $review->rating; $i < 5; $i++)
+                                <svg class="h-4 w-4 text-gray-300" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="m12 2 2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.3 5.9 20.4l1.4-6.8L2.2 9l6.9-.7L12 2Z"></path>
+                                </svg>
+                            @endfor
+                        </div>
+
+                        <blockquote class="mt-4 flex-1 text-sm leading-relaxed text-gray-600">
+                            &ldquo;{{ $review->comment }}&rdquo;
+                        </blockquote>
+
+                        <figcaption class="mt-5 flex items-center gap-3 border-t border-gray-100 pt-5">
+                            <span class="flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold {{ $colors[$index % count($colors)] }}">
+                                {{ substr($review->name, 0, 1) }}
+                            </span>
+                            <div>
+                                <p class="text-sm font-bold text-gray-900">{{ $review->name }}</p>
+                                <p class="text-xs text-gray-500">{{ $review->role ?? 'Guest' }}</p>
+                            </div>
+                        </figcaption>
+                    </figure>
+                @empty
+                    <div class="col-span-3 text-center py-10 text-gray-500">
+                        No reviews yet. Be the first to leave a review!
+                    </div>
+                @endforelse
+            </div>
+        </section>
     </main>
 
     <!-- ============================ FOOTER ============================ -->
@@ -212,27 +326,74 @@
         <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 py-6 sm:flex-row sm:px-6 lg:px-8">
             <p class="text-sm text-gray-400">&copy; {{ date('Y') }} SportOps. All rights reserved.</p>
             <div class="flex items-center gap-5 text-sm text-gray-400">
-                <a href="#" class="hover:text-[#0047D4] transition-colors duration-150">Help</a>
-                <a href="#" class="hover:text-[#0047D4] transition-colors duration-150">Privacy</a>
-                <a href="#" class="hover:text-[#0047D4] transition-colors duration-150">Terms</a>
+                <span>Jl. Olahraga No. 12, Jakarta</span>
             </div>
         </div>
     </footer>
 
     <!-- Interactivity: profile dropdown + mobile menu -->
     <script>
+        // Check local storage
+        if (localStorage.getItem('user_notif_read') === 'true') {
+            const nb = document.getElementById('notif-badge');
+            if (nb) nb.classList.add('hidden');
+        }
+
         function toggleProfileMenu() {
             document.getElementById('profile-menu').classList.toggle('hidden');
+            document.getElementById('notif-menu').classList.add('hidden');
+        }
+        function toggleNotifMenu() {
+            document.getElementById('notif-menu').classList.toggle('hidden');
+            document.getElementById('profile-menu').classList.add('hidden');
+            const notifBadge = document.getElementById('notif-badge');
+            if (notifBadge) {
+                notifBadge.classList.add('hidden');
+                localStorage.setItem('user_notif_read', 'true');
+            }
+        }
+        function expandUserNotifList(e) {
+            e.preventDefault();
+            const list = document.getElementById('user-notif-list');
+            if (list) {
+                list.classList.remove('max-h-64');
+                list.classList.add('max-h-96');
+                const dummyItem = `
+                <a href="#" class="block px-4 py-3 hover:bg-gray-50 border-b border-gray-50 last:border-0 transition-colors opacity-60">
+                    <p class="text-sm font-semibold text-gray-900">Promo Khusus</p>
+                    <p class="text-xs text-gray-500 mt-0.5">Dapatkan diskon 10% untuk pemesanan selanjutnya.</p>
+                    <p class="text-[10px] text-gray-400 mt-1">3 days ago</p>
+                </a>
+                <a href="#" class="block px-4 py-3 hover:bg-gray-50 border-b border-gray-50 last:border-0 transition-colors opacity-60">
+                    <p class="text-sm font-semibold text-gray-900">Update Sistem</p>
+                    <p class="text-xs text-gray-500 mt-0.5">Pemeliharaan sistem telah selesai.</p>
+                    <p class="text-[10px] text-gray-400 mt-1">1 week ago</p>
+                </a>
+                <a href="#" class="block px-4 py-3 hover:bg-gray-50 border-b border-gray-50 last:border-0 transition-colors opacity-60">
+                    <p class="text-sm font-semibold text-gray-900">Pemesanan Dibatalkan</p>
+                    <p class="text-xs text-gray-500 mt-0.5">Pemesanan lapangan Anda telah dibatalkan.</p>
+                    <p class="text-[10px] text-gray-400 mt-1">1 week ago</p>
+                </a>`;
+                list.innerHTML += dummyItem;
+            }
+            const container = document.getElementById('user-view-all-container');
+            if (container) container.style.display = 'none';
         }
         function toggleMobileMenu() {
             document.getElementById('mobile-menu').classList.toggle('hidden');
         }
-        // Close the profile dropdown when clicking outside of it
+        // Close menus when clicking outside
         document.addEventListener('click', function (e) {
-            const menu = document.getElementById('profile-menu');
-            const trigger = e.target.closest('[onclick="toggleProfileMenu()"]');
-            if (!trigger && !menu.contains(e.target)) {
-                menu.classList.add('hidden');
+            const profileMenu = document.getElementById('profile-menu');
+            const notifMenu = document.getElementById('notif-menu');
+            const profileTrigger = e.target.closest('[onclick="toggleProfileMenu()"]');
+            const notifTrigger = e.target.closest('[onclick="toggleNotifMenu()"]');
+            
+            if (!profileTrigger && !profileMenu.contains(e.target)) {
+                profileMenu.classList.add('hidden');
+            }
+            if (!notifTrigger && !notifMenu.contains(e.target)) {
+                notifMenu.classList.add('hidden');
             }
         });
     </script>

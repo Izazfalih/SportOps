@@ -107,13 +107,37 @@
 
                 <div class="flex items-center gap-3">
                     {{-- Notifications --}}
-                    <button type="button" class="relative inline-flex items-center justify-center rounded-xl border border-gray-150 bg-white p-2.5 text-gray-500 shadow-xs hover:text-[#0047D4] hover:border-blue-200 transition-colors duration-150" aria-label="Notifications">
-                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M10.268 21a2 2 0 0 0 3.464 0"/>
-                            <path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/>
-                        </svg>
-                        <span class="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#0047D4] text-[9px] font-bold text-white ring-2 ring-white">5</span>
-                    </button>
+                    <div class="relative">
+                        <button type="button" onclick="toggleAdminNotifMenu()" class="relative inline-flex items-center justify-center rounded-xl border border-gray-150 bg-white p-2.5 text-gray-500 shadow-xs hover:text-[#0047D4] hover:border-blue-200 transition-colors duration-150" aria-label="Notifications">
+                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M10.268 21a2 2 0 0 0 3.464 0"/>
+                                <path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/>
+                            </svg>
+                            <span id="admin-notif-badge" class="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#0047D4] text-[9px] font-bold text-white ring-2 ring-white">5</span>
+                        </button>
+
+                        <div id="admin-notif-menu" class="hidden absolute right-0 mt-2 w-72 sm:w-80 overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-xl shadow-gray-900/10">
+                            <div class="border-b border-gray-50 px-4 py-3 flex items-center justify-between">
+                                <p class="text-sm font-bold text-gray-900">Notifications</p>
+                                <span class="text-xs text-[#0047D4] cursor-pointer hover:underline">Mark all as read</span>
+                            </div>
+                            <div id="admin-notif-list" class="max-h-64 overflow-y-auto">
+                                <a href="#" class="block px-4 py-3 hover:bg-gray-50 border-b border-gray-50 last:border-0 transition-colors">
+                                    <p class="text-sm font-semibold text-gray-900">New Booking Created</p>
+                                    <p class="text-xs text-gray-500 mt-0.5">Booking BK-20260021 has been successfully created.</p>
+                                    <p class="text-[10px] text-gray-400 mt-1">10 mins ago</p>
+                                </a>
+                                <a href="#" class="block px-4 py-3 hover:bg-gray-50 border-b border-gray-50 last:border-0 transition-colors">
+                                    <p class="text-sm font-semibold text-gray-900">New User Registered</p>
+                                    <p class="text-xs text-gray-500 mt-0.5">A new user has just registered on the platform.</p>
+                                    <p class="text-[10px] text-gray-400 mt-1">1 hour ago</p>
+                                </a>
+                            </div>
+                            <div id="admin-view-all-container" class="border-t border-gray-50 py-2 text-center">
+                                <a href="#" onclick="expandAdminNotifList(event)" class="text-xs font-semibold text-[#0047D4] hover:underline">View all notifications</a>
+                            </div>
+                        </div>
+                    </div>
 
                     {{-- Admin avatar --}}
                     <div class="flex items-center gap-2.5 rounded-xl border border-gray-150 bg-white p-1 pr-3 shadow-xs">
@@ -134,9 +158,7 @@
             <div class="flex flex-col items-center justify-between gap-3 px-4 py-6 sm:flex-row sm:px-6 lg:px-8">
                 <p class="text-sm text-gray-400">&copy; {{ date('Y') }} SportOps. All rights reserved.</p>
                 <div class="flex items-center gap-5 text-sm text-gray-400">
-                    <a href="#" class="hover:text-[#0047D4] transition-colors duration-150">Help Center</a>
-                    <a href="#" class="hover:text-[#0047D4] transition-colors duration-150">Privacy</a>
-                    <a href="#" class="hover:text-[#0047D4] transition-colors duration-150">Terms</a>
+                    <span>Jl. Olahraga No. 12, Jakarta</span>
                 </div>
             </div>
         </footer>
@@ -160,6 +182,59 @@
             overlay.classList.add('opacity-0', 'pointer-events-none');
             overlay.classList.remove('opacity-100', 'pointer-events-auto');
         }
+
+        const adminNotifMenu = document.getElementById('admin-notif-menu');
+        const adminNotifBadge = document.getElementById('admin-notif-badge');
+
+        if (localStorage.getItem('admin_notif_read') === 'true') {
+            if (adminNotifBadge) adminNotifBadge.classList.add('hidden');
+        }
+
+        function toggleAdminNotifMenu() {
+            if (adminNotifMenu) {
+                adminNotifMenu.classList.toggle('hidden');
+                // Hide badge when opened
+                if (!adminNotifMenu.classList.contains('hidden') && adminNotifBadge) {
+                    adminNotifBadge.classList.add('hidden');
+                    localStorage.setItem('admin_notif_read', 'true');
+                }
+            }
+        }
+        function expandAdminNotifList(e) {
+            e.preventDefault();
+            const list = document.getElementById('admin-notif-list');
+            if (list) {
+                list.classList.remove('max-h-64');
+                list.classList.add('max-h-96');
+                const dummyItem = `
+                <a href="#" class="block px-4 py-3 hover:bg-gray-50 border-b border-gray-50 last:border-0 transition-colors opacity-60">
+                    <p class="text-sm font-semibold text-gray-900">Laporan Bulanan Siap</p>
+                    <p class="text-xs text-gray-500 mt-0.5">Laporan pendapatan bulan lalu sudah bisa diunduh.</p>
+                    <p class="text-[10px] text-gray-400 mt-1">3 days ago</p>
+                </a>
+                <a href="#" class="block px-4 py-3 hover:bg-gray-50 border-b border-gray-50 last:border-0 transition-colors opacity-60">
+                    <p class="text-sm font-semibold text-gray-900">Pemesanan Dibatalkan</p>
+                    <p class="text-xs text-gray-500 mt-0.5">Pemesanan #BK-0089 telah dibatalkan.</p>
+                    <p class="text-[10px] text-gray-400 mt-1">4 days ago</p>
+                </a>
+                <a href="#" class="block px-4 py-3 hover:bg-gray-50 border-b border-gray-50 last:border-0 transition-colors opacity-60">
+                    <p class="text-sm font-semibold text-gray-900">Pengingat Jadwal</p>
+                    <p class="text-xs text-gray-500 mt-0.5">Ada 5 pemesanan untuk lapangan hari ini.</p>
+                    <p class="text-[10px] text-gray-400 mt-1">1 week ago</p>
+                </a>`;
+                list.innerHTML += dummyItem;
+            }
+            const container = document.getElementById('admin-view-all-container');
+            if (container) container.style.display = 'none';
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const isClickInsideNotif = event.target.closest('#admin-notif-menu') || event.target.closest('[onclick="toggleAdminNotifMenu()"]');
+            if (!isClickInsideNotif && adminNotifMenu && !adminNotifMenu.classList.contains('hidden')) {
+                adminNotifMenu.classList.add('hidden');
+            }
+        });
     </script>
 
     @stack('scripts')

@@ -132,7 +132,14 @@
                             <tbody>
                                 @foreach ($bookingsData as $i => $b)
                                     @php
-                                        $paymentStatus = $b->payments->first() ? ucfirst($b->payments->first()->status) : 'Unpaid';
+                                        $totalPaid = $b->payments->sum('nominal');
+                                        if ($totalPaid >= $b->total_harga) {
+                                            $paymentStatus = 'Fully Paid';
+                                        } elseif ($totalPaid > 0) {
+                                            $paymentStatus = 'DP Paid';
+                                        } else {
+                                            $paymentStatus = 'Unpaid';
+                                        }
                                         $statusClass = $statusBadge[ucfirst($b->status)] ?? 'bg-gray-100 text-gray-600';
                                         $paymentClass = $paymentBadge[$paymentStatus] ?? 'bg-gray-100 text-gray-500';
                                         $code = 'BK-2026' . str_pad($b->id, 4, '0', STR_PAD_LEFT);
@@ -163,7 +170,14 @@
                 <div class="mt-5 space-y-3 lg:hidden">
                     @foreach ($bookingsData as $i => $b)
                         @php
-                            $paymentStatus = $b->payments->first() ? ucfirst($b->payments->first()->status) : 'Unpaid';
+                            $totalPaid = $b->payments->sum('nominal');
+                            if ($totalPaid >= $b->total_harga) {
+                                $paymentStatus = 'Fully Paid';
+                            } elseif ($totalPaid > 0) {
+                                $paymentStatus = 'DP Paid';
+                            } else {
+                                $paymentStatus = 'Unpaid';
+                            }
                             $statusClass = $statusBadge[ucfirst($b->status)] ?? 'bg-gray-100 text-gray-600';
                             $paymentClass = $paymentBadge[$paymentStatus] ?? 'bg-gray-100 text-gray-500';
                             $code = 'BK-2026' . str_pad($b->id, 4, '0', STR_PAD_LEFT);
@@ -335,12 +349,13 @@
             document.getElementById('modal-time').textContent = b.jam_mulai.substring(0, 5) + ' - ' + b.jam_selesai.substring(0, 5);
 
             let paymentStatus = 'Unpaid';
+            const totalHarga = parseInt(b.total_harga) || 0;
+            let totalPaid = 0;
             if (b.payments && b.payments.length > 0) {
-                const pstat = b.payments[0].status;
-                if (pstat === 'paid') paymentStatus = 'Fully Paid';
-                else if (pstat === 'dp') paymentStatus = 'DP Paid';
-                else paymentStatus = 'Pending';
+                totalPaid = b.payments.reduce((sum, p) => sum + parseInt(p.nominal || 0), 0);
             }
+            if (totalPaid >= totalHarga) paymentStatus = 'Fully Paid';
+            else if (totalPaid > 0) paymentStatus = 'DP Paid';
             
             // Map db status to label
             let statusLabel = 'Pending Payment';
@@ -359,8 +374,8 @@
             sBadge.textContent = statusLabel;
 
             const formatter = new Intl.NumberFormat('id-ID');
-            const total = parseInt(b.total_harga);
-            const paid = b.payments && b.payments.length > 0 ? parseInt(b.payments[0].jumlah) : 0;
+            const total = parseInt(b.total_harga) || 0;
+            const paid = totalPaid;
             const remain = total - paid;
 
             document.getElementById('modal-price').textContent = 'Rp ' + formatter.format(total);
