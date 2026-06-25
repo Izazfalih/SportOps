@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book a Court | SportOps</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/logo-circle.png') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         [data-step] { animation: fadeUp .35s ease both; }
