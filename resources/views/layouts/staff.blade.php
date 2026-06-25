@@ -138,12 +138,33 @@
                         </div>
                     </div>
 
-                    {{-- Staff avatar --}}
-                    <div class="hidden text-right sm:block">
-                        <p class="text-sm font-semibold text-gray-900">{{ $staffUser['name'] }}</p>
-                        <p class="text-xs text-gray-400">{{ $staffUser['role'] }}</p>
+                    {{-- Staff Profile dropdown --}}
+                    <div class="relative">
+                        <button type="button" onclick="toggleStaffProfileMenu()" class="flex items-center gap-2 rounded-xl border border-gray-150 bg-white p-1 pr-2 shadow-xs hover:border-blue-200 transition-colors duration-150">
+                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[#0047D4] to-indigo-600 text-xs font-bold text-white">{{ $staffUser['initials'] }}</span>
+                            <div class="hidden text-left sm:block">
+                                <span class="block text-sm font-semibold text-gray-700 leading-tight">{{ $staffUser['name'] }}</span>
+                                <span class="block text-[10px] text-gray-400">{{ $staffUser['role'] }}</span>
+                            </div>
+                            <svg class="hidden h-4 w-4 text-gray-400 sm:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+                        </button>
+
+                        <div id="staff-profile-menu" class="hidden absolute right-0 mt-2 w-56 overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-xl shadow-gray-900/10">
+                            <div class="border-b border-gray-50 px-4 py-3">
+                                <p class="text-sm font-bold text-gray-900">{{ $staffUser['name'] }}</p>
+                                <p class="truncate text-xs text-gray-500">{{ $staffUser['role'] }}</p>
+                            </div>
+                            <div class="py-1">
+                                <a href="{{ route('profile.edit') }}" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-[#0047D4]">My Profile</a>
+                            </div>
+                            <div class="border-t border-gray-50 py-1">
+                                <form method="POST" action="{{ route('logout') }}" class="m-0">
+                                    @csrf
+                                    <button type="submit" class="block w-full text-left px-4 py-2.5 text-sm font-medium text-rose-600 hover:bg-rose-50">Sign out</button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
-                    <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#0047D4] to-indigo-600 text-xs font-bold text-white shadow-lg shadow-blue-500/10">{{ $staffUser['initials'] }}</span>
                 </div>
             </div>
         </header>
@@ -194,11 +215,25 @@
             }
         }
 
+        function toggleStaffProfileMenu() {
+            const profileMenu = document.getElementById('staff-profile-menu');
+            if (profileMenu) {
+                profileMenu.classList.toggle('hidden');
+                if (staffNotifMenu) staffNotifMenu.classList.add('hidden');
+            }
+        }
+
         // Close dropdown when clicking outside
         document.addEventListener('click', function(event) {
+            const profileMenu = document.getElementById('staff-profile-menu');
             const isClickInsideNotif = event.target.closest('#staff-notif-menu') || event.target.closest('[onclick="toggleStaffNotifMenu()"]');
+            const isClickInsideProfile = event.target.closest('#staff-profile-menu') || event.target.closest('[onclick="toggleStaffProfileMenu()"]');
+
             if (!isClickInsideNotif && staffNotifMenu && !staffNotifMenu.classList.contains('hidden')) {
                 staffNotifMenu.classList.add('hidden');
+            }
+            if (!isClickInsideProfile && profileMenu && !profileMenu.classList.contains('hidden')) {
+                profileMenu.classList.add('hidden');
             }
         });
     </script>
