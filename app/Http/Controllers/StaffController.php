@@ -303,29 +303,43 @@ class StaffController extends Controller
         }
 
         // Court Schedules (Right Panel)
-        $today = Carbon::today();
-        $bookingsToday = Booking::with('user')->whereDate('tanggal', $today)->get();
+        $selectedDate = request('date', Carbon::today()->format('Y-m-d'));
+        $bookingsToday = Booking::with('user')
+            ->whereDate('tanggal', $selectedDate)
+            ->whereIn('status', ['pending', 'confirmed', 'active', 'completed'])
+            ->get();
         
         $courtSchedules = [];
         foreach ($fields as $field) {
             $slots = [];
+            $bookedHours = [];
             $fieldBookings = $bookingsToday->where('field_id', $field->id);
             foreach ($fieldBookings as $b) {
                 $slots[] = [
                     'time' => Carbon::parse($b->jam_mulai)->format('H:i') . ' - ' . Carbon::parse($b->jam_selesai)->format('H:i'),
                     'customer' => $b->user ? $b->user->name : 'Unknown',
                 ];
+                
+                $startHour = (int) Carbon::parse($b->jam_mulai)->format('H');
+                $endHour = (int) Carbon::parse($b->jam_selesai)->format('H');
+                for ($h = $startHour; $h < $endHour; $h++) {
+                    $hStr = str_pad($h, 2, '0', STR_PAD_LEFT);
+                    $nextHStr = str_pad($h + 1, 2, '0', STR_PAD_LEFT);
+                    $bookedHours[] = "$hStr:00 - $nextHStr:00";
+                }
             }
             $courtSchedules[] = [
+                'id' => $field->id,
                 'court' => $field->nama_lapangan,
                 'sport' => $field->jenis_olahraga,
                 'color' => 'bg-blue-500', 
                 'slots' => $slots,
+                'booked_hours' => $bookedHours,
                 'note' => $field->status === 'maintenance' ? 'Under Maintenance' : '',
             ];
         }
 
-        return view('staff.offline-booking', compact('sports', 'timeSlots', 'courtSchedules', 'staff'));
+        return view('staff.offline-booking', compact('sports', 'timeSlots', 'courtSchedules', 'staff', 'selectedDate'));
     }
 
     private function getSportIcon($sport) {

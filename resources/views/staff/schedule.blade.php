@@ -171,8 +171,8 @@
                                                     @endif
                                                 @else
                                                     {{-- Available Cell --}}
-                                                    <a href="{{ route('staff.offline-booking', ['date' => $dateParam, 'time' => $time . ' - ' . $nextHour, 'field_id' => $court['id']]) }}" class="flex items-center justify-center rounded-xl border border-dashed border-gray-200 px-3 py-3 min-h-[52px] hover:border-blue-300 hover:bg-blue-50/50 transition-colors duration-150 cursor-pointer group">
-                                                        <span class="text-xs text-gray-400 group-hover:text-[#0047D4] transition-colors duration-150">Available</span>
+                                                    <a href="{{ route('staff.offline-booking', ['date' => $dateParam, 'time' => $time . ' - ' . $nextHour, 'field_id' => $court['id']]) }}" title="Book {{ $court['name'] }} at {{ $time }}" class="flex w-full items-center justify-center rounded-lg bg-blue-50 px-3 py-2 text-xs font-semibold text-[#0047D4] ring-1 ring-inset ring-blue-100 transition-all duration-150 hover:bg-[#0047D4] hover:text-white hover:ring-[#0047D4] active:scale-[0.97] min-h-[52px]">
+                                                        Available
                                                     </a>
                                                 @endif
                                             </td>
@@ -188,7 +188,7 @@
                 <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 rounded-2xl border border-gray-100 bg-white px-5 py-4 shadow-xs">
                     <span class="text-xs font-bold uppercase tracking-wider text-gray-500">Legend</span>
                     <div class="flex items-center gap-2">
-                        <span class="h-3 w-6 rounded border border-dashed border-gray-300 bg-white"></span>
+                        <span class="h-3 w-6 rounded bg-blue-50 border border-blue-200"></span>
                         <span class="text-xs text-gray-600">Available</span>
                     </div>
                     <div class="flex items-center gap-2">

@@ -704,7 +704,6 @@
                     const booked = isBooked(state.date, state.courtIdx, i);
                     const btn = document.createElement('button');
                     btn.type = 'button';
-                    btn.textContent = t;
                     btn.disabled = booked;
                     btn.dataset.slot = i;
                     timeGrid.appendChild(btn);
@@ -724,11 +723,14 @@
                     const booked = btn.disabled;
                     const inRange = sel !== null && i >= sel && i < sel + dur;
                     if (booked) {
-                        btn.className = 'cursor-not-allowed rounded-xl bg-gray-100 px-2 py-3 text-sm font-semibold text-gray-400 ring-1 ring-inset ring-gray-200';
+                        btn.className = 'flex flex-col items-center justify-center rounded-xl border-2 border-gray-100 bg-gray-50 px-2 py-3 cursor-not-allowed transition-all duration-150';
+                        btn.innerHTML = `<span class="text-sm font-semibold text-gray-400">${TIMES[i]}</span><span class="mt-0.5 text-[10px] font-bold uppercase tracking-wide text-gray-400">Booked</span>`;
                     } else if (inRange) {
-                        btn.className = 'rounded-xl bg-[#0047D4] px-2 py-3 text-sm font-bold text-white shadow-md shadow-blue-500/20 ring-2 ring-[#0047D4] ring-offset-2 transition-all duration-150';
+                        btn.className = 'flex flex-col items-center justify-center rounded-xl border-2 border-[#0047D4] bg-[#0047D4] px-2 py-3 transition-all duration-150 shadow-md shadow-blue-500/20';
+                        btn.innerHTML = `<span class="text-sm font-semibold text-white">${TIMES[i]}</span><span class="mt-0.5 text-[10px] font-medium text-white">Available</span>`;
                     } else {
-                        btn.className = 'rounded-xl bg-blue-50 px-2 py-3 text-sm font-semibold text-[#0047D4] ring-1 ring-inset ring-blue-100 hover:bg-[#0047D4] hover:text-white hover:shadow-md transition-all duration-150';
+                        btn.className = 'flex flex-col items-center justify-center rounded-xl border-2 border-blue-100 bg-blue-50/40 px-2 py-3 transition-all duration-150 hover:border-[#0047D4] hover:bg-[#0047D4] group';
+                        btn.innerHTML = `<span class="text-sm font-semibold text-gray-700 group-hover:text-white">${TIMES[i]}</span><span class="mt-0.5 text-[10px] font-medium text-blue-600 group-hover:text-white">Available</span>`;
                     }
                 });
                 nextTimeBtn.disabled = sel === null;
